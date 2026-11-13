@@ -254,7 +254,7 @@ app/
   api/plan/route.ts           8유형 + 경로 + 예보 (규칙)
   api/checkin/route.ts        모의 슈퍼패스 체크인 (결과만 돌려줌)
 lib/
-  types.ts                    모든 타입 (최초 작성 후 정환희만 수정)
+  types.ts                    모든 타입 (같이 씀: 기존 이름은 지우지 말고 추가만)
   store.ts                    useDemo(): 상태 + localStorage + BroadcastChannel + 장면 단계
   rules/classify.ts           8유형
   rules/path.ts               돌 고르기
@@ -478,10 +478,12 @@ FE·BE로 나누면 서로 기다리게 돼요. 대신 **기능 하나를 화면
 | **신재우** | 학생·교실 화면 + 실험실 + 시연 | `app/student/`(welcome 제외), `app/class/`, `app/demo/`, `components/`, `public/lab/` |
 | 함께 | 처음 30분 세팅, 통합, 리허설 | - |
 
-규칙
-1. `lib/types.ts`와 `lib/store.ts`는 정환희가 처음에 만들고, 바꿀 때는 말하고 바꾼다.
-2. 둘 다 `main`에 바로 올리되, 남의 폴더 파일은 고치지 않는다. 올리기 전에 항상 `git pull`.
-3. 30~40분마다 작게 커밋. Vercel이 `main`을 자동 배포하니 배포 주소에서 바로 확인.
+규칙 (저장소 README와 같음)
+1. 작업 전에 `git pull --rebase`. 둘 다 `main`에 바로 올린다.
+2. 주로 내 담당 폴더에서 작업하고, 다른 폴더를 고칠 때는 한마디 한다.
+3. 같이 쓰는 파일(`lib/types.ts`, `lib/store.ts`, `package.json`)은 누구나 고칠 수 있다. 고친 뒤 바로 커밋·push하고 알린다. 기존 이름은 지우거나 바꾸지 말고 추가만 한다.
+4. 30~40분마다 작게 커밋, 메시지 앞에 `[환희]`/`[재우]`. Vercel이 `main`을 자동 배포하니 배포 주소에서 바로 확인.
+5. 충돌이 나면 상대 변경을 지우지 말고 같이 본다.
 
 ### 11-2. CLAUDE.md (저장소 맨 위에 둘 AI 코딩 규칙)
 ```md
@@ -581,7 +583,7 @@ curl -X POST http://localhost:3000/api/explain -H "Content-Type: application/jso
 |---|---|---|
 | '의욕 신호' → '참여 신호' | 바꾼다 | 지금 |
 | 발표 기여도 분담 | 진선우 메인 + 시연 조작 소개 + 질의응답 분담 | 지금 |
-| 저장소 규칙 | main + 폴더 소유권 | 세팅 때 |
+| 저장소 규칙 | main + 폴더 담당(느슨하게) + 같이 쓰는 파일은 고치고 바로 push | 정함 |
 | AI 크레딧 키 담당 | 정환희 | 세팅 때 |
 | 교사 승인에 얼굴 서명 | 특강에서 가능하면 선택 기능, 아니면 버튼 승인 | 특강 후 |
 | 연습용 학교에 시연 수업 만들기(PPT 캡처용) | 팀이 직접 또는 맡기기 | 내일 오전 |
