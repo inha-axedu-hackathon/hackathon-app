@@ -5,7 +5,7 @@
 // 교사 화면이 교실 프로젝터에 비칠 수 있어서 이름은 기본으로 가리고(번호만), 예외 사유는 결재 화면에서만 보인다.
 // [AI 분석 다시 실행]은 로컬(npm run dev)에서만 실제로 돌고, 배포 주소에서는 저장본(data/analysis.saved.json)을 쓴다.
 import Link from "next/link";
-import { useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import savedJson from "@/data/analysis.saved.json";
 import { AiEvidence } from "@/components/teacher/AiEvidence";
 import { BlockedTop3 } from "@/components/teacher/BlockedTop3";
@@ -14,6 +14,11 @@ import { ConsoleView } from "@/components/teacher/ConsoleView";
 import { TOGETHER } from "@/components/student/stones";
 import { LockGate, LockStatus, useInfoLock } from "@/components/teacher/InfoLock";
 import { VerifyNotice } from "@/components/teacher/VerifyNotice";
+import { TypeSpace3D, type TypeCell } from "@/components/teacher/TypeSpace3D";
+import { StudentTypeModal } from "@/components/teacher/StudentTypeModal";
+import { sectionRoster, type StoneState } from "@/lib/rules/sectionRoster";
+import { typePosition } from "@/lib/rules/typePosition";
+import type { Section } from "@/lib/types";
 import { bridgeState, type SectionState } from "@/lib/rules/bridge";
 import { TYPE_PRINCIPLES, readinessCounts, typeHypothesis } from "@/lib/rules/typeRules";
 import { STUDENTS } from "@/lib/rules/roster"; // 교사 전용 전체 명단(학생·교실 화면은 import 금지)
@@ -43,12 +48,16 @@ const TYPES = [
   { p: "낮음", r: "보충", e: "걸림돌", stones: "작은 돌 1", color: "#F8E3D4" },
 ] as const;
 
-type TabId = "today" | "stuck" | "except" | "plan";
+const STONE_WORD: Record<StoneState, string> = { placed: "놓음", paper: "종이 돌", wet: "해 봤지만 아직", rope: "밧줄 돌", todo: "아직" };
+type RosterFilter = "all" | "left" | "done";
+
+type TabId = "today" | "stuck" | "except" | "plan" | "space";
 const TABS: { id: TabId; label: string; sub: string }[] = [
   { id: "today", label: "오늘 현황", sub: "구간 날씨 · 반 전체" },
   { id: "stuck", label: "막힌 지점", sub: "" },
   { id: "except", label: "예외 확인", sub: "" },
   { id: "plan", label: "함께 놓기", sub: "계획 · 8유형 분포" },
+  { id: "space", label: "8유형 공간", sub: "3D로 돌려 보기" },
 ];
 
 export default function TeacherPage() {
@@ -62,6 +71,10 @@ export default function TeacherPage() {
   const [tab, setTab] = useState<TabId>("today");
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
   const titleRef = useRef<HTMLParagraphElement>(null);
+  const [openSec, setOpenSec] = useState<Section | null>(null); // 오늘 현황: 구간 카드 → 학생 명단
+  const [rosterFilter, setRosterFilter] = useState<RosterFilter>("all");
+  const [typeFor, setTypeFor] = useState<string | null>(null); // 학생 유형 모달
+  const closeType = useCallback(() => setTypeFor(null), []);
   const run = live ?? SAVED;
 
   const blocked = useMemo(() => blockedPoints(run.results, dismissed), [run, dismissed]);
@@ -135,7 +148,7 @@ export default function TeacherPage() {
             : s.locked
               ? "80% 미만 · 물때에 잠김"
               : "80% 미만 · 수업 시작 때 잠김";
-    return { name: s.name, placed: s.placed, total: s.total, pct, word: s.weather, col: w.col, note, clear: w.key === "clear", cloud: w.key === "cloud", dark: w.key === "dark", shower: w.key === "shower" };
+    return { open: openSec === s.name, onOpen: () => { setOpenSec((o) => (o === s.name ? null : s.name)); setRosterFilter("all"); }, name: s.name, placed: s.placed, total: s.total, pct, word: s.weather, col: w.col, note, clear: w.key === "clear", cloud: w.key === "cloud", dark: w.key === "dark", shower: w.key === "shower" };
   });
 
   const counts = TYPES.map((t) => STUDENTS.filter((s) => s.type?.participation === t.p && s.type?.readiness === t.r && s.type?.environment === t.e).length);
@@ -149,6 +162,14 @@ export default function TeacherPage() {
   const pLow = hyps.filter((h) => h.participation === "낮음 · 이유 확인 전").length;
   const pEnv = hyps.filter((h) => h.participation === "낮아 보임 · 환경 먼저").length;
   const cell = (n: number) => (!lock.open && n > 0 && n <= 2 ? "1~2" : String(n));
+  const typeCells: TypeCell[] = TYPES.map((t, i) => ({ p: t.p, r: t.r, e: t.e, stones: t.stones, empty: counts[i] === 0, count: cell(counts[i]) }));
+  // 학생마다 8유형 공간 속 자리(스펙트럼). 칸 = 규칙 유형, 칸 안 위치 = 근거가 뚜렷한 정도 (lib/rules/typePosition.ts)
+  const positions = STUDENTS.map((s) => typePosition(s, run.results.find((r) => r.studentId === s.id)));
+  const classPoints = positions.map((p) => ({ x: p.x, y: p.y, z: p.z }));
+  const roster = openSec ? sectionRoster(openSec, d.events) : [];
+  const shownRoster = roster.filter((r) => (rosterFilter === "all" ? true : rosterFilter === "done" ? r.done : !r.done));
+  const typeIdx = typeFor ? shownRoster.findIndex((r) => r.student.id === typeFor) : -1;
+  const typeRow = typeIdx >= 0 ? shownRoster[typeIdx] : undefined;
   const v = {
     planLine: b.lessonStarted
       ? lockedNames.length
@@ -243,6 +264,9 @@ export default function TeacherPage() {
     exceptionSlot: <ExceptionPanel events={d.events} showNames={showNames && lock.open} />,
     typeSlot: (
       <>
+        <button type="button" className="btn bs" onClick={() => setTab("space")} style={{ alignSelf: "flex-start" }}>
+          3D 공간에서 돌려 보기 →
+        </button>
         <div style={{ display: "flex", height: 28, borderRadius: 8, overflow: "hidden", gap: 2 }} role="img" aria-label="유형 분포 8칸">
           {TYPES.map((t, i) => counts[i] > 0 && <i key={i} style={{ flex: counts[i], background: t.color }} />)}
         </div>
@@ -278,6 +302,79 @@ export default function TeacherPage() {
         </details>
       </>
     ),
+    // 8유형 3D 공간(SPEC 8-1-1): 숫자는 위 유형 분포와 같은 잠금 규칙(1~2명 묶음)을 따른다
+    spaceSlot: (
+      <div className="bx" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8 }}>
+          <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>8유형 공간 · 참여 × 선수 개념 × 환경</h2>
+          <span className="lb">반 {STUDENTS.length}명 · 이번 단원 가설 · 단원이 끝나면 지워요</span>
+        </div>
+        {/* 학생 점은 인원을 그대로 드러내므로 학생 정보를 연 뒤에만(잠긴 동안 1~2명 묶음 규칙) */}
+        <TypeSpace3D total={STUDENTS.length} cells={typeCells} points={lock.open ? classPoints : undefined} />
+        {!lock.open && <p style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>학생 한 명 한 명의 점은 학생 정보를 연 뒤에 보여요(오른쪽 위 잠금).</p>}
+        <p style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
+          환경 걸림돌이 있으면 참여는 “낮아 보임”으로 두고 판단을 미뤄요. 유형은 관찰한 근거로만 세우고 학생에게 보이지 않아요.
+        </p>
+      </div>
+    ),
+    sectionSlot: openSec ? (
+      <section id="sec-roster" className="bx sr-panel" aria-label={`${openSec} 구간 학생 명단`}>
+        <div className="sr-head">
+          <h2>
+            {openSec} 구간 · 학생 명단{" "}
+            <span className="lb num" style={{ fontWeight: 500 }}>
+              아직 남음 {roster.filter((r) => !r.done).length}명 · 다 놓음 {roster.filter((r) => r.done).length}명
+            </span>
+          </h2>
+          <div className="sr-filters" role="group" aria-label="명단 거르기">
+            {(
+              [
+                ["all", "전체"],
+                ["left", "아직 남음"],
+                ["done", "다 놓음"],
+              ] as const
+            ).map(([id, label]) => (
+              <button key={id} type="button" aria-pressed={rosterFilter === id} onClick={() => setRosterFilter(id)}>
+                {label}
+              </button>
+            ))}
+            <button type="button" onClick={() => setOpenSec(null)} aria-label="명단 닫기">
+              닫기 ✕
+            </button>
+          </div>
+        </div>
+        <div className="sr-legend" aria-hidden="true">
+          {(["placed", "paper", "wet", "rope", "todo"] as const).map((k) => (
+            <span key={k}>
+              <span className={`sr-stone is-${k}`}>ㄱ</span>
+              {STONE_WORD[k]}
+            </span>
+          ))}
+          <span style={{ marginLeft: "auto" }}>{showNames && lock.open ? "이름 보이는 중" : "프로젝터용 · 번호만"}</span>
+        </div>
+        <LockGate what={`${openSec} 구간 학생 명단`} ids={roster.map((r) => r.student.id)} label="학생 명단" rows={4}>
+          <ul className="sr-list">
+            {shownRoster.map((r) => (
+              <li key={r.student.id} className={`sr-row${r.done ? " done" : ""}`}>
+                <span className="sr-no">{r.student.no}번</span>
+                <span className="sr-name">{showNames && lock.open ? r.student.name : ""}</span>
+                <span className="sr-stones">
+                  {r.stones.map((st) => (
+                    <span key={st.id} className={`sr-stone is-${st.state}`} title={`${st.char} · ${STONE_WORD[st.state]}`} aria-label={`${st.char} ${STONE_WORD[st.state]}`}>
+                      {st.char}
+                    </span>
+                  ))}
+                </span>
+                <button type="button" className="sr-type" onClick={() => setTypeFor(r.student.id)}>
+                  학생 유형 보기
+                </button>
+              </li>
+            ))}
+            {shownRoster.length === 0 && <li style={{ color: "#6B665F", fontSize: 14 }}>해당하는 학생이 없어요.</li>}
+          </ul>
+        </LockGate>
+      </section>
+    ) : null,
     tab,
     tabsBar: (
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
@@ -325,5 +422,31 @@ export default function TeacherPage() {
     checkinSlot: null, // 11/14: 아침 교실 태블릿 체크인 없음(학교 지급 태블릿, 밤 10시 마감)
   };
 
-  return <ConsoleView {...v} />;
+  const tp = typeRow ? positions.find((p) => p.studentId === typeRow.student.id) : undefined;
+  const th = typeRow ? hyps.find((x) => x.studentId === typeRow.student.id) : undefined;
+  const tt = typeRow?.student.type;
+  const tIdx = tt ? TYPES.findIndex((t) => t.p === tt.participation && t.r === tt.readiness && t.e === tt.environment) : -1;
+
+  return (
+    <>
+      <ConsoleView {...v} />
+      {typeRow && tp && th && lock.open && (
+        <StudentTypeModal
+          student={typeRow.student}
+          showName={showNames}
+          pos={tp}
+          hyp={th}
+          cells={typeCells}
+          classPoints={classPoints.filter((_, i) => STUDENTS[i].id !== typeRow.student.id)}
+          stones={tIdx >= 0 ? TYPES[tIdx].stones : "—"}
+          source={source}
+          onClose={closeType}
+          onPrev={typeIdx > 0 ? () => setTypeFor(shownRoster[typeIdx - 1].student.id) : undefined}
+          onNext={typeIdx < shownRoster.length - 1 ? () => setTypeFor(shownRoster[typeIdx + 1].student.id) : undefined}
+          index={typeIdx}
+          count={shownRoster.length}
+        />
+      )}
+    </>
+  );
 }
