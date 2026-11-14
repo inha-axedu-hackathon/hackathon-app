@@ -1,0 +1,158 @@
+<meta charset="utf-8">
+<title>징검런 진행도 시안</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 레이아웃: 왼쪽 학생 폰 화면 하나 + 오른쪽 시연 단계 버튼과 규칙 요약. 색은 물빛 청록(진행)과 호박색(별) 둘만 */
+:root{
+  --bg:#f6f5f1; --surface:#ffffff; --soft:#eeece6; --ink:#1f1e1b; --muted:#6b6962; --line:#dedbd2;
+  --teal:#1d8f6e; --teal-soft:#e2f3ec; --teal-ink:#0f5c46;
+  --star:#b97813; --star-soft:#fbefd9; --star-ink:#7a4c08;
+  --accent-soft:#e6f0fb; --accent-ink:#0c447c;
+  --font:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161614; --surface:#1f1f1c; --soft:#2a2a26; --ink:#eeede8; --muted:#a3a198; --line:#3a3934;
+  --teal:#3fbf94; --teal-soft:#123b2e; --teal-ink:#9fe1cb;
+  --star:#efa53a; --star-soft:#3e2c0d; --star-ink:#fac775;
+  --accent-soft:#132a44; --accent-ink:#b5d4f4; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161614; --surface:#1f1f1c; --soft:#2a2a26; --ink:#eeede8; --muted:#a3a198; --line:#3a3934;
+  --teal:#3fbf94; --teal-soft:#123b2e; --teal-ink:#9fe1cb;
+  --star:#efa53a; --star-soft:#3e2c0d; --star-ink:#fac775;
+  --accent-soft:#132a44; --accent-ink:#b5d4f4; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 48px;display:grid;gap:18px}
+h1{font-size:1.5rem;font-weight:700;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:0}
+.board{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px}
+@media (max-width:640px){.board{grid-template-columns:1fr}}
+.ph{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.lb{font-size:12px;color:var(--muted);margin:0}
+.lvdot{width:46px;height:46px;border-radius:50%;background:var(--star-soft);color:var(--star-ink);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex:none}
+.segs{display:flex;gap:3px;margin-top:5px}
+.seg{flex:1;height:8px;border-radius:4px;background:var(--soft)}
+.seg.f{background:var(--star)}
+.toast{border:1px solid var(--teal);background:var(--teal-soft);color:var(--teal-ink);border-radius:8px;padding:8px 12px;font-size:14px;font-weight:500;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.c{border-radius:8px;background:var(--soft);padding:5px 0 3px;text-align:center;color:var(--muted)}
+.c b{display:block;font-size:16px;font-weight:500}
+.c.l{background:var(--teal-soft);color:var(--teal-ink)}
+.c.n{border:1px dashed var(--muted);color:var(--ink)}
+.c.x{background:transparent}
+.st{font-size:11px;letter-spacing:1px}
+.on{color:var(--star)}.off{color:var(--muted)}
+.side{display:flex;flex-direction:column;gap:10px;min-width:0}
+button{font:inherit;font-size:14px;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-align:left}
+button:hover{background:var(--soft)}
+button.a{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent-ink)}
+button:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.rules{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px}
+.rules p{margin:0;font-size:13px;color:var(--muted)}
+.rules strong{color:var(--ink);font-weight:500}
+.ringtxt1{fill:var(--ink);font-size:16px;font-weight:700}
+.ringtxt2{fill:var(--muted);font-size:12px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>징검런 진행도 3층</h1>
+    <p class="sub">오늘 · 이번 단원 · 올해. 오른쪽 버튼으로 시연 3단계를 넘겨 보세요.</p>
+  </header>
+
+  <div class="board">
+    <div class="ph">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="lvdot" id="lv">Lv.2</div>
+        <div style="flex:1;min-width:0">
+          <p style="margin:0;font-size:15px;font-weight:500">옛이응 ㆁ</p>
+          <p class="lb" id="lvtxt">다음 레벨까지 별 2개</p>
+          <div class="segs" id="segs"></div>
+        </div>
+      </div>
+      <div id="toast" class="toast" hidden></div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <svg width="96" height="96" viewBox="0 0 104 104" role="img" aria-label="오늘의 돌 진행">
+          <circle cx="52" cy="52" r="42" fill="none" stroke="var(--line)" stroke-width="10"/>
+          <circle id="ring" cx="52" cy="52" r="42" fill="none" stroke="var(--teal)" stroke-width="10" stroke-dasharray="176 264" transform="rotate(-90 52 52)"/>
+          <text id="rt1" class="ringtxt1" x="52" y="50" text-anchor="middle">1칸</text>
+          <text id="rt2" class="ringtxt2" x="52" y="68" text-anchor="middle">남음</text>
+        </svg>
+        <div style="min-width:0">
+          <p class="lb">오늘</p>
+          <p style="margin:0;font-size:16px;font-weight:500" id="today">4분이면 완주</p>
+          <p class="lb" id="today2">ㄴ 출발 돌 · ㄷ 놓음 · ㅌ 남음</p>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+          <p style="margin:0;font-size:13px;font-weight:500">이번 단원 · 내 자음 설계도</p>
+          <p class="lb" id="tot">별 8개</p>
+        </div>
+        <div class="grid" id="grid"></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px">
+          <span><span class="on">★</span> 굳힘</span><span><span class="on">★★</span> 내 말로 설명</span><span><span class="on">★★★</span> 일주일 뒤에도</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side">
+      <p class="lb">시연 단계</p>
+      <button type="button" class="a" data-s="0" id="b0">1 · 시작</button>
+      <button type="button" data-s="1" id="b1">2 · ㅌ 굳힘</button>
+      <button type="button" data-s="2" id="b2">3 · 말해보기 통과</button>
+      <div class="rules">
+        <p><strong>오늘</strong>: 진행 링, 남은 칸과 예상 시간</p>
+        <p><strong>이번 단원</strong>: 글자마다 별 3개. ★ 문항 2개로 굳힘 · ★★ 말해보기로 설명 · ★★★ 일주일 뒤 다시 밟기에서도 첫 시도 정답</p>
+        <p><strong>올해</strong>: 별 5개마다 1레벨, 단원이 바뀌어도 계속 쌓임(나의 강 지도에 함께)</p>
+        <p><strong>지킬 것</strong>: 레벨·별은 본인만 봄. 시간·접속·클릭으로는 안 오름. 별로 살 수 있는 것 없음</p>
+        <p><strong>시연 데이터</strong>: 옛이응(s07) 별 8개로 시작 → ㅌ 굳힘 9개 → 말해보기 통과 10개(Lv.3)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 레벨 = 별 5개마다 1 (Lv.1부터). 시연 학생은 별 8개로 시작해서 말해보기 통과 때 Lv.3이 된다
+const LETTERS = [["ㄱ",2],["ㅋ",0],null,["ㆁ",0],["ㄲ",0],["ㄴ",2],["ㄷ",1],["ㅌ",0],["ㄹ",0],["ㄸ",0],["ㅁ",1],["ㅂ",0],["ㅍ",0],null,["ㅃ",0],["ㅅ",1],["ㅈ",0],["ㅊ",0],["ㅿ",0],["ㅆ",0],["ㅇ",1],["ㆆ",0],["ㅎ",0],null,["ㆅ",0]];
+const $ = (id) => document.getElementById(id);
+function render(step){
+  const tStars = step === 0 ? 0 : step === 1 ? 1 : 2;
+  let total = 0;
+  const grid = $("grid"); grid.innerHTML = "";
+  for (const cell of LETTERS){
+    const d = document.createElement("div");
+    if (!cell){ d.className = "c x"; grid.appendChild(d); continue; }
+    const [ch, base] = cell; const v = ch === "ㅌ" ? tStars : base; total += v;
+    d.className = "c" + (v > 0 ? " l" : "") + (ch === "ㅌ" && v === 0 ? " n" : "");
+    d.innerHTML = "<b>" + ch + "</b><span class='st'><span class='on'>" + "★".repeat(v) + "</span><span class='off'>" + "☆".repeat(3 - v) + "</span></span>";
+    grid.appendChild(d);
+  }
+  const lv = Math.floor(total / 5) + 1, within = total % 5;
+  $("lv").textContent = "Lv." + lv;
+  $("lvtxt").textContent = "다음 레벨까지 별 " + (5 - within) + "개";
+  const segs = $("segs"); segs.innerHTML = "";
+  for (let i = 0; i < 5; i++){ const s = document.createElement("div"); s.className = "seg" + (i < within ? " f" : ""); segs.appendChild(s); }
+  $("tot").textContent = "별 " + total + "개";
+  if (step === 0){
+    $("ring").setAttribute("stroke-dasharray", "176 264"); $("rt1").textContent = "1칸"; $("rt2").textContent = "남음";
+    $("today").textContent = "4분이면 완주"; $("today2").textContent = "ㄴ 출발 돌 · ㄷ 놓음 · ㅌ 남음";
+  } else {
+    $("ring").setAttribute("stroke-dasharray", "264 264"); $("rt1").textContent = "완주"; $("rt2").textContent = "3/3";
+    $("today").textContent = step === 1 ? "첨벙! 한 칸 놓음" : "오늘 징검런 끝";
+    $("today2").textContent = step === 1 ? "도착 관문이 열렸어요 · 말해보기만 남음" : "580년 전 해례본과 같은 설명이에요";
+  }
+  const toast = $("toast");
+  toast.hidden = step === 0;
+  toast.textContent = step === 2 ? "Lv.3 레벨업! 가획을 내 말로 설명했어요 · ㅌ 별 2개" : "ㅌ 별 1개 · 다음 레벨까지 별 1개";
+  document.querySelectorAll("button[data-s]").forEach((b) => b.classList.toggle("a", Number(b.dataset.s) === step));
+}
+document.querySelectorAll("button[data-s]").forEach((b) => b.addEventListener("click", () => render(Number(b.dataset.s))));
+render(0);
+</script>
