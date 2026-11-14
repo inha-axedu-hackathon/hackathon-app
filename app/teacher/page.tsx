@@ -9,7 +9,7 @@ import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import savedJson from "@/data/analysis.saved.json";
 import { AiEvidence } from "@/components/teacher/AiEvidence";
 import { BlockedTop3 } from "@/components/teacher/BlockedTop3";
-import { CheckInPanel, ExceptionPanel } from "@/components/teacher/ClassPanels";
+import { ExceptionPanel } from "@/components/teacher/ClassPanels";
 import { ConsoleView } from "@/components/teacher/ConsoleView";
 import { TOGETHER } from "@/components/student/stones";
 import { LockGate, LockStatus, useInfoLock } from "@/components/teacher/InfoLock";
@@ -292,7 +292,7 @@ export default function TeacherPage() {
             className={tab === t.id ? "on" : ""}
           >
             <span className="t">{t.label}</span>
-            <span className="s">{t.id === "except" ? `예외 ${exceptionCount}건 · 체크인` : t.id === "stuck" ? `TOP 3 · AI가 읽은 근거` : t.sub}</span>
+            <span className="s">{t.id === "except" ? `예외 ${exceptionCount}건 · 아침 확인` : t.id === "stuck" ? `TOP 3 · AI가 읽은 근거` : t.sub}</span>
           </button>
         ))}
       </div>
@@ -317,7 +317,7 @@ export default function TeacherPage() {
         <VerifyNotice source={source} />
       </>
     ),
-    checkinSlot: <CheckInPanel events={d.events} showNames={showNames && lock.open} />,
+    checkinSlot: null, // 11/14: 아침 교실 태블릿 체크인 없음(학교 지급 태블릿, 밤 10시 마감)
   };
 
   return <ConsoleView {...v} />;

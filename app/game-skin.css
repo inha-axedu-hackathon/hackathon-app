@@ -345,3 +345,9 @@
   border: 4px solid var(--g-ink);
   box-shadow: 0 6px 0 var(--g-ink) !important;
 }
+/* 함께 놓기 정답 뒤 '구름이 걷혔어요': 어두운 막 위 밝은 스티커 + 먹선 (물에 겹치지 않게 정답 줄 옆으로 옮김) */
+.stage .cloudchip {
+  border: 3px solid var(--g-ink);
+  box-shadow: 0 4px 0 #000 !important;
+  rotate: -2deg;
+}

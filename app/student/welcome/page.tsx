@@ -1,6 +1,7 @@
 "use client";
 // 학생 · 첫 수업 안내와 동의 (담당: 정환희, docs/SPEC.md 5-2 S5) — 카드 3장 + 분리 동의
-// 개인정보 보호법: 동의마다 목적·항목·기간·거부권을 알리고(15조, 22조), 얼굴은 민감정보라 따로 받는다(23조).
+// 개인정보 보호법: 동의마다 목적·항목·기간·거부권을 알린다(15조, 22조).
+// 11/14: 학생 얼굴은 쓰지 않는다(학교 지급 태블릿으로 집에서 하므로 아침 체크인 없음). 얼굴 인증은 교사가 학생 정보를 열 때 교사 본인 확인에만 쓴다.
 // 만 14세 미만은 보호자 동의가 끝난 뒤에 켜지고(22조의2), 철회는 동의만큼 쉽게(37조). 처음엔 둘 다 꺼져 있다.
 // 시연 화면이라 고른 값은 저장·전송하지 않는다.
 import Link from "next/link";
@@ -33,12 +34,6 @@ const NOTICE = {
     ["언제까지?", "답과 AI 분석은 이 단원(약 4주)이 끝나면, 내가 이해한 개념 기록은 학년도 말(2월 말)에 지워요"],
     ["안 하면?", "불이익 없이 종이 징검돌로 똑같이 참여해요"],
   ],
-  face: [
-    ["왜?", "아침 교실 태블릿에서 1초 체크인하려고"],
-    ["무엇을?", "얼굴 정보는 슈퍼패스(토스)만 처리하고, 징검다리는 \"본인 맞음·방법·시각\"만 받아요"],
-    ["언제까지?", "체크인 기록은 단원이 끝나면 지워요 · 얼굴 정보 보관은 토스 안내를 따라요"],
-    ["안 하면?", "QR·바코드로 똑같이 열려요. 얼굴로 나를 지켜보지 않아요"],
-  ],
 } as const;
 
 function Notice({ rows }: { rows: readonly (readonly [string, string])[] }) {
@@ -57,7 +52,6 @@ function Notice({ rows }: { rows: readonly (readonly [string, string])[] }) {
 export default function WelcomePage() {
   const [step, setStep] = useState(0); // 0~2 카드, 3 동의
   const [service, setService] = useState(false);
-  const [face, setFace] = useState(false);
   const [paper, setPaper] = useState(false);
   const head = useRef<HTMLHeadingElement>(null);
   const last = CARDS.length;
@@ -118,7 +112,7 @@ export default function WelcomePage() {
           <h2 id="consent-h" ref={head} tabIndex={-1} className="font-serif text-3xl font-bold outline-none">
             내가 고르기
           </h2>
-          <p className="text-base text-mute">두 가지는 따로 골라요. 처음엔 둘 다 꺼져 있어요.</p>
+          <p className="text-base text-mute">처음엔 꺼져 있어요. 켜지 않아도 종이 징검돌로 똑같이 참여해요.</p>
 
           <label className="flex gap-3 rounded-2xl border-2 border-line bg-white p-4 has-checked:border-water">
             <input
@@ -127,7 +121,6 @@ export default function WelcomePage() {
               onChange={(e) => {
                 setService(e.target.checked);
                 setPaper(false);
-                if (!e.target.checked) setFace(false);
               }}
               className="mt-1 size-5 shrink-0 accent-water"
             />
@@ -137,26 +130,13 @@ export default function WelcomePage() {
             </span>
           </label>
 
-          <label className="flex gap-3 rounded-2xl border-2 border-line bg-white p-4 has-checked:border-water has-disabled:opacity-50">
-            <input
-              type="checkbox"
-              checked={face}
-              disabled={!service}
-              aria-describedby="face-desc"
-              onChange={(e) => setFace(e.target.checked)}
-              className="mt-1 size-5 shrink-0 accent-water"
-            />
-            <span id="face-desc">
-              <b className="block text-lg">
-                아침 태블릿에서 얼굴로 체크인할래요 <span className="text-sm font-semibold text-mute">(선택)</span>
-              </b>
-              {!service && <span className="block text-sm text-mute">먼저 위 항목을 켜야 고를 수 있어요.</span>}
-              <Notice rows={NOTICE.face} />
-            </span>
-          </label>
+          <p className="rounded-2xl bg-paper-2 p-4 text-base">
+            <b className="block">내 얼굴은 쓰지 않아요</b>
+            <span className="text-mute">얼굴 인증은 선생님이 내 정보를 열 때 선생님 본인인지 확인하는 데만 써요.</span>
+          </p>
 
           <p className="text-sm text-mute">
-            만 14세가 안 됐다면 보호자 동의가 끝난 뒤에 켜져요(동의서는 슈퍼스쿨 알림으로 보호자에게 가요). 그전엔 QR로 들어와요. 마음이 바뀌면 [내 정보 ›
+            만 14세가 안 됐다면 보호자 동의가 끝난 뒤에 켜져요(동의서는 슈퍼스쿨 알림으로 보호자에게 가요). 마음이 바뀌면 [내 정보 ›
             동의 관리]에서 언제든 끌 수 있어요. 시연 화면이라 고른 값은 저장하지 않아요.
           </p>
           {paper && !service && <p className="rounded-xl bg-paper-2 p-3 text-base">좋아요. 선생님이 종이 징검돌을 챙겨 주실 거예요.</p>}
@@ -175,7 +155,7 @@ export default function WelcomePage() {
           </button>
         ) : service ? (
           <Link href="/student" className="grid min-h-12 flex-1 place-items-center rounded-2xl bg-water px-5 text-center text-lg font-bold text-white hover:bg-water-deep">
-            {face ? "시작하기 · 얼굴은 보호자 확인 후 켜져요" : "시작하기"}
+            시작하기
           </Link>
         ) : (
           <button type="button" onClick={() => setPaper(true)} className="min-h-12 flex-1 rounded-2xl border-2 border-ink px-5 text-lg font-bold hover:bg-paper-2">
