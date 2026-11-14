@@ -312,20 +312,17 @@
   pointer-events: none;
 }
 
-/* ───────── 글씨체: 그림 분위기에 맞춘 둥근 글꼴 (교실 화면 · 학생 화면) ─────────
-   제목 = Bagel Fat One(도톰한 둥근 제목) · 강조 낱말·돌 글자 = Jua · 본문 = 나눔스퀘어라운드
-   글꼴은 app/layout.tsx의 <link>로 불러온다. 인터넷이 없으면 원래 글꼴(Pretendard·시스템)로 보인다.
-   옛 글자 자료(.serif, 제자표 세로쓰기)는 명조 그대로 둔다. */
+/* ───────── 글씨체: 칭호 배지와 같은 명조(Noto Serif KR)로 통일 (교실 화면 · 학생 화면) ─────────
+   제목·날씨 낱말·돌 글자는 가장 굵게(900), 본문·버튼도 같은 명조. 글꼴은 app/layout.tsx의 기존 <link>가 불러온다.
+   인터넷이 없으면 시스템 명조(AppleMyungjo 등)로 보인다. */
 :root {
-  --a-font-title: "Bagel Fat One", "Black Han Sans", "Pretendard Variable", Pretendard, sans-serif;
-  --a-font-round: "Jua", "NanumSquareRound", "Pretendard Variable", Pretendard, sans-serif;
-  --a-font-body: "NanumSquareRound", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --a-font: "Noto Serif KR", "AppleMyungjo", "Nanum Myeongjo", serif;
 }
 .stage,
 .tab,
 main.g-skin.max-w-md {
-  --g-font-title: var(--a-font-title);
-  font-family: var(--a-font-body) !important;
+  --g-font-title: var(--a-font);
+  font-family: var(--a-font) !important;
 }
 .stage button,
 .tab button,
@@ -335,20 +332,26 @@ main.g-skin.max-w-md {
 .stage svg.bank text {
   font-family: inherit;
 }
+/* 제목: 게임 스킨이 한 굵기 글꼴(400)에 맞춰 둔 값을 명조 최대 굵기로 */
+body .stage h1,
+body .tab h2,
+body main.g-skin.max-w-md h1 {
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
+}
 /* 날씨 낱말(맑음·구름…)과 구간 이름 */
 .stage .wxcell .t {
-  font-family: var(--a-font-round);
-  font-weight: 400 !important;
-  letter-spacing: 0 !important;
+  font-family: var(--a-font);
+  font-weight: 900 !important;
+  letter-spacing: -0.01em !important;
 }
-/* 징검돌 글자: 둥근 돌에 맞춰 둥근 글자 */
+/* 징검돌 글자 */
 .stage .sec .stone,
 .tab div:has(> svg[viewBox="0 0 744 262"]) .stone {
-  font-family: var(--a-font-round);
-  font-weight: 400;
-  font-size: calc(var(--s) * 0.46);
+  font-family: var(--a-font);
+  font-weight: 900;
 }
-/* 나눔스퀘어라운드는 Pretendard보다 글자 폭이 넓다. 학생 화면은 칸이 좁으니 자간을 조금 좁혀 줄바꿈·넘침을 막는다 */
+/* 명조는 Pretendard보다 글자 폭이 넓다. 학생 화면은 칸이 좁으니 자간을 조금 좁혀 줄바꿈·넘침을 막는다 */
 .tab,
 main.g-skin.max-w-md {
   letter-spacing: -0.04em;
