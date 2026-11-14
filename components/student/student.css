@@ -144,12 +144,3 @@
 @keyframes gstar-spark{0%,62%,100%{opacity:0;transform:scale(.3) rotate(0)}74%{opacity:1;transform:scale(1) rotate(45deg)}86%{opacity:0;transform:scale(.5) rotate(90deg)}}
 @media (prefers-reduced-motion:reduce){.gstar>svg,.gstar::before,.gstar::after{animation:none !important}.gstar::before,.gstar::after{display:none}}
 .lite .gstar>svg,.lite .gstar::before,.lite .gstar::after{animation:none !important}
-
-/* 징검돌은 붉은색(학생 화면 '지금 할 일'과 같은 --jg-now). 주황은 버튼·배경에만. 젖은 돌(해 봤지만 아직)은 회청색 그대로 */
-.tab .stone:not(.next):not(.wet):not(.sunk){background:radial-gradient(130% 100% at 32% 22%,#FBD3CC 0%,#E0675B 30%,#B3261E 66%,#7E1913 100%);color:#fff;text-shadow:0 2px 0 rgba(70,10,8,.4)}
-body .tab div:has(> svg[viewBox="0 0 744 262"]) .stone:not(.next):not(.wet){color:#fff !important;text-shadow:0 2px 0 rgba(70,10,8,.55) !important}
-/* 그림 돌(Higgsfield)의 질감은 살리고 붉게: 붉은 그러데이션 × 돌 그림(곱하기), 돌 모양으로 가림 */
-body .tab div:has(> svg[viewBox="0 0 744 262"]) .stone:not(.next):not(.wet)::before{
-  background:linear-gradient(160deg,#F59A8F 0%,#D0443A 45%,#9E2219 100%),url("/art/stone-dry.webp") !important;
-  background-size:100% 100% !important;background-repeat:no-repeat !important;background-blend-mode:multiply !important;
-  -webkit-mask:url("/art/stone-dry.webp") center/100% 100% no-repeat;mask:url("/art/stone-dry.webp") center/100% 100% no-repeat;filter:none !important}
