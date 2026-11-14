@@ -40,7 +40,7 @@ export function TypeGrid({ className = "" }: { className?: string }) {
           <tbody>
             {TYPE_ROWS.map((p) => (
               <tr key={p} className="border-t border-line">
-                <th className="py-1.5 text-left font-semibold">{p === "있음" ? "많음" : "적음"}</th>
+                <th className="py-1.5 text-left font-semibold">{p}</th>
                 {TYPE_COLS.map(([r, e]) => {
                   const key = `${p}/${r}/${e}`;
                   const n = counts.get(key) ?? 0;
@@ -57,8 +57,8 @@ export function TypeGrid({ className = "" }: { className?: string }) {
         </table>
       </div>
       <p className="mt-1 text-xs text-mute">
-        원안의 &quot;의욕&quot; 축을 관찰한 참여 신호(제출·시도·SOS)로 옮겼어요. 의욕을 판정하지 않고, 걸림돌이 있으면 환경부터 풀어요. 잠긴 동안 작은 칸은
-        1~2로 묶어요.
+        참여 신호는 관찰한 제출·시도·SOS예요(의욕을 판정하지 않음). 환경 걸림돌이 있으면 &quot;낮아 보임&quot;으로 두고 환경부터 풀어요(SPEC 8-1-1). 잠긴 동안
+        작은 칸은 1~2로 묶어요.
       </p>
     </section>
   );

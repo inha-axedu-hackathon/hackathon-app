@@ -3,7 +3,7 @@
 //                ② 5명을 한 번에 묻는다(긴 지시문을 학생마다 보내지 않음) ③ 배포 주소에서는 꺼 둔다(ANALYZE_ENABLED=1일 때만)
 // 키가 없거나 실패한 묶음은 키워드 결과로 채운다(source: "keyword"). 정답 라벨이 있으면 일치율도 계산한다.
 import { CONCEPTS, MISCONCEPTIONS, keywordMisconceptions } from "@/lib/content";
-import { CRISIS_WORDS, LLMError, callLLM, llmReady, maskPII, quoted, usageToday } from "@/lib/llm";
+import { LLMError, callLLM, crossSite, isCrisis, llmReady, maskPII, quoted, usageToday } from "@/lib/llm";
 import type { Analysis } from "@/lib/types";
 
 type Answer = { studentId: string; text: string; label?: string[] };
@@ -94,6 +94,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "분석은 시연 전에 로컬에서 한 번만 돌려요" }, { status: 403 });
   }
 
+  if (crossSite(req)) return Response.json({ error: "우리 화면에서만 부를 수 있어요" }, { status: 403 });
   if (Number(req.headers.get("content-length") ?? 0) > 50_000) {
     return Response.json({ error: "요청이 너무 커요" }, { status: 413 });
   }
@@ -117,7 +118,7 @@ export async function POST(req: Request) {
   const results: Analysis[] = new Array(valid.length);
   const toAsk: number[] = [];
   valid.forEach((a, i) => {
-    if (CRISIS_WORDS.some((w) => a.text.includes(w))) {
+    if (isCrisis(a.text)) {
       // 위기 낱말: AI에 보내지 않고 교사 확인으로
       results[i] = { studentId: a.studentId, conceptsHit: [], misconceptions: [], evidence: "", confidence: 0, needsTeacher: true, source: "keyword" };
     } else toAsk.push(i);

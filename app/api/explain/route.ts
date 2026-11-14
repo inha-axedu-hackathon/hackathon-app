@@ -2,7 +2,7 @@
 // 순서: ① 들어온 값 검사(400) ② 위기 낱말이면 AI에 안 보냄 ③ 키워드로 판정되면 끝(토큰 0)
 //       ④ 애매할 때만 AI 보조(최대 6초, 학생 한 명당 10분에 5번) ⑤ 실패하면 통과시키지 않고 "선생님이 확인할게요"
 // 학생에게 보이는 문장은 AI가 쓰지 않는다. 미리 써 둔 문장(FEEDBACK)만 쓴다(AI는 학생에게 말을 걸지 않음).
-import { CRISIS_WORDS, LLMError, callLLM, maskPII, quoted } from "@/lib/llm";
+import { LLMError, callLLM, crossSite, isCrisis, maskPII, quoted } from "@/lib/llm";
 
 type Idea = { id: "I1" | "I2"; hit: boolean; quote: string };
 type Judge = {
@@ -69,6 +69,8 @@ function feedbackFor(ideas: Idea[], misconception: string | null): string {
 }
 
 export async function POST(req: Request) {
+  if (crossSite(req)) return Response.json({ error: "우리 화면에서만 부를 수 있어요" }, { status: 403 });
+  if (Number(req.headers.get("content-length") ?? 0) > 5_000) return Response.json({ error: "요청이 너무 커요" }, { status: 413 });
   const body = (await req.json().catch(() => null)) as { studentId?: unknown; text?: unknown } | null;
   const studentId = typeof body?.studentId === "string" ? body.studentId : "";
   const text = typeof body?.text === "string" ? body.text.trim().slice(0, 300) : "";
@@ -77,7 +79,7 @@ export async function POST(req: Request) {
   }
 
   // ② 위기 낱말: AI에 보내지 않고 교사 확인으로
-  if (CRISIS_WORDS.some((w) => text.includes(w))) {
+  if (isCrisis(text)) {
     return reply({ passed: false, ideas: [], misconception: null, feedback: FEEDBACK.teacher, source: "saved", needsTeacher: true });
   }
 

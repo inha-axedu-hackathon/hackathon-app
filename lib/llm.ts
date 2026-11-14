@@ -3,18 +3,34 @@
 // 게이트웨이의 Claude 전용 주소(/claude/v1/messages)를 fetch로 부른다. 여기서만 생각(thinking)을 끄고 답 길이 상한을 정할 수 있다.
 // (OpenAI 방식 주소 /chat/completions는 생각을 끌 수 없어 같은 채점에 출력 토큰이 6~8배 들었다. 측정: docs/notes/token-fit.md)
 // 학교 도입 때는 이 파일만 바꾸면 다른 AI로 갈아 끼울 수 있다.
+import "server-only"; // 클라이언트 컴포넌트가 이 파일을 import하면 빌드가 멈춘다(키 유출 입구 차단, Next 내장)
 import { createHash } from "node:crypto";
 
 export class LLMError extends Error {}
 
 /** 위기 낱말: 이런 말이 보이면 AI에 보내지 않고 교사 화면에 "확인 필요"만 띄운다 */
-export const CRISIS_WORDS = ["죽고 싶", "자해", "자살"];
+export const CRISIS_WORDS = ["죽고싶", "자해", "자살"];
+// 이 단원의 수업 용어 "제자해(制字解)"에 "자해"가 들어 있어서 먼저 지우고 본다
+const CRISIS_SAFE = ["제자해"];
 
-/** AI에 보내기 전에 메일·전화번호처럼 보이는 것을 가린다 */
+/** 위기 낱말이 있는지. 띄어쓰기를 지우고 본다("죽고 싶다", "죽고싶다" 둘 다) */
+export function isCrisis(text: string): boolean {
+  let t = text.replace(/\s+/g, "");
+  for (const w of CRISIS_SAFE) t = t.replaceAll(w, "");
+  return CRISIS_WORDS.some((w) => t.includes(w));
+}
+
+/** AI에 보내기 전에 메일·전화번호처럼 보이는 것을 가린다(띄어 쓰거나 점 찍은 번호 포함) */
 export function maskPII(text: string): string {
   return text
     .replace(/[^\s@]+@[^\s@]+\.[^\s@]+/g, "[메일]")
+    .replace(/(?:\+?82[-.\s]?)?0?1[016789][-.\s]?\d{3,4}[-.\s]?\d{4}/g, "[번호]")
     .replace(/[0-9][0-9-]{6,}[0-9]/g, "[번호]");
+}
+
+/** 다른 사이트의 브라우저가 보낸 요청인지(Fetch Metadata). 우리 화면에서 온 요청만 받는다 */
+export function crossSite(req: Request): boolean {
+  return req.headers.get("sec-fetch-site") === "cross-site";
 }
 
 /** 키가 다 들어 있고 비상 스위치(LLM_DISABLED=1)가 꺼져 있는지. false면 부른 쪽이 키워드·저장본으로 대체 */
