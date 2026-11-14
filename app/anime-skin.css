@@ -311,3 +311,45 @@
   background: radial-gradient(52% 34% at 20% 13%, rgba(214, 228, 238, 0.5), rgba(214, 228, 238, 0) 72%);
   pointer-events: none;
 }
+
+/* ───────── 글씨체: 그림 분위기에 맞춘 둥근 글꼴 (교실 화면 · 학생 화면) ─────────
+   제목 = Bagel Fat One(도톰한 둥근 제목) · 강조 낱말·돌 글자 = Jua · 본문 = 나눔스퀘어라운드
+   글꼴은 app/layout.tsx의 <link>로 불러온다. 인터넷이 없으면 원래 글꼴(Pretendard·시스템)로 보인다.
+   옛 글자 자료(.serif, 제자표 세로쓰기)는 명조 그대로 둔다. */
+:root {
+  --a-font-title: "Bagel Fat One", "Black Han Sans", "Pretendard Variable", Pretendard, sans-serif;
+  --a-font-round: "Jua", "NanumSquareRound", "Pretendard Variable", Pretendard, sans-serif;
+  --a-font-body: "NanumSquareRound", "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+.stage,
+.tab,
+main.g-skin.max-w-md {
+  --g-font-title: var(--a-font-title);
+  font-family: var(--a-font-body) !important;
+}
+.stage button,
+.tab button,
+.tab input,
+.tab textarea,
+.tab .mk,
+.stage svg.bank text {
+  font-family: inherit;
+}
+/* 날씨 낱말(맑음·구름…)과 구간 이름 */
+.stage .wxcell .t {
+  font-family: var(--a-font-round);
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+}
+/* 징검돌 글자: 둥근 돌에 맞춰 둥근 글자 */
+.stage .sec .stone,
+.tab div:has(> svg[viewBox="0 0 744 262"]) .stone {
+  font-family: var(--a-font-round);
+  font-weight: 400;
+  font-size: calc(var(--s) * 0.46);
+}
+/* 나눔스퀘어라운드는 Pretendard보다 글자 폭이 넓다. 학생 화면은 칸이 좁으니 자간을 조금 좁혀 줄바꿈·넘침을 막는다 */
+.tab,
+main.g-skin.max-w-md {
+  letter-spacing: -0.04em;
+}
