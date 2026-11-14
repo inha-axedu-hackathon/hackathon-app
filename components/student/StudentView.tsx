@@ -115,13 +115,13 @@ export function StudentView(v: Record<string, any>) {
           </div>
 
           {/* 돌 카드: 놓은 돌도 다시 눌러 복습 */}
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px'} as any}>
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', alignItems: 'stretch', gap: '16px'} as any}>
             {(stoneCards as any[]).map((c: any) => (
-              <div key={c.id} className="card" style={{padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '6px', background: c.now ? '#FCF5F6' : '#fff'} as any}>
+              <div key={c.id} className="card" style={{padding: '18px 18px 20px', minHeight: '226px', display: 'flex', flexDirection: 'column', gap: '6px', background: c.now ? '#FCF5F6' : '#fff'} as any}>
                 <span style={{display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: '800'} as any}><span style={{color: '#6B665F'} as any}>{c.num} {c.section}</span><span style={{color: c.done ? '#0E6F61' : '#9B3A51'} as any}>{c.status}</span></span>
                 <b style={{fontSize: '20px', letterSpacing: '-0.02em'} as any}>{c.title}</b>
                 <span style={{fontSize: '14px', color: '#6B665F', lineHeight: '1.5'} as any}>{c.desc}</span>
-                <button type="button" className={c.now ? 'btnp' : 'btns'} onClick={c.go} style={{marginTop: '8px', minHeight: '50px', fontSize: '17px'} as any}>{c.cta}</button>
+                <button type="button" className={c.now ? 'btnp' : 'btns'} onClick={c.go} style={{marginTop: 'auto', minHeight: '50px', fontSize: '17px'} as any}>{c.cta}</button>
               </div>
             ))}
           </div>
