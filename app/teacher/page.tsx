@@ -42,6 +42,14 @@ const TYPES = [
   { p: "낮음", r: "보충", e: "걸림돌", stones: "작은 돌 1", color: "#F8E3D4" },
 ] as const;
 
+type TabId = "today" | "stuck" | "except" | "plan";
+const TABS: { id: TabId; label: string; sub: string }[] = [
+  { id: "today", label: "오늘 현황", sub: "구간 날씨 · 반 전체" },
+  { id: "stuck", label: "막힌 지점", sub: "" },
+  { id: "except", label: "예외 확인", sub: "" },
+  { id: "plan", label: "함께 놓기", sub: "계획 · 8유형 분포" },
+];
+
 export default function TeacherPage() {
   const d = useDemo();
   const lock = useInfoLock(); // 학생 정보 잠금(T7): 열렸을 때만 이름을 보일 수 있다
@@ -50,6 +58,7 @@ export default function TeacherPage() {
   const [live, setLive] = useState<AnalysisRun | null>(null);
   const [runState, setRunState] = useState<RunState>("idle");
   const [showNames, setShowNames] = useState(false);
+  const [tab, setTab] = useState<TabId>("today");
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
   const titleRef = useRef<HTMLParagraphElement>(null);
   const run = live ?? SAVED;
@@ -130,6 +139,7 @@ export default function TeacherPage() {
 
   const planNames = b.lessonStarted ? lockedNames : b.sections.filter((s) => s.placed / Math.max(s.total, 1) < 0.8).map((s) => s.name);
   const planQ = planNames[0] ? TOGETHER[planNames[0] as keyof typeof TOGETHER] : null;
+  const exceptionCount = STUDENTS.filter((s) => s.exception).length;
   const v = {
     planLine: b.lessonStarted
       ? lockedNames.length
@@ -231,31 +241,46 @@ export default function TeacherPage() {
         <span style={{ fontSize: 12, color: "#6B665F" }}>환경 걸림돌이 있으면 참여는 “낮아 보임”으로 두고, 환경을 먼저 해소한 뒤 다시 판단해요(SPEC 8-1-1).</span>
       </>
     ),
-    extraSlot: (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "stretch" }}>
-        <div className="bx" style={{ flex: "7 1 520px", display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>AI가 읽은 근거</h2>
-            <span className="lb">키워드가 놓친 답을 AI가 찾은 예</span>
-          </div>
-          {runState === "off" && (
-            <p role="status" style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
-              배포 주소에서는 시연 전에 저장한 분석을 써요 · 다시 실행은 발표 노트북(로컬)에서만
-            </p>
-          )}
-          {runState === "saved-only" && (
-            <p role="status" style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
-              {live ? "다시 부르지 못해서 직전 분석을 그대로 보여 줘요." : "지금은 AI를 부를 수 없어서 저장된 분석을 보여 줘요."}
-            </p>
-          )}
-          <AiEvidence run={run} wins={wins.slice(0, 3)} total={wins.length} />
-          <VerifyNotice source={source} />
-        </div>
-        <div className="bx" style={{ flex: "5 1 380px" }}>
-          <CheckInPanel events={d.events} showNames={showNames && lock.open} />
-        </div>
+    tab,
+    tabsBar: (
+      <div role="tablist" aria-label="예보 화면 고르기" className="console-tabs">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            role="tab"
+            id={`tab-${t.id}`}
+            aria-selected={tab === t.id}
+            onClick={() => setTab(t.id)}
+            className={tab === t.id ? "on" : ""}
+          >
+            <span className="t">{t.label}</span>
+            <span className="s">{t.id === "except" ? `예외 ${exceptionCount}건 · 체크인` : t.id === "stuck" ? `TOP 3 · AI가 읽은 근거` : t.sub}</span>
+          </button>
+        ))}
       </div>
     ),
+    aiSlot: (
+      <>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>AI가 읽은 근거</h2>
+          <span className="lb">키워드가 놓친 답을 AI가 찾은 예</span>
+        </div>
+        {runState === "off" && (
+          <p role="status" style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
+            배포 주소에서는 시연 전에 저장한 분석을 써요 · 다시 실행은 발표 노트북(로컬)에서만
+          </p>
+        )}
+        {runState === "saved-only" && (
+          <p role="status" style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
+            {live ? "다시 부르지 못해서 직전 분석을 그대로 보여 줘요." : "지금은 AI를 부를 수 없어서 저장된 분석을 보여 줘요."}
+          </p>
+        )}
+        <AiEvidence run={run} wins={wins.slice(0, 3)} total={wins.length} />
+        <VerifyNotice source={source} />
+      </>
+    ),
+    checkinSlot: <CheckInPanel events={d.events} showNames={showNames && lock.open} />,
   };
 
   return <ConsoleView {...v} />;

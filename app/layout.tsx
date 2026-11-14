@@ -23,9 +23,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-dvh bg-paper text-ink">
         <DemoKeys />
         {children}
-        <p className="pointer-events-none fixed right-3 bottom-2 z-50 rounded bg-paper/80 px-1.5 text-xs text-mute">
-          시연용 가상 학생 데이터 · 모의 인증
-        </p>
       </body>
     </html>
   );

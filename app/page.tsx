@@ -39,6 +39,7 @@ export default function Home() {
         ))}
       </ul>
       <p className="text-sm text-mute">단축키 · N 다음 · T 수업 시작 · A 승인 · O 오프라인 · Shift+R 처음부터 · 1 학생 · 2 교실 · 3 교사</p>
+      <p className="mt-auto pt-6 text-center text-xs text-mute">시연용 가상 학생 데이터 · 모의 인증</p>
     </main>
   );
 }

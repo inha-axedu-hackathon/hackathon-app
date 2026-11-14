@@ -227,6 +227,7 @@ export default function CheckinPage() {
           </div>
         )}
       </section>
+      <p className="mt-auto pt-6 text-center text-xs text-mute">시연용 가상 학생 데이터 · 모의 인증</p>
     </main>
   );
 }

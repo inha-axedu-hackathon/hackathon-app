@@ -148,6 +148,7 @@ export default function RiverPage() {
       <p className="text-center text-sm text-mute">
         나와 선생님만 봐요 · 학년도 말(2월 말)에 지워져요 · 내려받은 파일은 내가 보관해요 · 성적·학생부에 들어가지 않아요
       </p>
+      <p className="mt-auto pt-6 text-center text-xs text-mute">시연용 가상 학생 데이터 · 모의 인증</p>
     </main>
   );
 }

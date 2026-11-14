@@ -20,7 +20,7 @@
 .btn.bs,
 .btn.bseal,
 .btn.bg,
-.g-skin button:not(:disabled),
+.g-skin button[class*="rounded"]:not(:disabled):not([class*="underline"]),
 .g-skin a.rounded-2xl,
 .g-skin a.rounded-xl {
   border: 3px solid var(--g-ink) !important;
@@ -34,7 +34,7 @@
 .btnp:hover,
 .pillbtn:hover,
 .btn.bp:hover,
-.g-skin button:not(:disabled):hover {
+.g-skin button[class*="rounded"]:not(:disabled):not([class*="underline"]):hover {
   transform: translateY(-2px);
   box-shadow: 0 7px 0 var(--g-ink) !important;
 }
@@ -42,7 +42,7 @@
 .btns:active,
 .pillbtn:active,
 .btn:active,
-.g-skin button:not(:disabled):active,
+.g-skin button[class*="rounded"]:not(:disabled):not([class*="underline"]):active,
 .g-skin a.rounded-2xl:active {
   transform: translateY(4px) !important;
   box-shadow: 0 1px 0 var(--g-ink) !important;
@@ -241,4 +241,56 @@
   .stage.s-open::after {
     animation: none !important;
   }
+}
+
+/* ── 교사 홈 탭 (스크롤 대신 탭으로 아래 영역만 바꿈) ── */
+.console-tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.console-tabs button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 2px solid #e2d6cf;
+  box-shadow: 0 3px 0 #e2d6cf;
+  text-align: left;
+  transition: transform 120ms var(--ease-standard), box-shadow 120ms;
+}
+.console-tabs button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #cbb9ae;
+}
+.console-tabs button .t {
+  font-size: 18px;
+  font-weight: 800;
+}
+.console-tabs button .s {
+  font-size: 13px;
+  color: #6b665f;
+}
+.console-tabs button.on {
+  background: var(--color-brand);
+  color: #fff;
+  border-color: #6e2638;
+  box-shadow: 0 4px 0 #6e2638;
+}
+.console-tabs button.on .s {
+  color: #f9ecef;
+}
+.console-tabs button:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 3px;
+}
+/* 팀원 패널(자체 카드)을 Console 카드와 같은 모양으로 — 상자 안 상자 없이 */
+.panelgrid > section {
+  border: 2px solid #e2d6cf !important;
+  box-shadow: 0 3px 0 #e2d6cf;
+  border-radius: 20px !important;
+  padding: 24px !important;
 }

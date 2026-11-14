@@ -5,14 +5,14 @@ import { Fragment } from "react";
 import "./console.css";
 
 export function ConsoleView(v: Record<string, any>) {
-  const { planLine, planQ, teams, secs, tide, headerLine, analyze, analyzing, analyzeLabel, startSlot, toolbarSlot, noticeMeta, tideTitle, tideSub, totalPlaced, totalAll, arrived, students, crossingText, top3Slot, exceptionSlot, typeSlot, extraSlot } = v;
+  const { tab, tabsBar, aiSlot, checkinSlot, planLine, planQ, teams, secs, tide, headerLine, analyze, analyzing, analyzeLabel, startSlot, toolbarSlot, noticeMeta, tideTitle, tideSub, totalPlaced, totalAll, arrived, students, crossingText, top3Slot, exceptionSlot, typeSlot } = v;
   return (
     <>
 <div className="on-light" style={{width: '100%', minHeight: '1040px', boxSizing: 'border-box', background: '#FFFFFF', color: '#1C1A18', fontFamily: "'Pretendard Variable', Pretendard, sans-serif"} as any}>
   
   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', padding: '16px 40px', borderBottom: '1px solid #F1E9E9', background: '#fff', fontSize: '13px', color: '#8A7F80'} as any}>
-    <span style={{display: 'flex', gap: '8px', alignItems: 'center'} as any}><b style={{color: '#1C1A18'} as any}>슈퍼스쿨</b> › 수업활동 › 중2 국어 › <b style={{color: '#9B3A51'} as any}>징검다리</b></span>
-    <span style={{display: 'flex', gap: '14px', alignItems: 'center'} as any}><span>시연용 가상 학생 데이터 · 모의 인증</span><span style={{width: '28px', height: '28px', borderRadius: '50%', background: '#F8EAEE', display: 'grid', placeItems: 'center', color: '#9B3A51', fontWeight: '800'} as any}>교</span></span>
+    <span style={{display: 'flex', gap: '10px', alignItems: 'center'} as any}><b style={{color: '#9B3A51', fontSize: '18px', fontFamily: 'var(--g-font-title)', fontWeight: 400} as any}>징검다리</b><span style={{color: '#B9AEAF'} as any}>|</span><span>교사</span></span>
+    <span style={{display: 'flex', gap: '14px', alignItems: 'center'} as any}><span style={{padding: '3px 10px', borderRadius: '999px', background: '#F7F6F2', color: '#6B665F'} as any}>슈퍼스쿨 수업활동과 연동</span><span>시연용 가상 학생 데이터 · 모의 인증</span><span style={{width: '28px', height: '28px', borderRadius: '50%', background: '#F8EAEE', display: 'grid', placeItems: 'center', color: '#9B3A51', fontWeight: '800'} as any}>교</span></span>
   </div>
 
   <div style={{maxWidth: '1376px', margin: '0 auto', padding: '36px 40px 48px', display: 'flex', flexDirection: 'column', gap: '22px'} as any}>
@@ -41,7 +41,10 @@ export function ConsoleView(v: Record<string, any>) {
       </div>
     </>)}
 
+    {tabsBar}
+
     
+    {(tab === 'today') && (
     <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px'} as any}>
       {(secs as any[]).map((s: any, __i: number) => (<Fragment key={__i}>
         <div className="bx" style={{display: 'flex', flexDirection: 'column', gap: '8px'} as any}>
@@ -64,33 +67,27 @@ export function ConsoleView(v: Record<string, any>) {
         <span className="num" style={{display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '700', color: '#9B3A51', marginTop: 'auto'} as any}><span style={{width: '8px', height: '8px', borderRadius: '50%', background: '#C76E7F', boxShadow: '0 0 0 4px #F8EAEE'} as any}></span>{crossingText}</span>
       </div>
     </div>
+    )}
 
     
+    {(tab === 'stuck') && (
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'stretch'} as any}>
       <div className="bx" style={{flex: '7 1 520px'} as any}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px'} as any}><h2 style={{margin: '0', fontSize: '20px', fontWeight: '700'} as any}>막힌 지점 TOP 3</h2><span className="lb">오개념 단위 · 인원</span></div>
         {top3Slot}
-
-
-
-
-
       </div>
-      <div className="bx" style={{flex: '5 1 380px', display: 'flex', flexDirection: 'column', gap: '4px'} as any}>
-        {exceptionSlot}
-
-
-
-
-
-
-
-      </div>
+      <div className="bx" style={{flex: '6 1 460px', display: 'flex', flexDirection: 'column', gap: '8px'} as any}>{aiSlot}</div>
     </div>
-
-    {extraSlot}
+    )}
+    {(tab === 'except') && (
+    <div className="panelgrid" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '16px', alignItems: 'start'} as any}>
+      {exceptionSlot}
+      {checkinSlot}
+    </div>
+    )}
 
     
+    {(tab === 'plan') && (
     <div style={{display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'stretch'} as any}>
       <div className="bx" style={{flex: '5 1 380px', display: 'flex', flexDirection: 'column', gap: '12px'} as any}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'} as any}><h2 style={{margin: '0', fontSize: '20px', fontWeight: '700'} as any}>함께 놓기 계획</h2><span className="lb num">첫 8분 · 기준 80%</span></div>
@@ -117,6 +114,7 @@ export function ConsoleView(v: Record<string, any>) {
 
       </div>
     </div>
+    )}
 
     <footer style={{display: 'flex', flexDirection: 'column', gap: '4px', paddingTop: '18px', borderTop: '1px solid #F1E9E9', fontSize: '13px', color: '#4A4641'} as any}>
       <span>AI는 제안만 합니다. 선생님이 승인한 길만 학생에게 갑니다.</span>

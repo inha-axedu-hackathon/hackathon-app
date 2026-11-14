@@ -223,7 +223,7 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
   };
 
   return (
-    <main className="h-dvh w-full" style={{ background: "#F2F1EB", overflow: "clip" }}>
+    <main className="h-dvh w-full" style={{ background: "#FFFFFF", overflow: "clip" }}>
       <FitStage width={1180} height={820}>
         <StudentView {...v} />
       </FitStage>
