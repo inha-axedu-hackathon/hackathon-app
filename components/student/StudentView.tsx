@@ -82,8 +82,12 @@ export function StudentView(v: Record<string, any>) {
           {/* 지금 할 일: 들어오자마자 '무엇을 누르면 되는지' 한 가지만 크게 */}
           <div className="card" style={{display: 'flex', alignItems: 'center', gap: '24px', padding: '22px 26px', background: '#FCF5F6'} as any}>
             <div style={{flex: '1', minWidth: '0', display: 'flex', flexDirection: 'column', gap: '8px'} as any}>
-              <span style={{alignSelf: 'flex-start', fontSize: '14px', fontWeight: '800', color: '#fff', background: '#9B3A51', borderRadius: '999px', padding: '4px 12px'} as any}>{mission.tag}</span>
-              <span style={{fontSize: '30px', fontWeight: '800', letterSpacing: '-0.03em', lineHeight: '1.2'} as any}>{mission.title}</span>
+              {/* '지금 할 일'을 제목 옆에 제목만큼 크게: 들어오자마자 눈에 걸리게 */}
+              <div style={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '10px 14px'} as any}>
+                <span style={{display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '24px', fontWeight: '900', letterSpacing: '-0.02em', color: '#fff', background: '#9B3A51', borderRadius: '14px', padding: '8px 16px', boxShadow: '0 4px 0 #231F1C', border: '3px solid #231F1C'} as any}><span aria-hidden="true">👉</span>{mission.tag}</span>
+                <span style={{fontSize: '34px', fontWeight: '800', letterSpacing: '-0.03em', lineHeight: '1.2'} as any}>{mission.title}</span>
+                {(mission.note) && (<span style={{fontSize: '14px', fontWeight: '800', color: '#9B3A51', background: '#fff', borderRadius: '999px', padding: '4px 11px', boxShadow: 'inset 0 0 0 1.5px #EBC3CC'} as any}>{mission.note}</span>)}
+              </div>
               <span style={{fontSize: '17px', color: '#4A4641'} as any}>{mission.sub}</span>
               {(mission.steps) && (<ol aria-label="순서" style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', margin: '4px 0 0', padding: '0', listStyle: 'none', fontSize: '14px', fontWeight: '700', color: '#4A4641'} as any}>
                 {(mission.steps as string[]).map((st: string, i: number) => (<li key={st} style={{display: 'flex', alignItems: 'center', gap: '8px'} as any}>{i > 0 && <span aria-hidden="true" style={{color: '#B9B4AA'} as any}>→</span>}<span style={{background: '#fff', borderRadius: '999px', padding: '4px 11px', boxShadow: 'inset 0 0 0 1.5px #EBC3CC'} as any}>{i + 1}. {st}</span></li>))}

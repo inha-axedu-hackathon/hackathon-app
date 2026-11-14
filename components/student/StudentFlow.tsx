@@ -213,11 +213,11 @@ export function StudentFlow({ initial = "home", initialStone = "st-t" }: { initi
   // 홈 '지금 할 일': 화면에서 가장 먼저 보이는 한 가지
   const mission = placedT
     ? passed
-      ? { tag: "오늘 완주", title: "오늘 길을 다 건넜어요! 🏁", sub: "수업에서 만나요 · 놓은 돌은 다시 눌러 복습할 수 있어요", steps: null, cta: "시연 처음부터 다시", primary: false, go: () => d.reset() }
-      : { tag: "지금 할 일 · 마지막", title: "도착 관문: 내 말로 설명하기", sub: "ㅌ은 왜 ㄷ에 획을 더했을까? 낱말 상자로 한 문장 · 약 1분", steps: ["낱말 고르기", "제출하기"], cta: "도착 관문 가기 →", primary: true, go: () => setScreen("gate") }
+      ? { tag: "오늘 완주", note: "", title: "오늘 길을 다 건넜어요! 🏁", sub: "수업에서 만나요 · 놓은 돌은 다시 눌러 복습할 수 있어요", steps: null, cta: "시연 처음부터 다시", primary: false, go: () => d.reset() }
+      : { tag: "지금 할 일", note: "마지막 하나", title: "도착 관문: 내 말로 설명하기", sub: "ㅌ은 왜 ㄷ에 획을 더했을까? 낱말 상자로 한 문장 · 약 1분", steps: ["낱말 고르기", "제출하기"], cta: "도착 관문 가기 →", primary: true, go: () => setScreen("gate") }
     : closed
-      ? { tag: "오늘 놓기 마감", title: "오늘 놓기는 밤 10시에 닫혔어요", sub: "수업에서 함께 건너요 · 놓은 돌은 그대로예요", steps: null, cta: null, primary: false, go: () => {} }
-      : { tag: tState === "wet" ? "지금 할 일 · 하다 멈춘 돌" : "지금 할 일 · 1개 남음", title: "ㅌ 돌 놓기", sub: "ㄷ에 획을 하나 더해 ㅌ을 만들고 문제 2개 풀기 · 약 4분", steps: ["개념 보기", "실험실에서 만들기", "문제 2개"], cta: tState === "wet" ? "이어서 하기 →" : "시작하기 →", primary: true, go: () => startStone("st-t") };
+      ? { tag: "오늘 놓기 마감", note: "", title: "오늘 놓기는 밤 10시에 닫혔어요", sub: "수업에서 함께 건너요 · 놓은 돌은 그대로예요", steps: null, cta: null, primary: false, go: () => {} }
+      : { tag: "지금 할 일", note: tState === "wet" ? "하다 멈춘 돌" : "1개 남음", title: "ㅌ 돌 놓기", sub: "ㄷ에 획을 하나 더해 ㅌ을 만들고 문제 2개 풀기 · 약 4분", steps: ["개념 보기", "실험실에서 만들기", "문제 2개"], cta: tState === "wet" ? "이어서 하기 →" : "시작하기 →", primary: true, go: () => startStone("st-t") };
 
   const doneState = (id: StoneId) => (id === "st-t" ? placedT : p.stones.find((x) => x.id === id)?.state === "placed");
   const stoneCards = (["st-n", "st-d", "st-t"] as StoneId[]).map((id, i) => {
