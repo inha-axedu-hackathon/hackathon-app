@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:secrets": "sh scripts/check-secrets.sh",
+    "check:api": "node scripts/check-api.mjs",
     "demo:local": "next build && next start -H 127.0.0.1 -p 3000"
   },
   "dependencies": {

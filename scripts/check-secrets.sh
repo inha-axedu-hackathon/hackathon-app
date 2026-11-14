@@ -70,6 +70,11 @@ if [ -f scripts/make-public-class.mjs ]; then
   fi
 fi
 
+# 8) 학생·교실·키오스크 번들에 교사 전용 정보(가짜 실명·말해보기 원문·예외 사유)가 실렸는지
+if [ -f scripts/check-bundle.mjs ] && ! node scripts/check-bundle.mjs; then
+  fail=1
+fi
+
 if [ "$fail" -eq 0 ]; then
   echo "✓ 비밀값 점검 통과"
 fi
