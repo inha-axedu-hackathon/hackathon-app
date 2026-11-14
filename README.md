@@ -1,116 +1,71 @@
-# hackathon-app
-2026 INHA AX-EDU 해커톤 팀 프로젝트
+# 징검다리
 
-## 징검다리 · 팀 다이버
-플립러닝 사전학습 결손을 수업 전에 찾아 메우는 교사 지원 서비스예요. 학생 게임 모드는 **징검런**이에요.
+2026 INHA AX-EDU 해커톤 팀 다이버 프로젝트
 
-> 다리가 끊긴 곳에서 수업이 시작된다.
+플립러닝 사전학습 결손을 수업 전에 찾아 메우는 교사 지원 서비스입니다.
+AI가 학생들의 개념 말해보기 답에서 막힌 곳을 찾고, 교사가 승인한 규칙으로 학생마다 다른 개수의 징검돌을 놓아 반 전체가 같은 수업에 도착하게 합니다.
 
-AI가 학생들의 '개념 말해보기' 답을 읽어 막힌 곳을 찾고(읽기만), 교사가 승인한 규칙이 학생마다 다른 개수의 징검돌을 고르고, 반 전체가 다리를 완성해 같은 수업에 도착해요. 슈퍼스쿨(수업활동·슈퍼패스) 안의 메뉴로 붙는 구조예요.
+- 배포 주소: https://hackathon-app-omega-two.vercel.app
+- 시연 단원: 중2 국어 국어의 문자 체계 (훈민정음 제자 원리)
 
-> **시연용 가상 학생 데이터 · 모의 인증**: 학생 30명(2학년 3반)은 모두 가상이고, 교사 얼굴 인증(학생 정보 열기)은 흉내만 내요(얼굴 정보를 받거나 저장하지 않음). 학생 얼굴은 쓰지 않아요.
+## 프로젝트 소개
 
-### 화면
-| 주소 | 화면 |
-|---|---|
-| `/student` | 학생 징검런: 홈 → 돌 굳히기(실험실) → 도착 관문 |
-| `/class` | 교실 프로젝터: 우리 반 다리(한 화면에 구간 하나·날씨 하나, ←/→·밀어서 넘김) → 함께 놓기 → 개통 → 제자표 |
-| `/student/class` | 학생이 보는 우리 반 다리(같은 화면, 보기만 · "← 내 징검런") |
-| `/teacher/generate` | 징검돌 문제 만들기: 성취기준 → 단원·차시 → 서술형/서답형/선다형 → AI 초안 → 교사 검토 → 징검다리 |
-| `/teacher`, `/teacher/approve` | 교사: 오늘의 수업 예보(AI 근거·학생 정보 잠금), 아침 예외 결재 |
-| `/student/welcome`, `/student/river` | 첫 수업 안내·분리 동의, 나의 강 지도 |
-| `/demo` | 시연 분할 화면 |
+거꾸로 수업에서는 사전 영상을 제대로 보지 않거나 개념이 막힌 학생이 수업 활동에 끼지 못하고 결손이 쌓입니다.
+교사는 수업이 시작돼야 누가 어디서 막혔는지 알 수 있고, 학생마다 필요한 지원도 다릅니다.
+징검다리는 수업 전에 막힌 곳을 찾아 교사에게 알려 주고, 학생마다 필요한 만큼의 학습을 채워 같은 출발선에서 수업을 시작하게 합니다.
 
-시연 단축키: `N` 다음 단계 · `T` 수업 시작 · `A` 승인 · `1`/`2`/`3` 학생/교실/교사 · `Shift+R` 처음부터 · 실험실 숨은 키 `K`
+## 주요 기능
 
-### 폴더 구조
-```
-├─ frontend/   화면 (Next.js): app(페이지·API 연결), components, public(그림·실험실), lib/store.ts(시연 상태)
-├─ backend/    서버 쪽: api(API 처리), lib(AI 호출·규칙·타입·학습 내용), data(가상 학생·문항·성취기준), scripts(점검)
-├─ docs/       기획 문서
-├─ AGENTS.md   AI 코딩 도구 규칙 (CLAUDE.md가 불러옴)
-└─ README.md
-```
-- 하나의 Next.js 앱으로 배포돼요. `frontend/app/api/*/route.ts`는 `backend/api/*.ts`를 불러오는 연결 한 줄만 있어요.
-- 화면 코드는 `@/…`(frontend), 서버 쪽 코드는 `@backend/…`로 불러와요.
+1. 수업 예보: AI가 학생 30명의 답을 읽고 막힌 개념 TOP 3와 구간별 상태를 수업 전에 보여 줍니다.
+2. 8유형 공간: 참여, 선수 개념, 환경 세 축으로 학생 유형을 3D로 보여 주고, 학생마다 정확한 위치와 근거를 확인할 수 있습니다.
+3. 제시 방향: 학생 위치에 맞는 연구 근거 기반 지도 전략과 문항 유형 비율을 AI가 교사에게 제안합니다.
+4. 징검돌 문제 만들기: 성취기준과 차시를 고르면 AI가 문제 초안을 만들고, 교사가 검토한 것만 학생에게 갑니다.
+5. 징검런: 학생은 개념 보기, 실험실 글자 만들기, 문제 풀이로 돌을 굳히고, 도착 관문에서 자기 말로 설명하면 칭호가 오릅니다.
+6. 우리 반 다리: 학생이 굳힌 돌이 반 다리가 되고, 부족한 구간은 수업 첫 8분에 함께 메웁니다.
+7. 학생 정보 보호: 학생이 드러나는 정보는 교사 재인증 뒤에만 열리고, 외부 AI에는 가명 처리한 답만 보냅니다.
 
-### 실행
-배포본: https://hackathon-app-omega-two.vercel.app (AI 포함 바로 사용)
+## 실행 방법
+
+설치 없이 배포 주소에서 바로 사용할 수 있으며, AI 기능도 모두 동작합니다.
+
+- 교사 화면: https://hackathon-app-omega-two.vercel.app/teacher
+- 학생 화면: https://hackathon-app-omega-two.vercel.app/student
+- 교실 화면: https://hackathon-app-omega-two.vercel.app/class
+- 문제 만들기: https://hackathon-app-omega-two.vercel.app/teacher/generate
+
+시연 단축키는 N 다음 단계, T 수업 시작, 숫자 1 2 3 학생 교실 교사 화면 전환, Shift+R 처음부터입니다.
+
+로컬에서 직접 실행하려면 아래 명령을 차례로 입력합니다.
 
 ```bash
-cd frontend
+git clone https://github.com/inha-axedu-hackathon/hackathon-app.git
+cd hackathon-app/frontend
 npm install
-cp .env.example .env.local   # LLM_API_KEY 등을 채운다(비우면 AI 없이 키워드·저장본으로 동작)
-npm run dev                  # http://localhost:3000
+npm run dev
 ```
-- npm 명령은 모두 `frontend/`에서 실행해요. Vercel 프로젝트의 Root Directory는 `frontend`예요.
-- 발표 노트북: `npm run demo:local` (빌드 후 127.0.0.1에만 열림)
-- 점검: `npm run check:secrets`(비밀값·번들 유출), `npm run check:api`(서버를 켠 뒤 API 점검, `AI=1`이면 실제 AI까지)
-- 환경 변수: `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL`(claude-haiku-5-5 권장), 선택 `LLM_DAILY_TOKENS`·`LLM_ANALYZE_TOKENS`·`LLM_DISABLED`·`ANALYZE_ENABLED` — 설명은 `.env.example`
 
-### 백엔드 한눈에
-- `POST /api/explain`: 도착 관문 판정(키워드 먼저 → 애매할 때만 AI, 근거가 학생 글에 있어야 인정, 학생에게는 미리 쓴 문장만)
-- `POST /api/analyze`: 30명 말해보기 분석(5명씩 묶음, 저장본 `backend/data/analysis.saved.json`, 배포 주소에서는 꺼짐)
-- AI 호출은 `backend/lib/llm.ts` 한 곳(안뇽GPT 게이트웨이의 Claude Haiku 5.5, 생각 끔·하루 토큰 상한·같은 질문 재사용). 측정: `docs/notes/token-fit.md`
-- 학생·교실 화면은 공개 명단(`backend/data/class-2-3.public.json`)만, 교사 화면만 전체 명단(`backend/lib/rules/roster.ts`)
+AI 기능을 로컬에서 쓰려면 frontend 폴더의 env.example 파일을 참고해 API 키를 설정합니다. 키가 없으면 저장된 분석 결과로 동작합니다.
 
-### 팀 다이버
-정환희(데이터·AI·백엔드) · 신재우(화면·디자인) · 진선우(발표·학습 내용) · 김나희(학생 데이터·PPT)
+## 폴더 구조
 
-### 출처·라이선스
-- 실험실(`frontend/public/lab/`): 팀원이 실제 수업용으로 만든 한글 자음 실험실을 사용 동의를 받아 같은 출처 iframe으로 사용. 안에 포함된 외부 코드는 `NOTICE.md`
-- 해례본 원문 「聲出稍厲 故加畫」은 공공 영역(1446). 교과서 지문·삽화는 옮기지 않고 팀이 쓴 요약만 사용
-- 글꼴: Pretendard, Noto Serif KR, Black Han Sans(모두 SIL Open Font License)
+- frontend: 화면을 담당하는 Next.js 앱입니다. 페이지, 컴포넌트, 이미지, 설정이 있습니다.
+- backend: API 처리, AI 호출, 규칙, 데이터, 점검 스크립트가 있습니다.
+- docs: 기획 문서입니다.
+- AGENTS.md: 개발 규칙입니다.
 
-## 문서
-| 파일 | 내용 |
-|---|---|
-| [docs/SPEC.md](docs/SPEC.md) | 총기획안. 무엇을, 왜, 어떻게 만드는지의 기준 문서 |
-| [docs/GAMIFICATION.md](docs/GAMIFICATION.md) | 징검런 규칙, 화면 문구, 페이스패스, 근거, 예상 질문 |
-| [AGENTS.md](AGENTS.md) | AI 코딩 도구가 지킬 규칙 (CLAUDE.md는 이 파일을 불러옴) |
+## 기술 스택
 
-## 작업 분할 (11/14 10:15 확정 · 충돌 방지용)
-**원칙: 한 파일의 주인은 한 명.** 남의 파일은 고치지 않고 말로 요청해요. 새 파일은 아래 표의 내 경로에만 만들어요.
+- Next.js, TypeScript, Tailwind CSS
+- 안뇽GPT BAZE API Gateway, Claude Haiku 5.5
+- Vercel
 
-### 신재우 — 학생·교실 화면 = 시그니처 90초
-| 파일 | 할 일 |
-|---|---|
-| `frontend/app/layout.tsx`, `frontend/app/globals.css`, `frontend/app/page.tsx` | 글꼴·색 토큰, 시작 화면 (환희는 Tailwind 클래스만 씀) |
-| `frontend/app/student/page.tsx` | S1 징검런 홈(진행 링, 1칸 남음, 오늘은 여기까지) |
-| `frontend/app/student/stone/[id]/page.tsx` | S2 돌 굳히기(실험실 + 2문항 + 변형 + 첨벙) → 성공 시 `demo.reach(1)` |
-| `frontend/app/student/explain/page.tsx` | S3 도착 관문 → `/api/explain` 호출, 통과 시 `demo.reach(2)` + 해례 |
-| `frontend/app/class/page.tsx` | C1~C4 교실 다리, 물때, 함께 놓기 O/X(`demo.reach(4)`), 개통, 제자표 |
-| `frontend/app/demo/page.tsx` | 분할 화면 배치 |
-| `frontend/components/LabFrame.tsx` | `docs/notes/lab-integration.md` 코드 그대로 |
-| `frontend/components/student/*`, `frontend/components/class/*`, `frontend/components/ProgressRing.tsx` | 학생·교실 전용 컴포넌트 |
-| `frontend/components/StepBadge.tsx` | 13:15 전에는 지우지 않음(교사 화면이 씀) |
-| `backend/data/stones.json` | 돌 카드·굳히기 문항·함께 놓기 O/X·관문 질문과 문장 틀·해례 원문 (내용: 진선우) |
-| `frontend/public/lab/`, `docs/design/*`(시안 제외), `docs/notes/재우.md` | 실험실 사본은 고치지 않음 |
-| **11/14 11:55 환희에게서 넘겨받음** `frontend/app/teacher/*`(예보·결재·레이아웃), `frontend/app/student/welcome/page.tsx`, `frontend/app/student/river/page.tsx`, `frontend/components/teacher/*`, `frontend/components/DemoKeys.tsx`, `frontend/lib/student/me.ts` | 화면은 전부 재우. 화면별 설명·지키는 원칙·주의점은 `docs/notes/handoff-screens.md` |
+## 안내
 
-### 정환희 — 데이터·AI·규칙·문서 (화면은 11/14 11:55부터 재우)
-| 파일 | 할 일 |
-|---|---|
-| `backend/lib/types.ts`, `frontend/lib/store.ts` | 주인. 재우가 필요한 필드·이벤트·시각 변경은 말로 요청 → 환희가 추가하고 바로 push |
-| `backend/lib/llm.ts`, `backend/lib/prompts.ts`, `backend/lib/content.ts`, `backend/lib/rules/*` | AI 호출, 규칙(구간·예보·8유형·예외 제안). 화면 문구가 여기서 나오면 재우가 말로 요청 → 환희가 고침 |
-| `backend/api/*` | `/api/explain`, `/api/analyze` (예보·8유형·예외는 API 없이 규칙으로) |
-| `backend/data/class-2-3.json`, `backend/data/concepts.json`, `backend/data/analysis.saved.json` | 30명, 개념·오개념·관문 키워드, AI 저장본 |
-| `docs/SPEC.md`, `docs/GAMIFICATION.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `package.json` | 문서·설정은 환희만. 재우는 `docs/notes/재우.md`에 적고 알림 |
+- 학생 30명은 모두 가상 데이터이며, 얼굴 인증은 모의 동작으로 얼굴 정보를 받거나 저장하지 않습니다.
+- 기록은 성적에 반영되지 않습니다.
+- 한글 실험실은 팀원이 만든 저작물을 사용 동의를 받아 사용했습니다. 해례본 원문은 공공 영역입니다.
+- 외부 코드와 글꼴의 출처와 라이선스는 NOTICE.md에 있습니다.
 
-### 둘이 맞춘 약속 (바꾸려면 먼저 말하기)
-- 라우트: `/`, `/student`, `/student/stone/[id]`, `/student/explain`, `/student/welcome`, `/student/river`, `/student/class`, `/class`, `/teacher`, `/teacher/approve`, `/teacher/generate`, `/demo` (`/checkin`은 11/14 삭제)
-- 단계 이동은 `demo.reach(n)`만 씀(1 ㅌ 완성 · 2 관문 통과 · 3 수업 시작 · 4 함께 놓기 · 5 개통). 시각은 `d.now`, `d.minutesToLesson`만 읽고 화면에 시각을 직접 쓰지 않음
-- 돌 ID: `st-n`, `st-d`, `st-t`, `st-kk` · 시연 학생 `s07`
-- `/api/explain`: 요청 `{ studentId, stoneId, text }` → 응답 `{ passed, ideas, misconception, feedback, source }`. 서버가 안 되면 화면은 "선생님이 확인할게요"로
-- 오늘은 **새 패키지를 설치하지 않음**(애니메이션은 CSS로). 꼭 필요하면 환희가 설치하고 바로 push
-- 다리 칸 숫자·개통 기준(80%)은 `backend/data/` 값으로 계산해서 화면에 숫자를 직접 쓰지 않음
+## 팀 다이버
 
-## 작업 규칙
-1. 작업 시작 전과 push 직전에 `git pull --rebase`
-2. 커밋할 때 `git add .` 대신 **내 파일 경로만** 적어서 add
-3. 30분마다 작게 커밋·push, 메시지 앞에 `[환희]` 또는 `[재우]`
-4. push 전에 `npm run build`와 `npm run check:secrets` 통과 확인
-5. 남의 파일이 바뀌어 있으면(`git status`) 커밋하지 말고 `git restore 파일`로 되돌린 뒤 말하기. `next dev`가 `AGENTS.md`를 다시 쓰면 그대로 둠
-6. 저장소 전체에 포맷터·`lint --fix`를 돌리지 않음
-7. 충돌이 나면 상대 변경을 지우지 말고 같이 본다. AI 도구로 해결할 때도 상대 코드가 남아 있는지 확인한다
-8. `.env.local`(API 키)은 절대 커밋하지 않는다. Vercel 환경 변수는 환희가 넣음
+정환희, 신재우, 진선우, 김나희
