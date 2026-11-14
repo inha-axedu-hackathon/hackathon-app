@@ -15,8 +15,10 @@ export function FitStage({ width, height, children }: { width: number; height: n
     return () => ro.disconnect();
   }, [width, height]);
   return (
-    <div ref={box} className="relative grid h-full w-full place-items-center" style={{ overflow: "clip" }}>
-      <div style={{ width, height, transform: `scale(${scale})`, transformOrigin: "center", flex: "none", overflow: "clip" }} className="relative">
+    <div ref={box} className="relative h-full w-full" style={{ overflow: "clip" }}>
+      <div
+        style={{ width, height, position: "absolute", left: "50%", top: "50%", transform: `translate(-50%, -50%) scale(${scale})`, transformOrigin: "center", overflow: "clip" }}
+      >
         {children}
       </div>
     </div>
