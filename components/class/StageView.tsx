@@ -105,7 +105,7 @@ export function StageView(v: Record<string, any>) {
     <div className="wave loop"><svg width="2880" height="44" viewBox="0 0 2880 44" preserveAspectRatio="none"><path d="M0 22 Q60 6 120 22 T240 22 T360 22 T480 22 T600 22 T720 22 T840 22 T960 22 T1080 22 T1200 22 T1320 22 T1440 22 T1560 22 T1680 22 T1800 22 T1920 22 T2040 22 T2160 22 T2280 22 T2400 22 T2520 22 T2640 22 T2760 22 T2880 22 L2880 44 L0 44Z" fill="#7FDFC6" fillOpacity=".55" /></svg></div>
     <div className="wave w2 loop"><svg width="2880" height="44" viewBox="0 0 2880 44" preserveAspectRatio="none"><path d="M0 22 Q60 6 120 22 T240 22 T360 22 T480 22 T600 22 T720 22 T840 22 T960 22 T1080 22 T1200 22 T1320 22 T1440 22 T1560 22 T1680 22 T1800 22 T1920 22 T2040 22 T2160 22 T2280 22 T2400 22 T2520 22 T2640 22 T2760 22 T2880 22 L2880 44 L0 44Z" fill="#F2FFFB" fillOpacity=".45" /></svg></div>
     
-    <svg className="bank" width="250" height="230" viewBox="0 0 250 230" style={{position: 'absolute', left: '-40px', top: '-76px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
+    <svg className="bank" width="250" height="230" viewBox="0 0 250 230" style={{position: 'absolute', left: '-92px', top: '-76px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
       <defs>
         <linearGradient id="bkR1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#EEE7D8" /><stop offset=".45" stopColor="#C3B8A2" /><stop offset="1" stopColor="#7E7461" /></linearGradient>
         <linearGradient id="bkR2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#F6F1E6" /><stop offset=".5" stopColor="#D2C8B4" /><stop offset="1" stopColor="#958A75" /></linearGradient>
@@ -139,7 +139,7 @@ export function StageView(v: Record<string, any>) {
       <text x="58" y="193" textAnchor="middle" fontSize="21" fontWeight="800" fill="#1C1A18" fontFamily="Pretendard Variable, Pretendard, sans-serif" letterSpacing="1">출발</text>
     </svg>
     
-    <svg className="bank" width="260" height="250" viewBox="0 0 260 250" style={{position: 'absolute', right: '-34px', top: '-116px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
+    <svg className="bank" width="260" height="250" viewBox="0 0 260 250" style={{position: 'absolute', right: '-86px', top: '-116px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
       <defs>
         <linearGradient id="bkP1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#EEE7D8" /><stop offset=".45" stopColor="#C3B8A2" /><stop offset="1" stopColor="#7E7461" /></linearGradient>
         <linearGradient id="bkP2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#6A7279" /><stop offset=".6" stopColor="#343A40" /><stop offset="1" stopColor="#1F2327" /></linearGradient>

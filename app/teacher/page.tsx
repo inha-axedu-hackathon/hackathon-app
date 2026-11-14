@@ -15,6 +15,7 @@ import { TOGETHER } from "@/components/student/stones";
 import { LockGate, LockStatus, useInfoLock } from "@/components/teacher/InfoLock";
 import { VerifyNotice } from "@/components/teacher/VerifyNotice";
 import { bridgeState, type SectionState } from "@/lib/rules/bridge";
+import { TYPE_PRINCIPLES, readinessCounts, typeHypothesis } from "@/lib/rules/typeRules";
 import { STUDENTS } from "@/lib/rules/roster"; // 교사 전용 전체 명단(학생·교실 화면은 import 금지)
 import { type AnalysisRun, aiWins, blockedPoints, headline, needsTeacher } from "@/lib/rules/forecast";
 import { useDemo } from "@/lib/store";
@@ -140,6 +141,12 @@ export default function TeacherPage() {
   const planNames = b.lessonStarted ? lockedNames : b.sections.filter((s) => s.placed / Math.max(s.total, 1) < 0.8).map((s) => s.name);
   const planQ = planNames[0] ? TOGETHER[planNames[0] as keyof typeof TOGETHER] : null;
   const exceptionCount = STUDENTS.filter((s) => s.exception).length;
+  // 8유형 기준 5가지(SPEC 8-1-2): 관찰 근거 · 의욕 판정 보류 · 결손/오개념 구분 · 경계 보류 · 이번 단원 가설
+  const hyps = STUDENTS.map((s) => typeHypothesis(s, run.results.find((r) => r.studentId === s.id)));
+  const rc = readinessCounts(hyps);
+  const pLow = hyps.filter((h) => h.participation === "낮음 · 이유 확인 전").length;
+  const pEnv = hyps.filter((h) => h.participation === "낮아 보임 · 환경 먼저").length;
+  const cell = (n: number) => (!lock.open && n > 0 && n <= 2 ? "1~2" : String(n));
   const v = {
     planLine: b.lessonStarted
       ? lockedNames.length
@@ -238,7 +245,27 @@ export default function TeacherPage() {
             </span>
           ))}
         </div>
-        <span style={{ fontSize: 12, color: "#6B665F" }}>환경 걸림돌이 있으면 참여는 “낮아 보임”으로 두고, 환경을 먼저 해소한 뒤 다시 판단해요(SPEC 8-1-1).</span>
+        <div className="num" style={{ display: "flex", flexWrap: "wrap", gap: 8, fontSize: 13 }}>
+          {(["준비", "결손", "오개념", "경계"] as const).map((k) => (
+            <span key={k} style={{ padding: "4px 10px", borderRadius: 999, background: k === "경계" ? "#FBF0D6" : "#F7F6F2", fontWeight: 700 }}>
+              {k === "결손" ? "결손(아직 모름)" : k === "오개념" ? "오개념(틀린 생각)" : k === "경계" ? "경계 · 단정 안 함" : "준비"} {cell(rc[k])}
+            </span>
+          ))}
+          <span style={{ padding: "4px 10px", borderRadius: 999, background: "#F7F6F2" }}>
+            참여 낮음 · 이유 확인 전 {cell(pLow)} · 낮아 보임 · 환경 먼저 {cell(pEnv)}
+          </span>
+        </div>
+        <details style={{ fontSize: 13, color: "#4A4641" }}>
+          <summary style={{ cursor: "pointer", fontWeight: 700 }}>유형을 나누는 기준 5가지 · 이번 단원 가설이에요</summary>
+          <ol style={{ margin: "6px 0 0", paddingLeft: 18, display: "grid", gap: 2 }}>
+            {TYPE_PRINCIPLES.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ol>
+          <p style={{ margin: "6px 0 0", color: "#6B665F" }}>
+            확신은 지금은 AI가 답을 읽은 확신(0.65 미만이면 경계)으로 보고, 학생 스스로의 확신 문항은 파일럿에서 더해요. 유형은 학생에게 보이지 않고 단원이 끝나면 지워요.
+          </p>
+        </details>
       </>
     ),
     tab,

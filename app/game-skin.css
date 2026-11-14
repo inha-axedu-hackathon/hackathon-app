@@ -294,3 +294,18 @@
   border-radius: 20px !important;
   padding: 24px !important;
 }
+
+/* ── 교실 화면 배치 보정: 구간 폭을 줄여 둑과 돌이 겹치지 않게, 함께 놓기 화면에 비·경계선이 보이지 않게 ── */
+.stage .sec {
+  width: 352px;
+}
+.stage .sec .stone {
+  --s: 66px;
+}
+.stage.s-together .scrim,
+.stage.s-jejapyo .scrim {
+  opacity: 1;
+}
+.stage.s-together .rainbox {
+  opacity: 0;
+}

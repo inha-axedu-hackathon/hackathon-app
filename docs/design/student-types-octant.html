@@ -3430,4 +3430,15 @@ cv.addEventListener('pointerdown',e=>{drag=true;auto=false;moved=0;[lx,ly]=pos(e
 cv.addEventListener('pointermove',e=>{if(!drag)return;const[x,y]=pos(e);ay+=(x-lx)*0.012;ax+=(y-ly)*0.012;ax=Math.max(-1.4,Math.min(1.4,ax));moved+=Math.abs(x-lx)+Math.abs(y-ly);lx=x;ly=y;});
 cv.addEventListener('pointerup',e=>{drag=false;if(moved<6){const[x,y]=pos(e);for(let i=lab.length-1;i>=0;i--){const o=lab[i];if(Math.hypot(x-o.P.x,y-o.P.y)<=o.r+8){sel=o.b.id;info.innerHTML='<div style="font-weight:500;margin-bottom:2px;">'+o.b.id+' '+o.b.t+'</div><div style="color:var(--text-secondary);">'+o.b.d+'</div>';return;}}}});
 window.addEventListener('resize',fit);
-</script></div></body></html>
+</script></div><section style="max-width:880px;margin:32px auto;padding:20px 24px;border:2px solid #231f1c;border-radius:16px;box-shadow:0 4px 0 #231f1c;font-family:Pretendard,system-ui,sans-serif;line-height:1.7;background:#fff">
+<h2 style="margin:0 0 8px;font-size:20px">유형을 나누는 기준 5가지 (11/14 예비교사 확정)</h2>
+<ol style="margin:0;padding-left:20px">
+<li>관찰한 근거만 쓴다.</li>
+<li>이유를 확인하기 전에는 의욕 부족으로 판정하지 않는다. (화면 표기: 참여 신호 낮음 · 이유 확인 전 / 낮아 보임 · 환경 먼저)</li>
+<li>정답과 확신을 함께 보고 결손과 오개념을 구분한다.</li>
+<li>경계에 있는 학생은 단정하지 않는다.</li>
+<li>유형은 이번 사이클의 가설이며 낙인이 되지 않게 쓴다.</li>
+</ol>
+<p style="margin:8px 0 0;color:#6b665f;font-size:14px">구현: lib/rules/typeRules.ts · 문서: docs/SPEC.md 8-1-2</p>
+</section>
+</body></html>

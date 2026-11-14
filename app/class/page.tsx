@@ -44,8 +44,17 @@ export default function ClassPage() {
     onRope: () => d.reach(4),
   });
 
+  // 화면 비율이 16:9가 아닐 때 남는 여백을 장면 색으로 채워 '틀'이 보이지 않게
+  const SKY = { 맑음: "#AFDAEC", 구름: "#C3CCD1", 먹구름: "#3A4752", 소나기: "#2F3F4A" } as const;
+  const dark = scene === "together" || scene === "jejapyo";
+  const left = SKY[bridge.sections[0].weather];
+  const right = SKY[bridge.sections[2].weather];
+  const backdrop = dark
+    ? "#12171A"
+    : `linear-gradient(180deg, transparent 0 58%, #22AE91 58%, #0A6659 100%), linear-gradient(90deg, ${left} 0 50%, ${right} 50% 100%)`;
+
   return (
-    <main className="h-dvh w-full" style={{ background: "#12171A", overflow: "clip" }}>
+    <main className="h-dvh w-full" style={{ background: backdrop, overflow: "clip", transition: "background 900ms" }}>
       <FitStage width={1440} height={810}>
         <StageView {...v} />
       </FitStage>

@@ -13,7 +13,7 @@ const T: Record<Wx, { word: string; col: string; name: string; lvl: number }> = 
   dark: { word: "먹구름", col: "#F4F2EC", name: "#C9D3D7", lvl: 100 },
   shower: { word: "소나기", col: "#BFF1F3", name: "#C9D3D7", lvl: 84 },
 };
-const XS = [92, 520, 948];
+const XS = [168, 536, 904]; // 양쪽 둑에 돌이 가리지 않게 (구간 폭 352)
 const SKX = [-100, 400, 840];
 const SKW = [820, 760, 700];
 const NAMES = ["상형", "가획", "병서"];
@@ -105,7 +105,7 @@ export function stageVals(opts: {
     };
   });
   const L = sections.map((s) => s.lvl);
-  const line = `M0 ${L[0]} L432 ${L[0]} C492 ${L[0]} 520 ${L[1]} 580 ${L[1]} L860 ${L[1]} C920 ${L[1]} 948 ${L[2]} 1008 ${L[2]} L1440 ${L[2]}`;
+  const line = `M0 ${L[0]} L488 ${L[0]} C528 ${L[0]} 536 ${L[1]} 576 ${L[1]} L856 ${L[1]} C896 ${L[1]} 904 ${L[2]} 944 ${L[2]} L1440 ${L[2]}`;
 
   const locked = bridge.sections.filter((s) => s.locked).map((s) => s.name);
   const cloudy = bridge.sections.filter((s) => s.weather !== "맑음");
