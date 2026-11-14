@@ -111,7 +111,7 @@ export default function CheckinPage() {
   );
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-5xl flex-col px-4 py-5 sm:px-8">
+    <main className="g-skin mx-auto flex min-h-dvh max-w-5xl flex-col px-4 py-5 sm:px-8">
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
         <p className="text-lg font-bold">
           슈퍼패스 <span className="font-normal text-mute">운영 모드</span> · 아침 징검다리

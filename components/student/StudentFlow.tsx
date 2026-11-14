@@ -2,7 +2,7 @@
 // components/student/StudentFlow.tsx — 학생 태블릿 화면의 흐름 (담당: 신재우)
 // 디자인(StudentView)에 실제 동작을 붙인다: 실험실(LabFrame) · 굳히기 문항 · 첨벙(시연 단계 1) · 도착 관문(/api/explain, 시연 단계 2)
 // 본인 숫자만 보여 준다. 점수·순위·연속 기록·레벨 없음. 학생에게 보이는 판정 문장은 서버가 미리 써 둔 문구뿐.
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { handleDemoKey } from "@/components/DemoKeys";
 import { FitStage } from "@/components/FitStage";
@@ -25,7 +25,7 @@ const Q = [
     explain: "ㅁ에 획을 더하면 ㅂ. 소리가 조금 세져요.", fix: "ㅆ은 나란히 쓴 병서, ㆁ은 모양이 다른 이체자예요." },
 ];
 
-type Judge = { passed: boolean; feedback: string; source: string };
+type Judge = { passed: boolean; feedback: string; source: string; misconception?: string | null; needsTeacher?: boolean };
 
 export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
   const d = useDemo();
@@ -41,6 +41,8 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
   const [b2, setB2] = useState("");
   const [freeText, setFreeText] = useState("");
   const [busy, setBusy] = useState(false);
+  const inFlight = useRef(false); // 같은 프레임 연타 방지
+  const [held, setHeld] = useState(false); // 서버가 "선생님 확인"으로 넘긴 답: 다시 내지 않고 기다림
   const [gateMsg, setGateMsg] = useState("");
   const [answer, setAnswer] = useState("");
 
@@ -82,30 +84,36 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
 
   const submit = async () => {
     const text = tab === "frame" ? `ㅌ은 ㄷ보다 소리가 ${b1.trim()} 나서 ${b2.trim()} 하나 더했다.` : freeText.trim();
-    if (busy) return;
+    if (inFlight.current || held) return;
     if ((tab === "frame" && (!b1.trim() || !b2.trim())) || (tab === "free" && text.length < 5)) {
       setGateMsg("빈칸을 채우거나 내 말로 써 볼까요?");
       return;
     }
+    inFlight.current = true;
     setBusy(true);
-    let j: Judge = { passed: false, feedback: "선생님이 확인할게요", source: "saved" };
+    let j: Judge = { passed: false, feedback: "선생님이 확인할게요", source: "saved", needsTeacher: true };
     try {
       const res = await fetch("/api/explain", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ studentId: DEMO_STUDENT, stoneId: "st-t", text }),
+        signal: AbortSignal.timeout(9000), // 서버가 멈춰도 '확인하는 중…'에 갇히지 않게
       });
       if (res.ok) j = (await res.json()) as Judge;
     } catch {
       /* 서버에 못 닿으면 통과시키지 않는다 */
     }
+    inFlight.current = false;
     setBusy(false);
     if (j.passed) {
       setGateMsg("");
       setAnswer(text);
       d.reach(2); // 시연 단계 2: 말해보기 통과
       setScreen("pass");
-    } else setGateMsg(j.feedback);
+    } else {
+      setGateMsg(j.needsTeacher ? `${j.feedback} · 괜찮아요, 홈에서 다른 돌을 이어 가요` : j.feedback);
+      if (j.needsTeacher) setHeld(true);
+    }
   };
 
   const cq = Q[q];

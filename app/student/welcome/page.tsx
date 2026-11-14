@@ -67,7 +67,7 @@ export default function WelcomePage() {
   }, [step]);
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col gap-5 px-5 pt-6">
+    <main className="g-skin mx-auto flex min-h-dvh max-w-md flex-col gap-5 px-5 pt-6">
       <header>
         <p className="text-sm text-mute">2학년 3반 국어 · 첫 수업 안내</p>
         <h1 className="text-2xl font-bold">안녕, {ME.alias}</h1>

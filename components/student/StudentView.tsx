@@ -203,7 +203,7 @@ export function StudentView(v: Record<string, any>) {
           </div>
           {(frameTab) && (<>
             <div className="paper" style={{padding: '30px 36px 26px', display: 'flex', flexDirection: 'column', gap: '18px'} as any}>
-              <div style={{fontSize: '28px', fontWeight: '600', lineHeight: '2.2', letterSpacing: '-0.01em'} as any}>ㅌ은 ㄷ보다 소리가<input className="blank" aria-label="빈칸 1, 소리의 세기" value={b1} onChange={setB1} />나서<input className="blank" aria-label="빈칸 2, 더한 것" value={b2} onChange={setB2} />하나 더했다.</div>
+              <div style={{fontSize: '28px', fontWeight: '600', lineHeight: '2.2', letterSpacing: '-0.01em'} as any}>ㅌ은 ㄷ보다 소리가<input maxLength={20} className="blank" aria-label="빈칸 1, 소리의 세기" value={b1} onChange={setB1} />나서<input maxLength={20} className="blank" aria-label="빈칸 2, 더한 것" value={b2} onChange={setB2} />하나 더했다.</div>
               <div style={{display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '14px', borderTop: '1px dashed #E7DDCB'} as any}>
                 <span style={{fontSize: '13px', fontWeight: '700', color: '#8A7F70', marginRight: '4px'} as any}>낱말 상자</span>
                 {(words as any[]).map((w: any) => (<button key={w.w} type="button" className={w.cls} onClick={w.fill}>{w.w}</button>))}
@@ -212,7 +212,7 @@ export function StudentView(v: Record<string, any>) {
             <span style={{fontSize: '14px', color: '#6B665F'} as any}>빈칸 2개 · 다음 단원부터는 첫 낱말만 보여요</span>
           </>)}
           {(freeTab) && (<>
-            <label className="paper" style={{display: 'flex', flexDirection: 'column', gap: '10px', padding: '24px 28px', fontSize: '14px', fontWeight: '700', color: '#8A7F70'} as any}>내 설명<textarea rows={4} value={freeText} onChange={setFree} placeholder="예) ㅌ은 ㄷ보다…" style={{font: 'inherit', fontSize: '24px', fontWeight: '500', lineHeight: '1.6', color: '#1C1A18', border: 'none', background: 'transparent', resize: 'none', outline: 'none'} as any}></textarea></label>
+            <label className="paper" style={{display: 'flex', flexDirection: 'column', gap: '10px', padding: '24px 28px', fontSize: '14px', fontWeight: '700', color: '#8A7F70'} as any}>내 설명<textarea maxLength={300} rows={4} value={freeText} onChange={setFree} placeholder="예) ㅌ은 ㄷ보다…" style={{font: 'inherit', fontSize: '24px', fontWeight: '500', lineHeight: '1.6', color: '#1C1A18', border: 'none', background: 'transparent', resize: 'none', outline: 'none'} as any}></textarea></label>
           </>)}
           {(gateMsg) && (<p role="status" style={{margin: '0', padding: '12px 18px', borderRadius: '16px', background: '#F9ECEF', color: '#7E2C42', fontSize: '17px', fontWeight: 700} as any}>{gateMsg}</p>)}
           <div style={{marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '20px'} as any}>

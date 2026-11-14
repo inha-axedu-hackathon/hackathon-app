@@ -21,7 +21,7 @@ import { useDemo } from "@/lib/store";
 
 const SAVED = savedJson as unknown as AnalysisRun;
 const noop = () => () => {};
-type RunState = "idle" | "running" | "saved-only";
+type RunState = "idle" | "running" | "saved-only" | "off";
 
 const WX: Record<SectionState["weather"], { key: "clear" | "cloud" | "dark" | "shower"; col: string }> = {
   맑음: { key: "clear", col: "#7A4E00" },
@@ -63,7 +63,7 @@ export default function TeacherPage() {
   const lockedNames = b.sections.filter((s) => s.locked).map((s) => s.name);
   const lockedNow = b.lessonStarted && !b.together && lockedNames.length > 0;
   const model = run.model ?? "claude-haiku-5-5";
-  const source = run.live ? `AI 분석 · 방금 다시 실행 (${model}, ${run.llmCount ?? run.results.length}명)` : `AI 분석 저장본 · 말해보기 제출 직후 (${model})`;
+  const source = run.live ? `AI 분석 · 방금 다시 실행 (${model}, ${run.llmCount ?? run.results.length}명)` : `AI 분석 저장본 · 말해보기 제출 직후 (${model})` + (run.live && run.tokens?.used === 0 ? " · 같은 답이라 직전 결과 재사용" : "");
   const agree = run.agreement ? ` · 오개념 탐지 일치 ${run.agreement.matched}/${run.agreement.total}` : "";
 
   function toggle(key: string) {
@@ -84,7 +84,7 @@ export default function TeacherPage() {
     if (runState === "running") return;
     setRunState("running");
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25_000);
+    const timer = setTimeout(() => ctrl.abort(), 45_000);
     try {
       const answers = STUDENTS.map((s) => ({ studentId: s.id, text: s.signals.explain1, label: s.label?.misconceptions ?? [] }));
       const res = await fetch("/api/analyze", {
@@ -93,10 +93,14 @@ export default function TeacherPage() {
         body: JSON.stringify({ answers }),
         signal: ctrl.signal,
       });
+      if (res.status === 403) {
+        setRunState("off"); // 배포 주소: 시연 전에 저장한 분석을 쓴다(로컬에서만 다시 실행)
+        return;
+      }
       const out = (await res.json()) as AnalysisRun & { usedLLM?: boolean };
       const llm = out.results?.filter((r) => r.source === "llm").length ?? 0;
       if (!res.ok || !out.usedLLM || llm < out.results.length * 0.8) throw new Error("fallback"); // AI가 거의 못 읽었으면 저장본 유지
-      setLive({ ...out, createdAt: new Date().toISOString(), live: true });
+      setLive({ ...out, tokens: (out as AnalysisRun).tokens, createdAt: new Date().toISOString(), live: true });
       setRunState("idle");
     } catch {
       setRunState("saved-only");
@@ -145,8 +149,8 @@ export default function TeacherPage() {
       </>
     ),
     analyze,
-    analyzing: runState === "running",
-    analyzeLabel: runState === "running" ? `${STUDENTS.length}명 읽는 중…` : "AI 분석 다시 실행",
+    analyzing: runState === "running" || runState === "off",
+    analyzeLabel: runState === "running" ? `${STUDENTS.length}명 읽는 중…` : runState === "off" ? "저장본 사용 중" : "AI 분석 다시 실행",
     startSlot: !mounted ? null : !b.lessonStarted ? (
       <button type="button" className="btn bp" onClick={startLesson}>
         수업 시작 <kbd style={{ opacity: 0.7, fontSize: 12 }}>T</kbd>
@@ -206,7 +210,7 @@ export default function TeacherPage() {
             </div>
           </details>
         )}
-        <VerifyNotice />
+        <VerifyNotice source={source} />
       </div>
     ),
     exceptionSlot: <ExceptionPanel events={d.events} showNames={showNames && lock.open} />,
@@ -234,6 +238,11 @@ export default function TeacherPage() {
             <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>AI가 읽은 근거</h2>
             <span className="lb">키워드가 놓친 답을 AI가 찾은 예</span>
           </div>
+          {runState === "off" && (
+            <p role="status" style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
+              배포 주소에서는 시연 전에 저장한 분석을 써요 · 다시 실행은 발표 노트북(로컬)에서만
+            </p>
+          )}
           {runState === "saved-only" && (
             <p role="status" style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
               {live ? "다시 부르지 못해서 직전 분석을 그대로 보여 줘요." : "지금은 AI를 부를 수 없어서 저장된 분석을 보여 줘요."}

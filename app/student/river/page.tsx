@@ -35,7 +35,7 @@ export default function RiverPage() {
   const myChars = ME.path.filter(placed).map((id) => STONES.find((s) => s.id === id)?.char ?? "");
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col gap-5 px-5 py-6 print:py-0">
+    <main className="g-skin mx-auto flex min-h-dvh max-w-md flex-col gap-5 px-5 py-6 print:py-0">
       <header className="flex items-end justify-between gap-2">
         <div>
           <p className="text-sm text-mute">

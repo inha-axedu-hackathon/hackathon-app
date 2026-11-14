@@ -59,7 +59,7 @@ export default function ApprovePage() {
   });
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-5xl flex-col gap-4 px-4 pt-5 pb-16 sm:px-8">
+    <main className="g-skin mx-auto flex min-h-dvh max-w-5xl flex-col gap-4 px-4 pt-5 pb-16 sm:px-8">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <Link href="/teacher" className="text-sm text-mute hover:text-ink">
