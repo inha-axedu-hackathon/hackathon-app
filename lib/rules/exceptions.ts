@@ -25,7 +25,7 @@ export const RULE_SETS = [
 export const TYPE_DEFS: Record<string, { id: string; name: string; support: string }> = {
   "있음/준비/양호": { id: "C1", name: "참여 신호 있음 · 선수 개념 준비 · 환경 양호", support: "심화 돌, 또래 설명 역할(희망자)" },
   "있음/보충/양호": { id: "A1", name: "참여 신호 있음 · 선수 개념 보충 · 환경 양호", support: "선수 개념 돌 추가, 소그룹 지도" },
-  "있음/준비/걸림돌": { id: "C2", name: "참여 신호 있음 · 선수 개념 준비 · 환경 걸림돌", support: "종이 돌·교내 시간대(아침 태블릿)로 기회 보장" },
+  "있음/준비/걸림돌": { id: "C2", name: "참여 신호 있음 · 선수 개념 준비 · 환경 걸림돌", support: "종이 돌·학교 지급 태블릿으로 기회 보장(밤 10시 마감)" },
   "있음/보충/걸림돌": { id: "A2", name: "참여 신호 있음 · 선수 개념 보충 · 환경 걸림돌", support: "환경 지원(기기 대여, 교내 학습 공간)을 먼저 하고 보충" },
   "낮음/준비/양호": { id: "E1", name: "참여 신호 낮음 · 선수 개념 준비 · 환경 양호", support: "선택권 주기, 도전 돌, 동기 탐색 대화(안부 묻기)" },
   "낮음/보충/양호": { id: "B1", name: "참여 신호 낮음 · 선수 개념 보충 · 환경 양호", support: "짧은 목표(작은 돌), 흥미 연결, 1:1 대화" },
@@ -53,13 +53,13 @@ export function proposalFor(s: Student): { why: string; plan: string[] } {
   if (ex.includes("기기")) {
     return {
       why: `${stoneName(s.path?.[0])} 돌을 종이 징검돌로 놓았어요${chose}`,
-      plan: ["종이 돌을 확인하면 다리에 놓인 것으로 쳐요", "아침 교실 태블릿(07:50~08:40)을 안내해요"],
+      plan: ["종이 돌을 확인하면 다리에 놓인 것으로 쳐요", "학교 지급 태블릿으로 밤 10시 전에 놓도록 안내해요"],
     };
   }
   if (ex.includes("영상")) {
     return {
       why: `사전학습 영상을 2번 시작하지 않아 ${stuck} 돌이 비어 있어요${chose}`,
-      plan: ["아침 교실 태블릿을 안내해요", `수업 전에 먼저 말 걸기${atStart}`],
+      plan: ["학교 지급 태블릿 사용을 안내해요", `수업 전에 먼저 말 걸기${atStart}`],
     };
   }
   if (ex.includes("SOS")) {

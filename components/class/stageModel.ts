@@ -61,6 +61,7 @@ export function stageVals(opts: {
   scene: Scene;
   step: number;
   minutesToLesson: number;
+  minutesToDeadline?: number;
   pick: "O" | "X" | null;
   revealed: boolean;
   onPick: (v: "O" | "X") => void;
@@ -124,8 +125,8 @@ export function stageVals(opts: {
   }));
 
   const CLOCK: Record<Scene, string> = {
-    forecast: `3교시까지 ${Math.max(0, minutesToLesson)}분`,
-    splash: `3교시까지 ${Math.max(0, minutesToLesson)}분`,
+    forecast: `밤 10시 마감까지 ${Math.max(0, opts.minutesToDeadline ?? minutesToLesson)}분`,
+    splash: `밤 10시 마감까지 ${Math.max(0, opts.minutesToDeadline ?? minutesToLesson)}분`,
     tide: "3교시 · 물때",
     together: "3교시 · 함께 놓기",
     rope: "3교시 · 함께 놓기",

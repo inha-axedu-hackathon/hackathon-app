@@ -6,7 +6,7 @@ export function StepBadge() {
   const d = useDemo();
   return (
     <p className="text-sm text-neutral-500">
-      단계 {d.step} · {STEP_LABEL[d.step]} · 가상 시각 {d.now.slice(11, 16)} · 수업까지 {d.minutesToLesson}분
+      단계 {d.step} · {STEP_LABEL[d.step]} · 가상 시각 {d.now.slice(11, 16)} · 마감까지 {d.minutesToDeadline}분 · 수업까지 {d.minutesToLesson}분
       {d.offline ? " · 오프라인" : ""} · 이벤트 {d.events.length}개
     </p>
   );

@@ -14,8 +14,10 @@ const KEY = "jingum:v3";
 const CHANNEL = "jingum-sync";
 const LESSON_AT = "2026-11-14T10:50:00+09:00"; // 3교시 시작
 // 단계별 가상 시각. Date.now()는 쓰지 않는다(발표가 오후라 수업이 이미 지난 것처럼 보임)
-const STEP_TIME = ["10:38", "10:40", "10:42", "10:50", "10:52", "10:57", "10:58"] as const;
-const timeOf = (s: Step) => `2026-11-14T${STEP_TIME[s]}:00+09:00`;
+// 11/14 변경: 돌 놓기는 전날 밤 22:00에 마감(교사가 아침에 확정된 결과를 보고 바로 수업 준비). 0~2단계는 전날 밤, 3단계부터 수업 당일
+const DEADLINE_AT = "2026-11-13T22:00:00+09:00";
+const STEP_TIME = ["11-13T21:48", "11-13T21:50", "11-13T21:52", "11-14T10:50", "11-14T10:52", "11-14T10:57", "11-14T10:58"] as const;
+const timeOf = (s: Step) => `2026-${STEP_TIME[s]}:00+09:00`;
 
 export const STEP_LABEL = ["초기", "ㅌ 첨벙", "말해보기 통과", "수업 시작", "함께 놓기", "개통", "제자표"] as const;
 
@@ -122,5 +124,6 @@ export const demo = {
 export function useDemo() {
   const s = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const minutesToLesson = Math.round((Date.parse(LESSON_AT) - Date.parse(s.now)) / 60000);
-  return { ...s, minutesToLesson, ...demo };
+  const minutesToDeadline = Math.round((Date.parse(DEADLINE_AT) - Date.parse(s.now)) / 60000); // 0 이하면 오늘 돌 놓기 마감
+  return { ...s, minutesToLesson, minutesToDeadline, ...demo };
 }

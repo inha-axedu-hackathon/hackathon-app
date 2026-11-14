@@ -23,7 +23,11 @@ const Q = [
     explain: "ㅋ도 ㄱ에 획을 더한 글자예요. 소리가 조금 세졌죠.", fix: "ㄲ은 ㄱ을 나란히 쓴 병서예요. 획을 더한 글자를 다시 찾아봐요." },
   { tag: "굳히기 2/2 · 비슷한 문제", text: "ㄴ → ㄷ처럼 획을 더해 만든 짝은?", opts: ["ㅅ → ㅆ", "ㅁ → ㅂ", "ㅇ → ㆁ"], ans: 1, serif: false,
     explain: "ㅁ에 획을 더하면 ㅂ. 소리가 조금 세져요.", fix: "ㅆ은 나란히 쓴 병서, ㆁ은 모양이 다른 이체자예요." },
+  { tag: "굳히기 1/2 · 비슷한 문제", text: "ㄱ에 획을 하나 더해 ㅋ을 만든 까닭은?", opts: ["글자를 나란히 쓰려고", "소리가 조금 세게 나서", "글자 모양을 예쁘게 하려고"], ans: 1, serif: false,
+    explain: "ㅋ도 ㅌ처럼 소리가 조금 세져서 획을 더했어요(聲出稍厲).", fix: "나란히 쓰는 건 병서(ㄲ)예요. 획을 더하는 까닭은 소리가 세지는 것이에요." },
 ];
+// 문항마다 비슷한 문제가 하나씩: 1번(0) → 3, 2번(1) → 2. 비슷한 문제를 맞히면 그 문항을 통과한 것으로 보고 다음 문항으로 간다(건너뛰지 않음)
+const VARIANT_OF = [3, 2] as const;
 
 type Judge = { passed: boolean; feedback: string; source: string; misconception?: string | null; needsTeacher?: boolean };
 
@@ -117,6 +121,8 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
   };
 
   const cq = Q[q];
+  const closed = d.minutesToDeadline <= 0 && d.step < 3; // 전날 밤 22:00 마감 ~ 수업 시작 전
+  const slot: 0 | 1 = q === 0 || q === 3 ? 0 : 1; // 지금 풀고 있는 문항 (1번 또는 2번)
   const answered = picked !== null;
   const ok = answered && picked === cq.ans;
   const stepIdx = screen === "concept" ? 1 : screen === "lab" ? 2 : 3;
@@ -148,8 +154,8 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     ringLabel: placedT ? "진행 3/3" : "진행 2/3",
     ringDash: placedT ? "3 0" : "2 3",
     ringColor: placedT ? "#C9A227" : "#9B3A51",
-    heroLine: placedT ? "완주! 🏁" : "1칸 남음 · 4분이면 완주 🏁",
-    heroSub: placedT ? (passed ? "오늘 수업에서 만나요" : "도착 관문이 남았어요") : "ㄷ → ㅌ 만들기 + 문항 2개",
+    heroLine: placedT ? "완주! 🏁" : closed ? "오늘 놓기는 밤 10시에 닫혔어요" : "1칸 남음 · 4분이면 완주 🏁",
+    heroSub: placedT ? (passed ? "오늘 수업에서 만나요" : "도착 관문이 남았어요") : closed ? "수업에서 함께 건너요 · 놓은 돌은 그대로예요" : "ㄷ → ㅌ 만들기 + 문항 2개",
     titleName: passed ? "집현전 견습생" : "첫걸음 학생",
     star2: passed ? "#C9A227" : "none",
     star2w: passed ? "0" : "1.8",
@@ -160,7 +166,7 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     qFix: cq.fix,
     fbOk: answered && ok,
     fbNo: answered && !ok,
-    okLabel: q === 0 ? "다음 문항" : "돌 굳히기",
+    okLabel: slot === 0 ? "다음 문항" : "돌 굳히기",
     opts: cq.opts.map((t, j) => {
       let cls = "opt";
       if (answered) cls += j === picked ? (ok ? " ok" : " no") : " dim";
@@ -169,9 +175,10 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
       return { text: t, mark, cls, font: cq.serif ? "serif" : "", pick: () => !answered && (setPicked(j), setTouched(true)) };
     }),
     afterOk: () => {
-      if (q === 0) {
-        setQ(1);
+      if (slot === 0) {
+        setQ(1); // 1번(또는 1번의 비슷한 문제)을 맞혀도 2번은 꼭 푼다
         setPicked(null);
+        setUsedVariant(false); // 비슷한 문제 기회는 문항마다 한 번
       } else place();
     },
     toVariant: () => {
@@ -180,12 +187,13 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
         return;
       }
       setUsedVariant(true);
-      setQ(2);
+      setQ(VARIANT_OF[slot]);
       setPicked(null);
     },
     goHome: () => setScreen("home"),
     variantLabel: usedVariant ? "다음에 이어서" : "비슷한 문제로 다시",
     goConcept: () => {
+      if (closed && !placedT) return; // 밤 10시 마감 뒤에는 열지 않는다(수업 뒤 밧줄 돌은 따로)
       setTouched(true);
       setScreen(placedT ? (passed ? "home" : "gate") : "concept");
     },
@@ -193,6 +201,7 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     goQuiz: () => {
       setQ(0);
       setPicked(null);
+      setUsedVariant(false);
       setScreen("quiz");
     },
     goGate: () => setScreen("gate"),

@@ -16,10 +16,10 @@ export function StudentView(v: Record<string, any>) {
       <span className="stone" style={{'--s': '34px', fontSize: '0'} as any}></span>
       <span style={{fontSize: '20px', fontWeight: '800', letterSpacing: '-0.02em'} as any}>징검런</span>
       <span style={{width: '1px', height: '18px', background: '#DCD7CC'} as any}></span>
-      <span style={{fontSize: '15px', color: '#4A4641'} as any}>국어의 문자 체계 · 3교시 전까지</span>
+      <span style={{fontSize: '15px', color: '#4A4641'} as any}>국어의 문자 체계 · 오늘 밤 10시까지</span>
     </div>
     <div style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', fontWeight: '600', color: '#6B665F'} as any}>
-      <span style={{display: 'flex', alignItems: 'center', gap: '6px'} as any}><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M6.5 11h3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>교실 태블릿 · 슈퍼패스로 들어옴</span>
+      <span style={{display: 'flex', alignItems: 'center', gap: '6px'} as any}><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M6.5 11h3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>학교 지급 태블릿 · 집에서</span>
       <span style={{display: 'flex', alignItems: 'center', gap: '8px', background: '#F7F6F2', borderRadius: '999px', padding: '6px 14px 6px 8px', color: '#1C1A18', fontSize: '14px', fontWeight: '700'} as any}><span className="serif" style={{width: '26px', height: '26px', borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', fontWeight: '900', boxShadow: 'inset 0 0 0 1px #E3E0D6'} as any}>ㆁ</span>옛이응</span>
     </div>
   </header>

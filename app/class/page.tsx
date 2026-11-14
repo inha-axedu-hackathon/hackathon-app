@@ -37,6 +37,7 @@ export default function ClassPage() {
     scene,
     step: d.step,
     minutesToLesson: d.minutesToLesson,
+    minutesToDeadline: d.minutesToDeadline,
     pick,
     revealed,
     onPick: setPick,

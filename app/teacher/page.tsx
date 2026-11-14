@@ -164,7 +164,7 @@ export default function TeacherPage() {
     headerLine: (
       <>
         2학년 3반 · 「국어의 문자 체계」 · 3교시 10:50 ·{" "}
-        <b style={{ color: "#9B3A51" }}>{d.minutesToLesson > 0 ? `수업까지 ${d.minutesToLesson}분` : "수업 중"}</b> · 수업활동 › 성찰 「개념 말해보기」 {run.results.length}/{STUDENTS.length} 제출
+        <b style={{ color: "#9B3A51" }}>{d.minutesToDeadline > 0 ? `오늘 밤 10시 돌 마감까지 ${d.minutesToDeadline}분` : d.minutesToLesson > 0 ? `어젯밤 10시 마감 · 수업까지 ${d.minutesToLesson}분` : "수업 중 · 어젯밤 10시 마감 기준"}</b> · 수업활동 › 성찰 「개념 말해보기」 {run.results.length}/{STUDENTS.length} 제출
       </>
     ),
     analyze,
