@@ -16,17 +16,18 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## 기술
 - Next.js App Router + TypeScript + Tailwind.
-- 타입은 `lib/types.ts`에 있는 것만 쓴다. 새 타입이 필요하면 거기에 추가한다.
-- 시연 상태는 `lib/store.ts`의 `useDemo()`만 쓴다. localStorage는 `"use client"` 컴포넌트의 `useEffect` 안에서만 읽는다.
-- API 키는 서버(`app/api`)에서만 `process.env`로 읽는다. `NEXT_PUBLIC_`에 넣지 않는다. `.env*` 파일은 커밋하지 않는다.
-- LLM 호출은 `lib/llm.ts`의 `callLLM()`만 쓴다(server-only). 시간 제한·답 길이 상한·대체 결과를 항상 두고, 학생에게 보이는 문장은 AI가 쓰지 않는다(미리 쓴 문장만).
+- 폴더: 화면은 `frontend/`(Next 앱, `@/…`), 서버 쪽(API 처리·AI·규칙·타입·데이터)은 `backend/`(`@backend/…`). `frontend/app/api/*/route.ts`는 `backend/api/*.ts`를 다시 내보내기만 한다. npm 명령은 `frontend/`에서 돌린다.
+- 타입은 `backend/lib/types.ts`에 있는 것만 쓴다. 새 타입이 필요하면 거기에 추가한다.
+- 시연 상태는 `frontend/lib/store.ts`의 `useDemo()`만 쓴다. localStorage는 `"use client"` 컴포넌트의 `useEffect` 안에서만 읽는다.
+- API 키는 서버(`backend/api`)에서만 `process.env`로 읽는다. `NEXT_PUBLIC_`에 넣지 않는다. `.env*` 파일은 커밋하지 않는다.
+- LLM 호출은 `backend/lib/llm.ts`의 `callLLM()`만 쓴다(server-only). 시간 제한·답 길이 상한·대체 결과를 항상 두고, 학생에게 보이는 문장은 AI가 쓰지 않는다(미리 쓴 문장만).
 - 시각은 `Date.now()`가 아니라 store의 가상 시계를 쓴다.
 
 ## 보안 (백엔드)
 - AI 결과는 허용된 ID만 받고, 근거 인용은 학생 글에 실제로 있을 때만 인정한다(`quoted()`). 위기 낱말은 `isCrisis()`로 먼저 걸러 AI에 보내지 않는다.
 - 외부 AI에는 답 텍스트만 보낸다(학생 ID·이름 금지, `maskPII()` 거친 뒤). 서버 로그에는 토큰 수·이유만, 학생 글과 키는 남기지 않는다.
 - API에는 입력 검사(형식·길이·본문 크기), 다른 사이트 요청 차단(`crossSite()`), 남용 상한(학생별·서버 전체·하루 토큰)을 둔다. 관리자용 `/api/analyze`는 배포 주소에서 꺼 둔다.
-- 학생·교실 화면은 교사 전용 명단(`lib/rules/roster.ts`, `data/class-2-3.json`)을 import하지 않는다. 공개 필드는 `lib/rules/bridge.ts`의 `PUBLIC_STUDENTS`.
+- 학생·교실 화면은 교사 전용 명단(`backend/lib/rules/roster.ts`, `backend/data/class-2-3.json`)을 import하지 않는다. 공개 필드는 `backend/lib/rules/bridge.ts`의 `PUBLIC_STUDENTS`.
 - push 전에 `npm run check:secrets`를 돌린다. 백엔드를 바꿨으면 `.claude/agents/security-reviewer.md` 기준으로 점검한다.
 
 ## 제품 원칙
@@ -37,7 +38,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## 협업
 - 폴더 담당은 `README.md`의 표를 참고한다. 요청받은 기능과 관계없는 다른 폴더의 파일은 고치지 않는다.
-- 같이 쓰는 파일(`lib/types.ts`, `lib/store.ts`, `package.json`)에서는 기존 타입·함수·필드의 이름을 지우거나 바꾸지 말고 추가만 한다. 꼭 바꿔야 하면 바꾸기 전에 사람에게 묻는다.
+- 같이 쓰는 파일(`backend/lib/types.ts`, `frontend/lib/store.ts`, `package.json`)에서는 기존 타입·함수·필드의 이름을 지우거나 바꾸지 말고 추가만 한다. 꼭 바꿔야 하면 바꾸기 전에 사람에게 묻는다.
 - 한 번에 한 기능만 고치고, 끝나면 `npm run build`가 통과하는지 확인한다.
 - 병합 충돌을 해결할 때 상대 변경을 지우지 않는다.
 - 커밋 메시지 앞에 `[환희]` 또는 `[재우]`를 붙인다.

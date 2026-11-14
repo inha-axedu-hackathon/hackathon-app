@@ -23,27 +23,42 @@ AI가 학생들의 '개념 말해보기' 답을 읽어 막힌 곳을 찾고(읽�
 
 시연 단축키: `N` 다음 단계 · `T` 수업 시작 · `A` 승인 · `1`/`2`/`3` 학생/교실/교사 · `Shift+R` 처음부터 · 실험실 숨은 키 `K`
 
+### 폴더 구조
+```
+├─ frontend/   화면 (Next.js): app(페이지·API 연결), components, public(그림·실험실), lib/store.ts(시연 상태)
+├─ backend/    서버 쪽: api(API 처리), lib(AI 호출·규칙·타입·학습 내용), data(가상 학생·문항·성취기준), scripts(점검)
+├─ docs/       기획 문서
+├─ AGENTS.md   AI 코딩 도구 규칙 (CLAUDE.md가 불러옴)
+└─ README.md
+```
+- 하나의 Next.js 앱으로 배포돼요. `frontend/app/api/*/route.ts`는 `backend/api/*.ts`를 불러오는 연결 한 줄만 있어요.
+- 화면 코드는 `@/…`(frontend), 서버 쪽 코드는 `@backend/…`로 불러와요.
+
 ### 실행
+배포본: https://hackathon-app-omega-two.vercel.app (AI 포함 바로 사용)
+
 ```bash
+cd frontend
 npm install
 cp .env.example .env.local   # LLM_API_KEY 등을 채운다(비우면 AI 없이 키워드·저장본으로 동작)
 npm run dev                  # http://localhost:3000
 ```
+- npm 명령은 모두 `frontend/`에서 실행해요. Vercel 프로젝트의 Root Directory는 `frontend`예요.
 - 발표 노트북: `npm run demo:local` (빌드 후 127.0.0.1에만 열림)
 - 점검: `npm run check:secrets`(비밀값·번들 유출), `npm run check:api`(서버를 켠 뒤 API 점검, `AI=1`이면 실제 AI까지)
 - 환경 변수: `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL`(claude-haiku-5-5 권장), 선택 `LLM_DAILY_TOKENS`·`LLM_ANALYZE_TOKENS`·`LLM_DISABLED`·`ANALYZE_ENABLED` — 설명은 `.env.example`
 
 ### 백엔드 한눈에
 - `POST /api/explain`: 도착 관문 판정(키워드 먼저 → 애매할 때만 AI, 근거가 학생 글에 있어야 인정, 학생에게는 미리 쓴 문장만)
-- `POST /api/analyze`: 30명 말해보기 분석(5명씩 묶음, 저장본 `data/analysis.saved.json`, 배포 주소에서는 꺼짐)
-- AI 호출은 `lib/llm.ts` 한 곳(안뇽GPT 게이트웨이의 Claude Haiku 5.5, 생각 끔·하루 토큰 상한·같은 질문 재사용). 측정: `docs/notes/token-fit.md`
-- 학생·교실 화면은 공개 명단(`data/class-2-3.public.json`)만, 교사 화면만 전체 명단(`lib/rules/roster.ts`)
+- `POST /api/analyze`: 30명 말해보기 분석(5명씩 묶음, 저장본 `backend/data/analysis.saved.json`, 배포 주소에서는 꺼짐)
+- AI 호출은 `backend/lib/llm.ts` 한 곳(안뇽GPT 게이트웨이의 Claude Haiku 5.5, 생각 끔·하루 토큰 상한·같은 질문 재사용). 측정: `docs/notes/token-fit.md`
+- 학생·교실 화면은 공개 명단(`backend/data/class-2-3.public.json`)만, 교사 화면만 전체 명단(`backend/lib/rules/roster.ts`)
 
 ### 팀 다이버
 정환희(데이터·AI·백엔드) · 신재우(화면·디자인) · 진선우(발표·학습 내용) · 김나희(학생 데이터·PPT)
 
 ### 출처·라이선스
-- 실험실(`public/lab/`): 팀원이 실제 수업용으로 만든 한글 자음 실험실을 사용 동의를 받아 같은 출처 iframe으로 사용. 안에 포함된 외부 코드는 `NOTICE.md`
+- 실험실(`frontend/public/lab/`): 팀원이 실제 수업용으로 만든 한글 자음 실험실을 사용 동의를 받아 같은 출처 iframe으로 사용. 안에 포함된 외부 코드는 `NOTICE.md`
 - 해례본 원문 「聲出稍厲 故加畫」은 공공 영역(1446). 교과서 지문·삽화는 옮기지 않고 팀이 쓴 요약만 사용
 - 글꼴: Pretendard, Noto Serif KR, Black Han Sans(모두 SIL Open Font License)
 
@@ -60,26 +75,26 @@ npm run dev                  # http://localhost:3000
 ### 신재우 — 학생·교실 화면 = 시그니처 90초
 | 파일 | 할 일 |
 |---|---|
-| `app/layout.tsx`, `app/globals.css`, `app/page.tsx` | 글꼴·색 토큰, 시작 화면 (환희는 Tailwind 클래스만 씀) |
-| `app/student/page.tsx` | S1 징검런 홈(진행 링, 1칸 남음, 오늘은 여기까지) |
-| `app/student/stone/[id]/page.tsx` | S2 돌 굳히기(실험실 + 2문항 + 변형 + 첨벙) → 성공 시 `demo.reach(1)` |
-| `app/student/explain/page.tsx` | S3 도착 관문 → `/api/explain` 호출, 통과 시 `demo.reach(2)` + 해례 |
-| `app/class/page.tsx` | C1~C4 교실 다리, 물때, 함께 놓기 O/X(`demo.reach(4)`), 개통, 제자표 |
-| `app/demo/page.tsx` | 분할 화면 배치 |
-| `components/LabFrame.tsx` | `docs/notes/lab-integration.md` 코드 그대로 |
-| `components/student/*`, `components/class/*`, `components/ProgressRing.tsx` | 학생·교실 전용 컴포넌트 |
-| `components/StepBadge.tsx` | 13:15 전에는 지우지 않음(교사 화면이 씀) |
-| `data/stones.json` | 돌 카드·굳히기 문항·함께 놓기 O/X·관문 질문과 문장 틀·해례 원문 (내용: 진선우) |
-| `public/lab/`, `docs/design/*`(시안 제외), `docs/notes/재우.md` | 실험실 사본은 고치지 않음 |
-| **11/14 11:55 환희에게서 넘겨받음** `app/teacher/*`(예보·결재·레이아웃), `app/student/welcome/page.tsx`, `app/student/river/page.tsx`, `components/teacher/*`, `components/DemoKeys.tsx`, `lib/student/me.ts` | 화면은 전부 재우. 화면별 설명·지키는 원칙·주의점은 `docs/notes/handoff-screens.md` |
+| `frontend/app/layout.tsx`, `frontend/app/globals.css`, `frontend/app/page.tsx` | 글꼴·색 토큰, 시작 화면 (환희는 Tailwind 클래스만 씀) |
+| `frontend/app/student/page.tsx` | S1 징검런 홈(진행 링, 1칸 남음, 오늘은 여기까지) |
+| `frontend/app/student/stone/[id]/page.tsx` | S2 돌 굳히기(실험실 + 2문항 + 변형 + 첨벙) → 성공 시 `demo.reach(1)` |
+| `frontend/app/student/explain/page.tsx` | S3 도착 관문 → `/api/explain` 호출, 통과 시 `demo.reach(2)` + 해례 |
+| `frontend/app/class/page.tsx` | C1~C4 교실 다리, 물때, 함께 놓기 O/X(`demo.reach(4)`), 개통, 제자표 |
+| `frontend/app/demo/page.tsx` | 분할 화면 배치 |
+| `frontend/components/LabFrame.tsx` | `docs/notes/lab-integration.md` 코드 그대로 |
+| `frontend/components/student/*`, `frontend/components/class/*`, `frontend/components/ProgressRing.tsx` | 학생·교실 전용 컴포넌트 |
+| `frontend/components/StepBadge.tsx` | 13:15 전에는 지우지 않음(교사 화면이 씀) |
+| `backend/data/stones.json` | 돌 카드·굳히기 문항·함께 놓기 O/X·관문 질문과 문장 틀·해례 원문 (내용: 진선우) |
+| `frontend/public/lab/`, `docs/design/*`(시안 제외), `docs/notes/재우.md` | 실험실 사본은 고치지 않음 |
+| **11/14 11:55 환희에게서 넘겨받음** `frontend/app/teacher/*`(예보·결재·레이아웃), `frontend/app/student/welcome/page.tsx`, `frontend/app/student/river/page.tsx`, `frontend/components/teacher/*`, `frontend/components/DemoKeys.tsx`, `frontend/lib/student/me.ts` | 화면은 전부 재우. 화면별 설명·지키는 원칙·주의점은 `docs/notes/handoff-screens.md` |
 
 ### 정환희 — 데이터·AI·규칙·문서 (화면은 11/14 11:55부터 재우)
 | 파일 | 할 일 |
 |---|---|
-| `lib/types.ts`, `lib/store.ts` | 주인. 재우가 필요한 필드·이벤트·시각 변경은 말로 요청 → 환희가 추가하고 바로 push |
-| `lib/llm.ts`, `lib/prompts.ts`, `lib/content.ts`, `lib/rules/*` | AI 호출, 규칙(구간·예보·8유형·예외 제안). 화면 문구가 여기서 나오면 재우가 말로 요청 → 환희가 고침 |
-| `app/api/*` | `/api/explain`, `/api/analyze` (예보·8유형·예외는 API 없이 규칙으로) |
-| `data/class-2-3.json`, `data/concepts.json`, `data/analysis.saved.json` | 30명, 개념·오개념·관문 키워드, AI 저장본 |
+| `backend/lib/types.ts`, `frontend/lib/store.ts` | 주인. 재우가 필요한 필드·이벤트·시각 변경은 말로 요청 → 환희가 추가하고 바로 push |
+| `backend/lib/llm.ts`, `backend/lib/prompts.ts`, `backend/lib/content.ts`, `backend/lib/rules/*` | AI 호출, 규칙(구간·예보·8유형·예외 제안). 화면 문구가 여기서 나오면 재우가 말로 요청 → 환희가 고침 |
+| `backend/api/*` | `/api/explain`, `/api/analyze` (예보·8유형·예외는 API 없이 규칙으로) |
+| `backend/data/class-2-3.json`, `backend/data/concepts.json`, `backend/data/analysis.saved.json` | 30명, 개념·오개념·관문 키워드, AI 저장본 |
 | `docs/SPEC.md`, `docs/GAMIFICATION.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `package.json` | 문서·설정은 환희만. 재우는 `docs/notes/재우.md`에 적고 알림 |
 
 ### 둘이 맞춘 약속 (바꾸려면 먼저 말하기)
@@ -88,7 +103,7 @@ npm run dev                  # http://localhost:3000
 - 돌 ID: `st-n`, `st-d`, `st-t`, `st-kk` · 시연 학생 `s07`
 - `/api/explain`: 요청 `{ studentId, stoneId, text }` → 응답 `{ passed, ideas, misconception, feedback, source }`. 서버가 안 되면 화면은 "선생님이 확인할게요"로
 - 오늘은 **새 패키지를 설치하지 않음**(애니메이션은 CSS로). 꼭 필요하면 환희가 설치하고 바로 push
-- 다리 칸 숫자·개통 기준(80%)은 `data/` 값으로 계산해서 화면에 숫자를 직접 쓰지 않음
+- 다리 칸 숫자·개통 기준(80%)은 `backend/data/` 값으로 계산해서 화면에 숫자를 직접 쓰지 않음
 
 ## 작업 규칙
 1. 작업 시작 전과 push 직전에 `git pull --rebase`
