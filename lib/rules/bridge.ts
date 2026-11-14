@@ -35,8 +35,7 @@ export interface BridgeState {
 
 export const SECTIONS: Section[] = ["상형", "가획", "병서"];
 const SECTION_OF = new Map<string, Section>(STONES.map((s) => [s.id, s.section as Section]));
-// (옛 이름) 전체 명단은 교사 전용 lib/rules/roster.ts로 옮겼다. 화면 import를 바꾸면 이 줄은 지운다
-export { STUDENTS } from "./roster";
+// 전체 명단(STUDENTS)은 여기서 내보내지 않는다. 교사 화면만 lib/rules/roster.ts에서 직접 import한다
 const ROSTER = PUBLIC_STUDENTS;
 
 /** 날씨 기준(화면에는 쓰지 않음): 100% 맑음 · 80~99% 구름 · 80% 미만은 수업 전 먹구름, 수업 시작 후 소나기 */

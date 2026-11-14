@@ -14,7 +14,8 @@ import { ConsoleView } from "@/components/teacher/ConsoleView";
 import { TOGETHER } from "@/components/student/stones";
 import { LockGate, LockStatus, useInfoLock } from "@/components/teacher/InfoLock";
 import { VerifyNotice } from "@/components/teacher/VerifyNotice";
-import { STUDENTS, bridgeState, type SectionState } from "@/lib/rules/bridge";
+import { bridgeState, type SectionState } from "@/lib/rules/bridge";
+import { STUDENTS } from "@/lib/rules/roster"; // 교사 전용 전체 명단(학생·교실 화면은 import 금지)
 import { type AnalysisRun, aiWins, blockedPoints, headline, needsTeacher } from "@/lib/rules/forecast";
 import { useDemo } from "@/lib/store";
 

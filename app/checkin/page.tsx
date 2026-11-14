@@ -5,7 +5,6 @@
 // 얼굴은 슈퍼패스(토스)가 처리하고, 징검다리는 "본인 맞음 · 방법 · 장소 · 시각"만 받는다.
 // 공용 기기라서: 확인 단계는 10초, 열린 뒤에는 30초 동안 손대지 않으면 처음으로 돌아간다.
 import { useEffect, useState } from "react";
-import { STUDENTS } from "@/lib/rules/bridge";
 import { charOf } from "@/lib/rules/exceptions";
 import { useDemo } from "@/lib/store";
 
@@ -14,7 +13,9 @@ type Phase = "choose" | "scan" | "confirm" | "open";
 type Quiz = "idle" | "ask" | "wrong" | "done";
 
 const PLACE = "2-3 교실 태블릿";
-const ME = STUDENTS.find((s) => s.id === "s15")!; // 모의 인증: 집에 기기가 없는 학생(SPEC 3장 페르소나)
+// 모의 인증: 집에 기기가 없는 학생(SPEC 3장 페르소나). 공용 태블릿이라 반 전체 명단을 불러오지 않고 한 명만 둔다.
+// 값은 data/class-2-3.json의 s15와 같게(바뀌면 같이 고친다)
+const ME: { id: string; no: number; alias: string; path: readonly string[] } = { id: "s15", no: 15, alias: "여울", path: ["st-o"] };
 const STONE = ME.path?.[0] ?? "st-o";
 const IDLE_SEC = { confirm: 10, open: 30 } as const;
 

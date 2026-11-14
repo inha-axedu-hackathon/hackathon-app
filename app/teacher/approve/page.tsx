@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { LockGate, LockIcon, LockStatus, useInfoLock } from "@/components/teacher/InfoLock";
 import { Stamp } from "@/components/teacher/Stamp";
 import { smallCell } from "@/components/teacher/ClassPanels";
-import { STUDENTS } from "@/lib/rules/bridge";
+import { STUDENTS } from "@/lib/rules/roster"; // 교사 전용 전체 명단(학생·교실 화면은 import 금지)
 import { RULE_SETS, TYPE_DEFS, charOf, nextStone, proposalFor, typeKey, typeOf } from "@/lib/rules/exceptions";
 import { METHOD_LABEL, exceptions, hhmm, typeCounts } from "@/lib/rules/forecast";
 import { useDemo } from "@/lib/store";
