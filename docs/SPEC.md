@@ -373,7 +373,7 @@ export interface DemoState { step: 0 | 1 | 2 | 3 | 4 | 5 | 6; now: string; event
 |---|---|---|---|
 | `POST /api/analyze` | `{ answers: [{ studentId, text, label? }] }` (최대 40명, 5명씩 묶어 3묶음씩 동시에) | `{ results: Analysis[], agreement, keywordAgreement, usedLLM, llmCount, model, tokens }` | 실패한 묶음은 키워드 결과. 배포 주소는 403(`ANALYZE_ENABLED=1`일 때만 열림), 다른 사이트 요청 403 |
 | `POST /api/explain` | `{ studentId, text }` | `{ passed, ideas:[{id,hit,quote}], misconception, feedback, source, needsTeacher? }` | `{ passed:false, feedback:"선생님이 확인할게요", source:"saved", needsTeacher:true }` |
-| `POST /api/generate` (준비본) | `{ content, standards, count?, grade? }` 교사의 학습 내용 + 성취기준 | `{ draft:true, needsTeacherReview:true, stones: StoneCard[], dropped, usedLLM, model, tokens }` (교사 검토 뒤에만 학생에게) | 400 입력, 403 다른 사이트·배포 주소(`GENERATE_ENABLED=1`일 때만), 429 횟수·몫, 502 초안 실패. `docs/notes/generate-api.md` |
+| `POST /api/generate` (교사 `/teacher/generate`) | `{ codes:["9국04-01"], lessonId, type: choice·short·essay, count?, memo? }` 성취기준 코드 + 교과서 차시 + 문항 유형 | `{ draft:true, needsTeacherReview:true, basis, stones, dropped, usedLLM, model, tokens }` (교사 검토 뒤에만 학생에게) | 400 입력, 403 다른 사이트·배포 주소(`GENERATE_ENABLED=1`일 때만), 429 횟수·몫, 502 초안 실패. `docs/notes/generate-api.md` |
 | (계산) 예보·유형·예외 | — | `lib/rules/bridge.ts`(구간·날씨), `lib/rules/forecast.ts`(헤드라인·TOP 3·AI 예시), `lib/rules/exceptions.ts`(8유형·예외 제안) | 순수 계산(API 없음) |
 | (삭제) 체크인 | 11/14 아침 체크인 기능을 뺐다(학교 지급 태블릿으로 집에서, 밤 10시 마감). 얼굴은 교사 재인증(T7)에만 쓰고 징검다리에는 결과만 남김 | | |
 

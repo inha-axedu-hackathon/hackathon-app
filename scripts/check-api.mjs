@@ -53,11 +53,13 @@ try {
   check("분석: 다른 사이트 요청 막힘", r.status === 403 || r.status === 400, String(r.status));
 
   // 문제 만들기(/api/generate): 입력 검사·다른 사이트 차단은 AI 없이 확인
-  const gen = { content: "ㄴ은 혀끝이 윗잇몸에 닿는 모양을 본떴고, ㄴ에 획을 더하면 ㄷ, 한 번 더 더하면 ㅌ이 된다. 획을 더한 까닭은 소리가 조금 세지기 때문이다(聲出稍厲).", standards: "[9국04-02] 한글의 창제 원리를 이해한다.", count: 1 };
-  r = await post("/api/generate", { ...gen, content: "ㄴ" });
-  check("문제 만들기: 너무 짧은 학습 내용 → 400", r.status === 400, String(r.status));
-  r = await post("/api/generate", { ...gen, standards: [] });
-  check("문제 만들기: 성취기준 없음 → 400", r.status === 400, String(r.status));
+  const gen = { codes: ["9국04-01"], lessonId: "u4-2-2", type: "choice", count: 1 };
+  r = await post("/api/generate", { ...gen, codes: ["9국99-99"] });
+  check("문제 만들기: 목록에 없는 성취기준 → 400", r.status === 400, String(r.status));
+  r = await post("/api/generate", { ...gen, lessonId: "없음" });
+  check("문제 만들기: 차시 없음 → 400", r.status === 400, String(r.status));
+  r = await post("/api/generate", { ...gen, type: "quiz" });
+  check("문제 만들기: 문항 유형 잘못 → 400", r.status === 400, String(r.status));
   r = await post("/api/generate", { ...gen, count: 9 });
   check("문제 만들기: 돌 개수 범위 밖 → 400", r.status === 400, String(r.status));
   r = await post("/api/generate", gen, { "sec-fetch-site": "cross-site" });

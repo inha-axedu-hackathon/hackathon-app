@@ -280,7 +280,8 @@ export default function TeacherPage() {
     ),
     tab,
     tabsBar: (
-      <div role="tablist" aria-label="예보 화면 고르기" className="console-tabs">
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+      <div role="tablist" aria-label="예보 화면 고르기" className="console-tabs" style={{ flex: "1 1 auto" }}>
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -295,6 +296,10 @@ export default function TeacherPage() {
             <span className="s">{t.id === "except" ? `예외 ${exceptionCount}건 · 아침 확인` : t.id === "stuck" ? `TOP 3 · AI가 읽은 근거` : t.sub}</span>
           </button>
         ))}
+      </div>
+      <Link href="/teacher/generate" className="btn bs" style={{ minHeight: 48, fontSize: 15 }}>
+        ＋ 징검돌 문제 만들기
+      </Link>
       </div>
     ),
     aiSlot: (
