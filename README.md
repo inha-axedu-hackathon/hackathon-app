@@ -53,7 +53,7 @@
 1. 작업 시작 전과 push 직전에 `git pull --rebase`
 2. 커밋할 때 `git add .` 대신 **내 파일 경로만** 적어서 add
 3. 30분마다 작게 커밋·push, 메시지 앞에 `[환희]` 또는 `[재우]`
-4. push 전에 `npm run build` 통과 확인
+4. push 전에 `npm run build`와 `npm run check:secrets` 통과 확인
 5. 남의 파일이 바뀌어 있으면(`git status`) 커밋하지 말고 `git restore 파일`로 되돌린 뒤 말하기. `next dev`가 `AGENTS.md`를 다시 쓰면 그대로 둠
 6. 저장소 전체에 포맷터·`lint --fix`를 돌리지 않음
 7. 충돌이 나면 상대 변경을 지우지 말고 같이 본다. AI 도구로 해결할 때도 상대 코드가 남아 있는지 확인한다

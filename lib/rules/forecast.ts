@@ -2,7 +2,8 @@
 // 숫자는 교사 화면에서만 쓴다(SPEC 5-0). 여기서는 판단하지 않고 모으기만 한다(판단은 규칙과 교사, AI는 읽기만).
 import { MISCONCEPTIONS, keywordMisconceptions } from "@/lib/content";
 import type { Analysis, DemoEvent, Section, Student } from "@/lib/types";
-import { STUDENTS, type BridgeState } from "./bridge";
+import type { BridgeState } from "./bridge";
+import { STUDENTS } from "./roster";
 
 export type Agreement = { matched: number; total: number; missed: number; wrong: number };
 /** AI 분석 한 번의 결과 (저장본 data/analysis.saved.json 또는 방금 실행) */

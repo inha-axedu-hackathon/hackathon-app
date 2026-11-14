@@ -1,0 +1,493 @@
+{
+  "_readme": "자동 생성(scripts/make-public-class.mjs). 직접 고치지 말고 data/class-2-3.json을 고친다. 학생·교실 화면용 공개 필드만 있다.",
+  "students": [
+    {
+      "id": "s01",
+      "alias": "산들",
+      "team": 1,
+      "path": [
+        "st-k",
+        "st-kk"
+      ],
+      "start": [],
+      "progress": {
+        "st-k": "placed",
+        "st-kk": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s02",
+      "alias": "바람",
+      "team": 2,
+      "path": [
+        "st-n",
+        "st-d",
+        "st-t",
+        "st-tt"
+      ],
+      "start": [],
+      "progress": {
+        "st-n": "placed",
+        "st-d": "placed",
+        "st-t": "placed",
+        "st-tt": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s03",
+      "alias": "구름",
+      "team": 3,
+      "path": [
+        "st-m",
+        "st-b",
+        "st-p",
+        "st-pp"
+      ],
+      "start": [],
+      "progress": {
+        "st-m": "placed",
+        "st-b": "placed",
+        "st-p": "placed",
+        "st-pp": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s04",
+      "alias": "별빛",
+      "team": 4,
+      "path": [
+        "st-s",
+        "st-j",
+        "st-ch",
+        "st-ss"
+      ],
+      "start": [],
+      "progress": {
+        "st-s": "placed",
+        "st-j": "placed",
+        "st-ch": "placed",
+        "st-ss": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s05",
+      "alias": "이슬",
+      "team": 5,
+      "path": [
+        "st-o",
+        "st-q",
+        "st-h",
+        "st-hh"
+      ],
+      "start": [],
+      "progress": {
+        "st-o": "placed",
+        "st-q": "placed",
+        "st-h": "placed",
+        "st-hh": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s06",
+      "alias": "노을",
+      "team": 1,
+      "path": [
+        "st-k",
+        "st-kk"
+      ],
+      "start": [],
+      "progress": {
+        "st-k": "placed",
+        "st-kk": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s07",
+      "alias": "옛이응 ㆁ",
+      "team": 2,
+      "path": [
+        "st-n",
+        "st-d",
+        "st-t"
+      ],
+      "start": [
+        "st-n"
+      ],
+      "progress": {
+        "st-n": "placed",
+        "st-d": "placed",
+        "st-t": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s08",
+      "alias": "단비",
+      "team": 3,
+      "path": [
+        "st-m",
+        "st-b",
+        "st-p",
+        "st-pp"
+      ],
+      "start": [],
+      "progress": {
+        "st-m": "placed",
+        "st-b": "placed",
+        "st-p": "placed",
+        "st-pp": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s09",
+      "alias": "새벽",
+      "team": 4,
+      "path": [
+        "st-s",
+        "st-j",
+        "st-ch",
+        "st-ss"
+      ],
+      "start": [],
+      "progress": {
+        "st-s": "placed",
+        "st-j": "placed",
+        "st-ch": "placed",
+        "st-ss": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s10",
+      "alias": "들꽃",
+      "team": 5,
+      "path": [
+        "st-q",
+        "st-h",
+        "st-hh"
+      ],
+      "start": [],
+      "progress": {
+        "st-q": "placed",
+        "st-h": "placed",
+        "st-hh": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s11",
+      "alias": "햇살",
+      "team": 1,
+      "path": [
+        "st-k",
+        "st-kk"
+      ],
+      "start": [],
+      "progress": {
+        "st-k": "placed",
+        "st-kk": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s12",
+      "alias": "미리내",
+      "team": 2,
+      "path": [
+        "st-d",
+        "st-t",
+        "st-tt"
+      ],
+      "start": [],
+      "progress": {
+        "st-d": "placed",
+        "st-t": "placed",
+        "st-tt": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s13",
+      "alias": "너울",
+      "team": 3,
+      "path": [
+        "st-b",
+        "st-p",
+        "st-pp"
+      ],
+      "start": [],
+      "progress": {
+        "st-b": "placed",
+        "st-p": "placed",
+        "st-pp": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s14",
+      "alias": "물결",
+      "team": 4,
+      "path": [
+        "st-j",
+        "st-ch",
+        "st-ss"
+      ],
+      "start": [],
+      "progress": {
+        "st-j": "placed",
+        "st-ch": "placed",
+        "st-ss": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s15",
+      "alias": "여울",
+      "team": 5,
+      "path": [
+        "st-o"
+      ],
+      "start": [],
+      "progress": {
+        "st-o": "paper"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s16",
+      "alias": "나래",
+      "team": 1,
+      "path": [
+        "st-g",
+        "st-k",
+        "st-kk"
+      ],
+      "start": [],
+      "progress": {
+        "st-g": "placed",
+        "st-k": "placed",
+        "st-kk": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s17",
+      "alias": "가람",
+      "team": 2,
+      "path": [
+        "st-d",
+        "st-tt"
+      ],
+      "start": [],
+      "progress": {
+        "st-d": "placed",
+        "st-tt": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s18",
+      "alias": "누리",
+      "team": 3,
+      "path": [
+        "st-b",
+        "st-pp"
+      ],
+      "start": [],
+      "progress": {
+        "st-b": "placed",
+        "st-pp": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s19",
+      "alias": "다솜",
+      "team": 4,
+      "path": [
+        "st-j",
+        "st-ss"
+      ],
+      "start": [],
+      "progress": {
+        "st-j": "placed",
+        "st-ss": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s20",
+      "alias": "라온",
+      "team": 5,
+      "path": [
+        "st-h",
+        "st-hh"
+      ],
+      "start": [],
+      "progress": {
+        "st-h": "placed",
+        "st-hh": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s21",
+      "alias": "마루",
+      "team": 1,
+      "path": [
+        "st-kk"
+      ],
+      "start": [],
+      "progress": {
+        "st-kk": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s22",
+      "alias": "바다",
+      "team": 2,
+      "path": [
+        "st-n",
+        "st-d",
+        "st-tt"
+      ],
+      "start": [],
+      "progress": {
+        "st-n": "placed",
+        "st-d": "placed",
+        "st-tt": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s23",
+      "alias": "아라",
+      "team": 3,
+      "path": [
+        "st-b",
+        "st-pp"
+      ],
+      "start": [],
+      "progress": {
+        "st-b": "placed",
+        "st-pp": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s24",
+      "alias": "하늘",
+      "team": 4,
+      "path": [
+        "st-s",
+        "st-j",
+        "st-ss"
+      ],
+      "start": [],
+      "progress": {
+        "st-s": "placed",
+        "st-j": "placed",
+        "st-ss": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s25",
+      "alias": "한결",
+      "team": 5,
+      "path": [
+        "st-o",
+        "st-q",
+        "st-hh"
+      ],
+      "start": [],
+      "progress": {
+        "st-o": "placed",
+        "st-q": "placed",
+        "st-hh": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s26",
+      "alias": "초롱",
+      "team": 1,
+      "path": [
+        "st-g"
+      ],
+      "start": [],
+      "progress": {
+        "st-g": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s27",
+      "alias": "보람",
+      "team": 2,
+      "path": [
+        "st-n",
+        "st-d"
+      ],
+      "start": [],
+      "progress": {
+        "st-n": "placed",
+        "st-d": "placed"
+      },
+      "arrived": true
+    },
+    {
+      "id": "s28",
+      "alias": "윤슬",
+      "team": 3,
+      "path": [
+        "st-b",
+        "st-pp"
+      ],
+      "start": [],
+      "progress": {
+        "st-b": "placed",
+        "st-pp": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s29",
+      "alias": "은솔",
+      "team": 4,
+      "path": [
+        "st-j",
+        "st-jj"
+      ],
+      "start": [],
+      "progress": {
+        "st-j": "placed",
+        "st-jj": "wet"
+      },
+      "arrived": false
+    },
+    {
+      "id": "s30",
+      "alias": "해솔",
+      "team": 5,
+      "path": [
+        "st-q",
+        "st-hh"
+      ],
+      "start": [],
+      "progress": {
+        "st-q": "placed",
+        "st-hh": "wet"
+      },
+      "arrived": false
+    }
+  ]
+}

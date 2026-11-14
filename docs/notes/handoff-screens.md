@@ -36,6 +36,14 @@
 - 새 라우트를 만든 직후 dev 서버가 404를 내면 파일을 한 번 저장(touch)하면 잡혀요.
 - 발표 노트북은 `npm run demo:local`(127.0.0.1에만 열림).
 
+## 3-1. 재우에게 부탁 (한 줄씩, 친구 정보가 학생 브라우저로 안 가게)
+
+명단이 둘로 나뉘었어요(11/14 12:00). 교실 화면은 이미 깨끗해졌고(번들에서 교사 전용 정보 0), 아래만 바꾸면 학생·키오스크도 깨끗해져요.
+- `components/student/progress.ts`: `import { STUDENTS } from "@/lib/rules/bridge"` → `import { PUBLIC_STUDENTS as STUDENTS } from "@/lib/rules/bridge"` (쓰는 필드 alias·path·progress·start·arrived가 다 들어 있음)
+- `app/teacher/page.tsx`, `app/teacher/approve/page.tsx`: `STUDENTS`를 `@/lib/rules/roster`에서 import(교사 화면은 전체 명단이 필요)
+- `app/checkin/page.tsx`: 15번 한 명만 필요하니 `PUBLIC_STUDENTS`에서 찾고 번호는 `15`로 직접 써도 됨
+- 다 바꾸면 환희가 `bridge.ts`의 옛 `STUDENTS` 다시 내보내기 줄을 지워요.
+
 ## 4. 디자인 캔버스로 옮길 때
 
 - 교사 화면 문구 중 규칙에서 나오는 것(헤드라인 `headline()`, 예외 근거 `proposalFor()`, 8유형 `TYPE_DEFS`)은 `lib/rules/*`라 환희 파일이에요. 문구를 바꾸고 싶으면 말로 요청 → 환희가 바로 push.

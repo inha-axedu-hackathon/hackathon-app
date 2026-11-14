@@ -19,8 +19,15 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - 타입은 `lib/types.ts`에 있는 것만 쓴다. 새 타입이 필요하면 거기에 추가한다.
 - 시연 상태는 `lib/store.ts`의 `useDemo()`만 쓴다. localStorage는 `"use client"` 컴포넌트의 `useEffect` 안에서만 읽는다.
 - API 키는 서버(`app/api`)에서만 `process.env`로 읽는다. `NEXT_PUBLIC_`에 넣지 않는다. `.env*` 파일은 커밋하지 않는다.
-- LLM 호출은 `lib/llm.ts`의 `callLLM()`만 쓴다. 4초 타임아웃과 대체 결과를 항상 둔다.
+- LLM 호출은 `lib/llm.ts`의 `callLLM()`만 쓴다(server-only). 시간 제한·답 길이 상한·대체 결과를 항상 두고, 학생에게 보이는 문장은 AI가 쓰지 않는다(미리 쓴 문장만).
 - 시각은 `Date.now()`가 아니라 store의 가상 시계를 쓴다.
+
+## 보안 (백엔드)
+- AI 결과는 허용된 ID만 받고, 근거 인용은 학생 글에 실제로 있을 때만 인정한다(`quoted()`). 위기 낱말은 `isCrisis()`로 먼저 걸러 AI에 보내지 않는다.
+- 외부 AI에는 답 텍스트만 보낸다(학생 ID·이름 금지, `maskPII()` 거친 뒤). 서버 로그에는 토큰 수·이유만, 학생 글과 키는 남기지 않는다.
+- API에는 입력 검사(형식·길이·본문 크기), 다른 사이트 요청 차단(`crossSite()`), 남용 상한(학생별·서버 전체·하루 토큰)을 둔다. 관리자용 `/api/analyze`는 배포 주소에서 꺼 둔다.
+- 학생·교실 화면은 교사 전용 명단(`lib/rules/roster.ts`, `data/class-2-3.json`)을 import하지 않는다. 공개 필드는 `lib/rules/bridge.ts`의 `PUBLIC_STUDENTS`.
+- push 전에 `npm run check:secrets`를 돌린다. 백엔드를 바꿨으면 `.claude/agents/security-reviewer.md` 기준으로 점검한다.
 
 ## 제품 원칙
 - 학생 화면에 점수, 순위, 연속 기록을 만들지 않는다. 진행은 확인된 학습 증거로만 바뀐다.

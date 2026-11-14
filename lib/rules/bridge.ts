@@ -1,10 +1,15 @@
 // lib/rules/bridge.ts — 우리 반 다리 계산 (docs/SPEC.md 5-0, 5-3, 7-5)
-// 입력: data/class-2-3.json(시연 시작 상태) + 시연 이벤트(useDemo().events)
+// 입력: data/class-2-3.public.json(공개 필드만, scripts/make-public-class.mjs가 만듦) + 시연 이벤트(useDemo().events)
 // 출력: 구간별 놓인 돌·날씨·잠김. 숫자(placed/total 등)는 교사 화면에서만 쓰고,
 //       학생·교실 화면은 weather·locked·opened만 쓴다(반·모둠 숫자를 보여 주지 않음).
-import classData from "@/data/class-2-3.json";
+// 이 파일은 교사 전용 명단(실명·원문·라벨·유형·예외)을 import하지 않는다 → 학생·교실 번들에 실리지 않게.
+import publicData from "@/data/class-2-3.public.json";
 import { STONES } from "@/lib/content";
 import type { DemoEvent, Section, Student, StoneProgress } from "@/lib/types";
+
+/** 학생·교실 화면용 공개 명단(다리 계산과 내 진행에 필요한 필드만) */
+export type PublicStudent = Pick<Student, "id" | "alias" | "team" | "path" | "start" | "progress" | "arrived">;
+export const PUBLIC_STUDENTS = publicData.students as unknown as PublicStudent[];
 
 export type Weather = "맑음" | "구름" | "먹구름" | "소나기";
 
@@ -30,7 +35,9 @@ export interface BridgeState {
 
 export const SECTIONS: Section[] = ["상형", "가획", "병서"];
 const SECTION_OF = new Map<string, Section>(STONES.map((s) => [s.id, s.section as Section]));
-export const STUDENTS = classData.students as unknown as Student[];
+// (옛 이름) 전체 명단은 교사 전용 lib/rules/roster.ts로 옮겼다. 화면 import를 바꾸면 이 줄은 지운다
+export { STUDENTS } from "./roster";
+const ROSTER = PUBLIC_STUDENTS;
 
 /** 날씨 기준(화면에는 쓰지 않음): 100% 맑음 · 80~99% 구름 · 80% 미만은 수업 전 먹구름, 수업 시작 후 소나기 */
 export function weatherOf(placed: number, total: number, lessonStarted: boolean): Weather {
@@ -45,7 +52,7 @@ export function bridgeState(events: readonly DemoEvent[]): BridgeState {
   // 1) 시연 시작 상태를 복사
   const progress = new Map<string, Map<string, StoneProgress>>();
   const arrived = new Set<string>();
-  for (const s of STUDENTS) {
+  for (const s of ROSTER) {
     progress.set(s.id, new Map(Object.entries(s.progress ?? {})));
     if (s.arrived) arrived.add(s.id);
   }
@@ -64,7 +71,7 @@ export function bridgeState(events: readonly DemoEvent[]): BridgeState {
   const sections = SECTIONS.map((name): SectionState => {
     let placed = 0;
     let total = 0;
-    for (const s of STUDENTS) {
+    for (const s of ROSTER) {
       for (const sid of s.path ?? []) {
         if (SECTION_OF.get(sid) !== name) continue;
         total++;
@@ -87,7 +94,7 @@ export function bridgeState(events: readonly DemoEvent[]): BridgeState {
   });
   const placed = sections.reduce((n, s) => n + s.placed + s.rope, 0);
   const total = sections.reduce((n, s) => n + s.total, 0);
-  return { sections, placed, total, arrived: arrived.size, students: STUDENTS.length, lessonStarted, together, opened };
+  return { sections, placed, total, arrived: arrived.size, students: ROSTER.length, lessonStarted, together, opened };
 }
 
 // 예시 (시연 숫자 확인용):
