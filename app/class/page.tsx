@@ -55,7 +55,7 @@ export default function ClassPage() {
 
   return (
     <main className="h-dvh w-full" style={{ background: backdrop, overflow: "clip", transition: "background 900ms" }}>
-      <FitStage width={1440} height={810}>
+      <FitStage width={1440} height={810} maxCrop={0.05}>
         <StageView {...v} />
       </FitStage>
     </main>
