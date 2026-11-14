@@ -148,7 +148,6 @@ export function StudentView(v: Record<string, any>) {
             <span style={{fontSize: '14px', fontWeight: '700', color: 'var(--jg-accent)'} as any}>① 개념 보기 · 읽고 다음으로</span>
             <h2 style={{margin: '0', fontSize: '38px', fontWeight: '800', letterSpacing: '-0.03em', lineHeight: '1.25'} as any}>{concept.head}</h2>
             <p style={{margin: '0', fontSize: '19px', lineHeight: '1.7', color: '#4A4641'} as any}>{concept.sub}</p>
-            <div className="serif" style={{fontSize: '26px', fontWeight: '700', color: '#6B665F', letterSpacing: '.08em'} as any}>{concept.hanja}</div>
             <button type="button" className="btnp" onClick={goLab} style={{alignSelf: 'flex-start', marginTop: '12px'} as any}>{concept.hasLab ? '② 실험실에서 만들어 보기 →' : '② 문제 2개 풀기 →'}</button>
           </div>
         </div>
