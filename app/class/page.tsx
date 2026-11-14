@@ -6,6 +6,7 @@ import { BridgeScene } from "@/components/class/BridgeScene";
 import { Jejapyo } from "@/components/class/Jejapyo";
 import { Together } from "@/components/class/Together";
 import { WEATHER_TEXT, WeatherIcon } from "@/components/class/WeatherIcon";
+import { isLabKey, postLabDone } from "@/components/student/labSignal";
 import { STONES } from "@/lib/content";
 import { bridgeState, type SectionState } from "@/lib/rules/bridge";
 import { useDemo } from "@/lib/store";
@@ -54,6 +55,13 @@ export default function ClassPage() {
     const t = setTimeout(() => setToast(false), 2600);
     return () => clearTimeout(t);
   }, [toast, splash]);
+
+  // 숨은 키 K: 교실 창에 포커스가 있어도 학생 화면의 실험실 완성 처리로 전달
+  useEffect(() => {
+    const on = (e: KeyboardEvent) => isLabKey(e) && postLabDone();
+    window.addEventListener("keydown", on);
+    return () => window.removeEventListener("keydown", on);
+  }, []);
 
   const phase = d.step >= 6 ? "top" : b.opened ? "opened" : b.together ? "rope" : b.lessonStarted ? "tide" : "before";
 
