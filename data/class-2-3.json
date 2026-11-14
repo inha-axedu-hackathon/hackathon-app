@@ -1,0 +1,1109 @@
+{
+ "_readme": "시연용 가상 학생 30명(2학년 3반). 이름·말해보기는 초안이라 김나희·진선우가 교체한다. 숫자는 docs/SPEC.md 7-5와 맞춤: 0단계 68/78(상형 14/14·가획 37/38·병서 17/26), 깃발 20/30, 예외 3.",
+ "class": {
+  "id": "2-3",
+  "name": "2학년 3반",
+  "subject": "국어",
+  "size": 30,
+  "goal": "가획과 병서를 구분해 자음자의 제자 원리를 설명할 수 있다",
+  "lessonAt": "2026-11-14T10:50:00+09:00"
+ },
+ "students": [
+  {
+   "id": "s01",
+   "no": 1,
+   "name": "김도윤",
+   "alias": "산들",
+   "team": 1,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄱ은 혀뿌리가 목구멍을 막는 모양을 본떠 만들었어요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-k",
+    "st-kk"
+   ],
+   "start": [],
+   "progress": {
+    "st-k": "placed",
+    "st-kk": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  },
+  {
+   "id": "s02",
+   "no": 2,
+   "name": "이서연",
+   "alias": "바람",
+   "team": 2,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄲ도 ㄱ에 획을 하나 더 그어서 만든 글자예요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M1"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-n",
+    "st-d",
+    "st-t",
+    "st-tt"
+   ],
+   "start": [],
+   "progress": {
+    "st-n": "placed",
+    "st-d": "placed",
+    "st-t": "placed",
+    "st-tt": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s03",
+   "no": 3,
+   "name": "박지호",
+   "alias": "구름",
+   "team": 3,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "획을 더하면 소리가 크게 나요. ㅋ은 ㄱ보다 크게 들려요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M2"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-m",
+    "st-b",
+    "st-p",
+    "st-pp"
+   ],
+   "start": [],
+   "progress": {
+    "st-m": "placed",
+    "st-b": "placed",
+    "st-p": "placed",
+    "st-pp": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s04",
+   "no": 4,
+   "name": "최하은",
+   "alias": "별빛",
+   "team": 4,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅅ은 이 모양을 본떴고, ㅈ은 ㅅ에 획을 더해서 소리가 세져요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-s",
+    "st-j",
+    "st-ch",
+    "st-ss"
+   ],
+   "start": [],
+   "progress": {
+    "st-s": "placed",
+    "st-j": "placed",
+    "st-ch": "placed",
+    "st-ss": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s05",
+   "no": 5,
+   "name": "정민재",
+   "alias": "이슬",
+   "team": 5,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅇ은 목구멍 모양을 본뜬 기본자예요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-o",
+    "st-q",
+    "st-h",
+    "st-hh"
+   ],
+   "start": [],
+   "progress": {
+    "st-o": "placed",
+    "st-q": "placed",
+    "st-h": "placed",
+    "st-hh": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s06",
+   "no": 6,
+   "name": "강서윤",
+   "alias": "노을",
+   "team": 1,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "쌍기역도 기역에다 선 하나 더 그은 거라서 가획이에요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M1"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-k",
+    "st-kk"
+   ],
+   "start": [],
+   "progress": {
+    "st-k": "placed",
+    "st-kk": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s07",
+   "no": 7,
+   "name": "조은우",
+   "alias": "옛이응 ㆁ",
+   "team": 2,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅌ은 ㄷ에 획을 하나 더했고 소리가 더 커져요",
+    "explainSubmitted": true,
+    "barriers": [
+     "시간 부족"
+    ]
+   },
+   "label": {
+    "misconceptions": [
+     "M2"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-n",
+    "st-d",
+    "st-t"
+   ],
+   "start": [
+    "st-n"
+   ],
+   "progress": {
+    "st-n": "placed",
+    "st-d": "placed",
+    "st-t": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  },
+  {
+   "id": "s08",
+   "no": 8,
+   "name": "윤지아",
+   "alias": "단비",
+   "team": 3,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅁ은 입 모양이고 ㅂ, ㅍ은 획을 더해서 소리가 점점 세져요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-m",
+    "st-b",
+    "st-p",
+    "st-pp"
+   ],
+   "start": [],
+   "progress": {
+    "st-m": "placed",
+    "st-b": "placed",
+    "st-p": "placed",
+    "st-pp": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s09",
+   "no": 9,
+   "name": "장현우",
+   "alias": "새벽",
+   "team": 4,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅍ은 ㅂ보다 목소리를 키워서 내는 소리라 획이 많아요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M2"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-s",
+    "st-j",
+    "st-ch",
+    "st-ss"
+   ],
+   "start": [],
+   "progress": {
+    "st-s": "placed",
+    "st-j": "placed",
+    "st-ch": "placed",
+    "st-ss": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s10",
+   "no": 10,
+   "name": "임채원",
+   "alias": "들꽃",
+   "team": 5,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "모음도 ㅏ에 점을 하나 더 찍으면 ㅑ가 되니까 가획이에요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M5"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-q",
+    "st-h",
+    "st-hh"
+   ],
+   "start": [],
+   "progress": {
+    "st-q": "placed",
+    "st-h": "placed",
+    "st-hh": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s11",
+   "no": 11,
+   "name": "한유준",
+   "alias": "햇살",
+   "team": 1,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄲ은 ㄱ을 나란히 쓴 병서고, ㅋ은 획을 더한 가획이라 둘이 달라요",
+    "explainSubmitted": true,
+    "barriers": [
+     "시간 부족"
+    ]
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-k",
+    "st-kk"
+   ],
+   "start": [],
+   "progress": {
+    "st-k": "placed",
+    "st-kk": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s12",
+   "no": 12,
+   "name": "오수아",
+   "alias": "미리내",
+   "team": 2,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄲ은 ㄱ에 획을 더한 가획자라서 소리가 세져요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M1"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-d",
+    "st-t",
+    "st-tt"
+   ],
+   "start": [],
+   "progress": {
+    "st-d": "placed",
+    "st-t": "placed",
+    "st-tt": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  },
+  {
+   "id": "s13",
+   "no": 13,
+   "name": "서준혁",
+   "alias": "너울",
+   "team": 3,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄷ도 기본 글자라서 발음 기관을 본떠 만들었어요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M4"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-b",
+    "st-p",
+    "st-pp"
+   ],
+   "start": [],
+   "progress": {
+    "st-b": "placed",
+    "st-p": "placed",
+    "st-pp": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s14",
+   "no": 14,
+   "name": "신예린",
+   "alias": "물결",
+   "team": 4,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "획이 늘어날수록 소리 볼륨이 올라가요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M2"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-j",
+    "st-ch",
+    "st-ss"
+   ],
+   "start": [],
+   "progress": {
+    "st-j": "placed",
+    "st-ch": "placed",
+    "st-ss": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s15",
+   "no": 15,
+   "name": "권도현",
+   "alias": "여울",
+   "team": 5,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄴ은 혀가 윗잇몸에 닿는 모양이에요",
+    "explainSubmitted": true,
+    "barriers": [
+     "기기 없음"
+    ]
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "보충",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-o"
+   ],
+   "start": [],
+   "progress": {
+    "st-o": "paper"
+   },
+   "arrived": true,
+   "exception": "기기 없음 · 종이 돌"
+  },
+  {
+   "id": "s16",
+   "no": 16,
+   "name": "황지유",
+   "alias": "나래",
+   "team": 1,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄲ도 ㅋ처럼 ㄱ에서 하나 늘린 거라 만드는 법이 같아요",
+    "explainSubmitted": true,
+    "barriers": [
+     "기기 없음"
+    ]
+   },
+   "label": {
+    "misconceptions": [
+     "M1",
+     "M3"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-g",
+    "st-k",
+    "st-kk"
+   ],
+   "start": [],
+   "progress": {
+    "st-g": "placed",
+    "st-k": "placed",
+    "st-kk": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s17",
+   "no": 17,
+   "name": "안시우",
+   "alias": "가람",
+   "team": 2,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄲ이랑 ㅋ은 둘 다 ㄱ에서 나온 글자고 똑같이 획을 더해서 만들었어요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M1",
+     "M3"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-d",
+    "st-tt"
+   ],
+   "start": [],
+   "progress": {
+    "st-d": "placed",
+    "st-tt": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s18",
+   "no": 18,
+   "name": "송하린",
+   "alias": "누리",
+   "team": 3,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅅ은 산 모양을 보고 만든 글자예요",
+    "explainSubmitted": true,
+    "barriers": [
+     "시간 부족"
+    ]
+   },
+   "label": {
+    "misconceptions": [
+     "M6"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-b",
+    "st-pp"
+   ],
+   "start": [],
+   "progress": {
+    "st-b": "placed",
+    "st-pp": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s19",
+   "no": 19,
+   "name": "류건우",
+   "alias": "다솜",
+   "team": 4,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅊ은 ㅈ보다 더 큰 소리를 내려고 획을 더했어요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M2"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-j",
+    "st-ss"
+   ],
+   "start": [],
+   "progress": {
+    "st-j": "placed",
+    "st-ss": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s20",
+   "no": 20,
+   "name": "홍다은",
+   "alias": "라온",
+   "team": 5,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅇ은 소리가 없어서 목구멍소리가 아닌 것 같아요",
+    "explainSubmitted": true,
+    "barriers": [
+     "시간 부족"
+    ]
+   },
+   "label": {
+    "misconceptions": [
+     "M7"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "준비",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-h",
+    "st-hh"
+   ],
+   "start": [],
+   "progress": {
+    "st-h": "placed",
+    "st-hh": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  },
+  {
+   "id": "s21",
+   "no": 21,
+   "name": "전태윤",
+   "alias": "마루",
+   "team": 1,
+   "signals": {
+    "videoStarted": false,
+    "checkFirstTry": {},
+    "explain1": "잘 모르겠어요",
+    "explainSubmitted": true,
+    "barriers": [
+     "집에서 하기 어려워요"
+    ]
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "준비",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-kk"
+   ],
+   "start": [],
+   "progress": {
+    "st-kk": "wet"
+   },
+   "arrived": false,
+   "exception": "영상 미시작 2회"
+  },
+  {
+   "id": "s22",
+   "no": 22,
+   "name": "고은서",
+   "alias": "바다",
+   "team": 2,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "기본자는 ㄱ ㄴ ㄷ ㅁ ㅅ ㅇ이에요",
+    "explainSubmitted": true,
+    "barriers": [
+     "기기 없음"
+    ]
+   },
+   "label": {
+    "misconceptions": [
+     "M4"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-n",
+    "st-d",
+    "st-tt"
+   ],
+   "start": [],
+   "progress": {
+    "st-n": "placed",
+    "st-d": "placed",
+    "st-tt": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s23",
+   "no": 23,
+   "name": "문승민",
+   "alias": "아라",
+   "team": 3,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "된소리는 획을 겹쳐서 쓰는 거예요. ㄱ에 한 번 더 그으면 ㄲ",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M1"
+    ]
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-b",
+    "st-pp"
+   ],
+   "start": [],
+   "progress": {
+    "st-b": "placed",
+    "st-pp": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  },
+  {
+   "id": "s24",
+   "no": 24,
+   "name": "양소율",
+   "alias": "하늘",
+   "team": 4,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅋ이랑 ㄲ은 둘 다 센소리라서 같은 원리로 만든 거예요",
+    "explainSubmitted": true,
+    "barriers": [
+     "내용이 어려움"
+    ]
+   },
+   "label": {
+    "misconceptions": [
+     "M3"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-s",
+    "st-j",
+    "st-ss"
+   ],
+   "start": [],
+   "progress": {
+    "st-s": "placed",
+    "st-j": "placed",
+    "st-ss": "wet"
+   },
+   "arrived": false,
+   "exception": "SOS 2회"
+  },
+  {
+   "id": "s25",
+   "no": 25,
+   "name": "손주원",
+   "alias": "한결",
+   "team": 5,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄱ ㄴ ㄷ 순서니까 ㄷ도 처음에 만든 글자예요",
+    "explainSubmitted": true,
+    "barriers": [
+     "기기 없음"
+    ]
+   },
+   "label": {
+    "misconceptions": [
+     "M4"
+    ]
+   },
+   "type": {
+    "participation": "있음",
+    "readiness": "보충",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-o",
+    "st-q",
+    "st-hh"
+   ],
+   "start": [],
+   "progress": {
+    "st-o": "placed",
+    "st-q": "placed",
+    "st-hh": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s26",
+   "no": 26,
+   "name": "배나연",
+   "alias": "초롱",
+   "team": 1,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄱ이 기본자예요",
+    "explainSubmitted": true,
+    "barriers": [
+     "인터넷 없음"
+    ]
+   },
+   "label": {
+    "misconceptions": []
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "보충",
+    "environment": "걸림돌"
+   },
+   "path": [
+    "st-g"
+   ],
+   "start": [],
+   "progress": {
+    "st-g": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s27",
+   "no": 27,
+   "name": "백준서",
+   "alias": "보람",
+   "team": 2,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄲ은 ㄱ을 두 번 쓴 거라 ㄱ에 획을 추가한 거랑 같아요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M1"
+    ]
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-n",
+    "st-d"
+   ],
+   "start": [],
+   "progress": {
+    "st-n": "placed",
+    "st-d": "placed"
+   },
+   "arrived": true,
+   "exception": null
+  },
+  {
+   "id": "s28",
+   "no": 28,
+   "name": "허윤아",
+   "alias": "윤슬",
+   "team": 3,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄷ은 기본자고 ㅌ은 ㄷ에 획을 더한 거예요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M4"
+    ]
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-b",
+    "st-pp"
+   ],
+   "start": [],
+   "progress": {
+    "st-b": "placed",
+    "st-pp": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  },
+  {
+   "id": "s29",
+   "no": 29,
+   "name": "남지환",
+   "alias": "은솔",
+   "team": 4,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㄲ도 가획이에요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M1"
+    ]
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "준비",
+    "environment": "양호"
+   },
+   "path": [
+    "st-j",
+    "st-jj"
+   ],
+   "start": [],
+   "progress": {
+    "st-j": "placed",
+    "st-jj": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  },
+  {
+   "id": "s30",
+   "no": 30,
+   "name": "노하율",
+   "alias": "해솔",
+   "team": 5,
+   "signals": {
+    "videoStarted": true,
+    "checkFirstTry": {},
+    "explain1": "ㅎ은 ㆆ보다 소리가 우렁차서 획이 하나 더 있어요",
+    "explainSubmitted": true,
+    "barriers": []
+   },
+   "label": {
+    "misconceptions": [
+     "M2"
+    ]
+   },
+   "type": {
+    "participation": "낮음",
+    "readiness": "보충",
+    "environment": "양호"
+   },
+   "path": [
+    "st-q",
+    "st-hh"
+   ],
+   "start": [],
+   "progress": {
+    "st-q": "placed",
+    "st-hh": "wet"
+   },
+   "arrived": false,
+   "exception": null
+  }
+ ]
+}

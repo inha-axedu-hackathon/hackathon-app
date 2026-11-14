@@ -23,6 +23,33 @@ export const MISCONCEPTIONS = [
 export type MisconceptionId = (typeof MISCONCEPTIONS)[number]["id"];
 
 /**
+ * 돌(글자) 목록. 모둠(team)은 소리 갈래 줄: 1 어금닛 · 2 혓 · 3 입술 · 4 잇 · 5 목구멍.
+ * 돌 카드·문항 내용은 data/stones.json(재우·진선우)에 있고, 여기는 구간 계산에 필요한 정보만 둔다.
+ */
+export const STONES = [
+  { id: "st-g", char: "ㄱ", section: "상형", team: 1 },
+  { id: "st-k", char: "ㅋ", section: "가획", team: 1 },
+  { id: "st-kk", char: "ㄲ", section: "병서", team: 1 },
+  { id: "st-n", char: "ㄴ", section: "상형", team: 2 },
+  { id: "st-d", char: "ㄷ", section: "가획", team: 2 },
+  { id: "st-t", char: "ㅌ", section: "가획", team: 2 },
+  { id: "st-tt", char: "ㄸ", section: "병서", team: 2 },
+  { id: "st-m", char: "ㅁ", section: "상형", team: 3 },
+  { id: "st-b", char: "ㅂ", section: "가획", team: 3 },
+  { id: "st-p", char: "ㅍ", section: "가획", team: 3 },
+  { id: "st-pp", char: "ㅃ", section: "병서", team: 3 },
+  { id: "st-s", char: "ㅅ", section: "상형", team: 4 },
+  { id: "st-j", char: "ㅈ", section: "가획", team: 4 },
+  { id: "st-ch", char: "ㅊ", section: "가획", team: 4 },
+  { id: "st-ss", char: "ㅆ", section: "병서", team: 4 },
+  { id: "st-jj", char: "ㅉ", section: "병서", team: 4 },
+  { id: "st-o", char: "ㅇ", section: "상형", team: 5 },
+  { id: "st-q", char: "ㆆ", section: "가획", team: 5 },
+  { id: "st-h", char: "ㅎ", section: "가획", team: 5 },
+  { id: "st-hh", char: "ㆅ", section: "병서", team: 5 },
+] as const;
+
+/**
  * 키워드만으로 오개념을 대강 찾는다. AI를 못 쓸 때의 대체 결과이자, "키워드만 M/30" 비교 기준선이다.
  * 일부러 단순하게 둔다(표현이 조금만 달라도 놓친다 → 그래서 AI가 필요하다는 근거가 된다).
  */
@@ -31,7 +58,7 @@ export function keywordMisconceptions(text: string): MisconceptionId[] {
   const has = (...words: string[]) => words.some((w) => t.includes(w));
   const found: MisconceptionId[] = [];
   if (t.includes("ㄲ") && has("획을 더", "획 더", "가획")) found.push("M1");
-  if (has("크게", "커서", "큰 소리", "커지", "볼륨")) found.push("M2");
+  if (has("크게", "커서", "큰 소리", "커지", "커져", "볼륨")) found.push("M2");
   if (t.includes("ㅋ") && t.includes("ㄲ") && has("같은 원리", "똑같", "같아")) found.push("M3");
   if (t.includes("ㄷ") && t.includes("기본자") && !has("아니", "아닌")) found.push("M4");
   if (has("ㅏ", "ㅑ", "모음") && has("가획", "획을 더")) found.push("M5");

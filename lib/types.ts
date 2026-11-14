@@ -24,7 +24,17 @@ export interface Student {
     barriers: Barrier[];
   };
   label?: { misconceptions: string[] }; // AI 정확도 점검용 정답 라벨
+  // 아래는 시연 데이터(data/class-2-3.json)용. 화면에서는 lib/rules/bridge.ts를 거쳐 읽는다
+  type?: { participation: "있음" | "낮음"; readiness: "준비" | "보충"; environment: "양호" | "걸림돌" }; // 교사만
+  path?: string[]; // 내 경로의 돌 ID (출발 돌 포함)
+  start?: string[]; // 출발 돌 (처음부터 켜진 돌)
+  progress?: Record<string, StoneProgress>; // 돌별 상태 (시연 시작 시점)
+  arrived?: boolean; // 도착 관문 통과(깃발)
+  exception?: string | null; // 교사 확인이 필요한 예외 사유 (교사만)
 }
+
+/** 돌 상태: 놓임 · 시도했지만 아직(젖은 돌) · 종이 돌로 놓음(교사 확인) */
+export type StoneProgress = "placed" | "wet" | "paper";
 
 export interface Analysis {
   studentId: string;
