@@ -3,8 +3,9 @@
 // 화면 목록을 손으로 적지 않고 빌드 결과에서 전부 찾는다(teacher/로 시작하는 화면과 api만 뺀다). 실패하면 종료 코드 1.
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = new URL("..", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("..", import.meta.url)); // 한글 경로도 되게
 const APP = join(ROOT, ".next/server/app");
 const students = JSON.parse(readFileSync(join(ROOT, "data/class-2-3.json"), "utf8")).students;
 const publicText = readFileSync(join(ROOT, "data/class-2-3.public.json"), "utf8");
