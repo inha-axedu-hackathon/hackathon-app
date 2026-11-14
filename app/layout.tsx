@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./game-skin.css";
+import "./anime-skin.css";
 import { DemoKeys } from "@/components/DemoKeys";
 
 export const metadata: Metadata = {

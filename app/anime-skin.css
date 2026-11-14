@@ -1,0 +1,313 @@
+/* app/anime-skin.css — 애니메이션 배경화풍 스킨 (그림: public/art, Higgsfield로 생성)
+   교실 화면(우리 반 다리)과 학생 홈 '내 길' 그림판에 그림을 입힌다.
+   구조(JSX)는 건드리지 않고 CSS만 얹는다. 끄려면 app/layout.tsx의 import 한 줄만 지우면 된다.
+   선택자가 안 맞으면 원래 그림(SVG)이 그대로 보인다. */
+
+/* ───────── 교실 화면: 하늘·산·강을 날씨별 그림 한 장으로 ───────── */
+/* 날씨 층(.sl)을 화면 전체 높이로 늘려 강물까지 함께 바뀌게 한다. 그림의 수면선(486/810)을 강 시작(470px)에 맞춘다 */
+.stage .sky,
+.stage .skyp {
+  height: 810px;
+}
+.stage .sl {
+  background-repeat: no-repeat !important;
+  background-size: 1512px 851px !important;
+  background-position: -36px -40px !important;
+}
+.stage .l-clear {
+  background-image: url("/art/bg-clear.webp") !important;
+}
+.stage .l-cloud {
+  background-image: url("/art/bg-cloud.webp") !important;
+}
+.stage .l-dark,
+.stage .l-shower {
+  background-image: url("/art/bg-storm.webp") !important;
+}
+.stage .sl > i,
+.stage .mtn {
+  display: none;
+}
+.stage .river .water {
+  background: none;
+}
+.stage .river .water::after {
+  display: none;
+}
+/* 함께 놓기 장면은 하늘이 막으로 가려지므로 강물만 따로 깐다 */
+.stage.s-together .river .water {
+  background: url("/art/bg-storm.webp") -36px -510px / 1512px 851px no-repeat;
+}
+.stage .wave {
+  opacity: 0.55;
+}
+/* 물높이 막: 그림 속 물결이 비치도록 옅게 */
+.stage .wfront {
+  opacity: 0.5;
+}
+
+/* ───────── 둑: 출발 둑(등불) · 도착 둑(학당) ───────── */
+.stage svg.bank > * {
+  display: none;
+}
+.stage svg.bank > .flag,
+.stage svg.bank > :nth-last-child(-n + 2) {
+  display: inline; /* '출발'·'수업' 꼬리표와 새 깃발은 그대로 */
+}
+.stage .river:has(> svg.bank[width="250"])::before,
+.stage .river:has(> svg.bank[width="260"])::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  background: center bottom / contain no-repeat;
+  filter: drop-shadow(0 10px 8px rgba(6, 40, 38, 0.35));
+}
+.stage .river:has(> svg.bank[width="250"])::before {
+  left: -104px;
+  top: -168px;
+  width: 310px;
+  height: 215px;
+  background-image: url("/art/bank-start.webp");
+}
+.stage .river:has(> svg.bank[width="260"])::after {
+  right: -128px;
+  top: -232px;
+  width: 420px;
+  height: 285px;
+  background-image: url("/art/bank-end.webp");
+}
+
+/* ───────── 징검돌: 그림 돌 위에 글자만 얹는다 ───────── */
+.stage .sec .stone:not(.next),
+.tab .jg-path .stone:not(.next),
+.tab div:has(> svg[viewBox="0 0 744 262"]) .stone:not(.next) {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  z-index: 0;
+  padding-bottom: calc(var(--s) * 0.05);
+  color: #2a2622;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.stage .sec .stone:not(.next)::before,
+.tab div:has(> svg[viewBox="0 0 744 262"]) .stone:not(.next)::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -9% -10% -9% -10% !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: -1;
+  border-radius: 0 !important;
+  transform: none !important;
+  background: url("/art/stone-dry.webp") center / 100% 100% no-repeat !important;
+  filter: drop-shadow(0 calc(var(--s) * 0.07) calc(var(--s) * 0.05) rgba(6, 46, 42, 0.42)) !important;
+}
+/* 젖은 돌 · 잠긴 돌 */
+.stage .sec .stone.wet,
+.stage .sec .stone.sunk,
+.tab div:has(> svg[viewBox="0 0 744 262"]) .stone.wet {
+  color: #f6fbfd;
+  text-shadow: 0 2px 0 rgba(12, 30, 40, 0.55);
+}
+.stage .sec .stone.wet::before,
+.stage .sec .stone.sunk::before,
+.tab div:has(> svg[viewBox="0 0 744 262"]) .stone.wet::before {
+  background-image: url("/art/stone-wet.webp") !important;
+}
+.stage .sec .stone.sunk::before {
+  filter: saturate(0.8) brightness(0.72) hue-rotate(-18deg) !important;
+  opacity: 0.9;
+}
+/* 출발 돌 · 금테 돌: 테두리 대신 빛무리 */
+.stage .sec .stone.start::before,
+.tab div:has(> svg[viewBox="0 0 744 262"]) .stone.start::before {
+  filter: drop-shadow(0 0 calc(var(--s) * 0.1) rgba(235, 150, 170, 0.95)) drop-shadow(0 calc(var(--s) * 0.07) calc(var(--s) * 0.05) rgba(6, 46, 42, 0.42)) !important;
+}
+.stage .sec .stone.gold::before,
+.tab div:has(> svg[viewBox="0 0 744 262"]) .stone.gold::before {
+  filter: drop-shadow(0 0 calc(var(--s) * 0.1) rgba(255, 214, 92, 0.95)) drop-shadow(0 calc(var(--s) * 0.07) calc(var(--s) * 0.05) rgba(6, 46, 42, 0.42)) !important;
+}
+
+/* ───────── 날씨 얼굴(이모지) ───────── */
+.stage .wxicon {
+  width: 124px;
+  height: 112px;
+  flex: none;
+  background: center / contain no-repeat;
+  filter: drop-shadow(0 6px 6px rgba(10, 30, 40, 0.28));
+}
+.stage .wxicon:has(#w2h) {
+  background-image: url("/art/wx-clear.webp");
+}
+.stage .wxicon:has(#w3a) {
+  background-image: url("/art/wx-cloud.webp");
+}
+.stage .wxicon:has(#w4a) {
+  background-image: url("/art/wx-dark.webp");
+}
+.stage .wxicon:has(#w5a) {
+  background-image: url("/art/wx-shower.webp");
+}
+.stage .wxicon:has(#w2h, #w3a, #w4a, #w5a) > svg {
+  visibility: hidden;
+}
+/* 아래 구간 넘기기 점의 작은 날씨 아이콘 */
+.stage .pgdots button > svg,
+.pgdots button > svg {
+  background: center / contain no-repeat;
+  overflow: visible;
+}
+.pgdots button > svg > * {
+  display: none;
+}
+.pgdots button > svg:has(circle[r="12"]) {
+  background-image: url("/art/wx-clear.webp");
+}
+.pgdots button > svg:has(circle[r="10"]) {
+  background-image: url("/art/wx-cloud.webp");
+}
+.pgdots button > svg:not(:has(circle)):not(:has(line)) {
+  background-image: url("/art/wx-dark.webp");
+}
+.pgdots button > svg:not(:has(circle)):has(line) {
+  background-image: url("/art/wx-shower.webp");
+}
+
+/* ───────── 나룻배: 그림 배가 강을 끝에서 끝까지 건넌다 ───────── */
+@keyframes anime-sail {
+  from {
+    transform: translateX(var(--from));
+  }
+  to {
+    transform: translateX(var(--to));
+  }
+}
+@keyframes anime-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2.5deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(2.5deg);
+  }
+}
+.stage .boat:has(#b8h, #b9h, #b10h) > svg {
+  visibility: hidden;
+  animation: none;
+}
+.stage .boat:has(#b8h, #b9h, #b10h) {
+  animation: anime-sail var(--dur) linear var(--delay, 0s) infinite;
+}
+.stage .boat:has(#b8h, #b9h, #b10h)::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: var(--bw);
+  height: var(--bh);
+  margin-left: calc(var(--bw) / -2);
+  background: center bottom / contain no-repeat;
+  transform-origin: 50% 85%;
+  animation: anime-bob 3.4s ease-in-out infinite;
+  filter: drop-shadow(0 4px 3px rgba(6, 46, 42, 0.35));
+  -webkit-box-reflect: below -3px linear-gradient(transparent 62%, rgba(255, 255, 255, 0.2));
+}
+/* 먼 돛단배(작게): 왼쪽 → 오른쪽 */
+.stage .boat:has(#b8h) {
+  --from: -520px;
+  --to: 1180px;
+  --dur: 78s;
+  --delay: -26s;
+}
+.stage .boat:has(#b8h)::before {
+  --bw: 104px;
+  --bh: 88px;
+  bottom: -10px; /* 돛대가 징검돌에 닿지 않게 */
+  background-image: url("/art/boat-sail.webp");
+}
+/* 등불 나룻배: 오른쪽 → 왼쪽 (그림을 뒤집어 뱃머리가 앞을 보게) */
+.stage .boat:has(#b9h) {
+  --from: 720px;
+  --to: -960px;
+  --dur: 96s;
+  --delay: -30s;
+}
+.stage .boat:has(#b9h)::before {
+  --bw: 150px;
+  --bh: 62px;
+  scale: -1 1;
+  background-image: url("/art/boat-lantern.webp");
+  animation-duration: 4.2s;
+}
+/* 가까운 돛단배(크게) */
+.stage .boat:has(#b10h) {
+  --from: -240px;
+  --to: 1420px;
+  --dur: 64s;
+  --delay: -8s;
+}
+.stage .boat:has(#b10h)::before {
+  --bw: 138px;
+  --bh: 116px;
+  background-image: url("/art/boat-sail.webp");
+  animation-duration: 2.9s;
+}
+
+/* ───────── 학생 홈 '내 길' 그림판 ───────── */
+.tab div:has(> svg[viewBox="0 0 744 262"]) {
+  background: url("/art/my-stones-panel.webp") center / 100% 100% no-repeat !important;
+}
+.tab div:has(> svg[viewBox="0 0 744 262"]) > svg[viewBox="0 0 744 262"] {
+  display: none;
+}
+/* 도착 관문은 그림 안에 있으므로 SVG 관문은 자리만 남긴다 */
+.tab div:has(> svg[viewBox="0 0 744 262"]) svg[viewBox="0 0 200 160"] {
+  visibility: hidden;
+}
+/* 그림판 위를 지나는 작은 돛단배 */
+.tab div:has(> svg[viewBox="0 0 744 262"])::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  width: 62px;
+  height: 52px;
+  background: url("/art/boat-sail.webp") center bottom / contain no-repeat;
+  filter: drop-shadow(0 3px 2px rgba(6, 46, 42, 0.3));
+  --from: -90px;
+  --to: 820px;
+  animation: anime-sail 46s linear -12s infinite;
+  pointer-events: none;
+}
+
+/* ───────── 움직임 줄이기 · 저사양: 배는 제자리에 멈춘다 ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .stage .boat:has(#b8h, #b9h, #b10h),
+  .stage .boat:has(#b8h, #b9h, #b10h)::before,
+  .tab div:has(> svg[viewBox="0 0 744 262"])::before {
+    animation: none !important;
+  }
+  .tab div:has(> svg[viewBox="0 0 744 262"])::before {
+    left: 40%;
+  }
+}
+.lite .boat:has(#b8h, #b9h, #b10h),
+.lite .boat:has(#b8h, #b9h, #b10h)::before,
+.lite div:has(> svg[viewBox="0 0 744 262"])::before {
+  animation: none !important;
+}
+.jg-ambient .boat,
+.jg-ambient .boat::before {
+  animation-play-state: paused !important;
+}
+
+/* 먹구름·소나기 하늘: 제목 뒤로 구름 사이 빛을 살짝 넣어 검은 제목이 읽히게 */
+.stage .l-dark::after,
+.stage .l-shower::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(52% 34% at 20% 13%, rgba(214, 228, 238, 0.5), rgba(214, 228, 238, 0) 72%);
+  pointer-events: none;
+}
