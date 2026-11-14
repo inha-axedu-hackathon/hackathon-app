@@ -8,10 +8,11 @@ type Wx = "clear" | "cloud" | "dark" | "shower";
 
 const WX_OF: Record<Weather, Wx> = { 맑음: "clear", 구름: "cloud", 먹구름: "dark", 소나기: "shower" };
 const T: Record<Wx, { word: string; col: string; name: string; lvl: number }> = {
-  clear: { word: "맑음", col: "#7A4E00", name: "#3F4A50", lvl: 150 },
-  cloud: { word: "구름", col: "#2F3B42", name: "#3F4A50", lvl: 128 },
-  dark: { word: "먹구름", col: "#F4F2EC", name: "#C9D3D7", lvl: 100 },
-  shower: { word: "소나기", col: "#BFF1F3", name: "#C9D3D7", lvl: 84 },
+  // 글자는 먹선(외곽선)을 두르므로 하늘색과 상관없이 읽힌다 (game-skin.css .wxcell .t)
+  clear: { word: "맑음", col: "#FFD34D", name: "#FFFFFF", lvl: 150 },
+  cloud: { word: "구름", col: "#FFFFFF", name: "#FFFFFF", lvl: 128 },
+  dark: { word: "먹구름", col: "#E3EAED", name: "#FFFFFF", lvl: 100 },
+  shower: { word: "소나기", col: "#9FF0E0", name: "#FFFFFF", lvl: 84 },
 };
 const XS = [168, 536, 904]; // 양쪽 둑에 돌이 가리지 않게 (구간 폭 352)
 const SKX = [-100, 400, 840];

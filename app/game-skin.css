@@ -327,3 +327,21 @@
   animation-play-state: paused !important;
   transition: none !important;
 }
+
+/* 날씨 이름: 하늘이 밝든 어둡든 읽히게 두꺼운 먹선 + 바닥 그림자(게임 타이틀식). 물때 배너와 겹치지 않게 조금 아래로 */
+.stage .wxcell {
+  top: 306px;
+}
+.stage .wxcell .t {
+  -webkit-text-stroke: 7px var(--g-ink);
+  paint-order: stroke fill;
+  text-shadow: 0 5px 0 var(--g-ink);
+}
+.stage .wxcell .t:first-child {
+  -webkit-text-stroke-width: 5px;
+  text-shadow: 0 3px 0 var(--g-ink);
+}
+.stage .tidebn {
+  border: 4px solid var(--g-ink);
+  box-shadow: 0 6px 0 var(--g-ink) !important;
+}
