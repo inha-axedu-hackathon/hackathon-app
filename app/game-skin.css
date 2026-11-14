@@ -319,3 +319,11 @@
 .stage.s-jejapyo {
   background: #12171a;
 }
+
+/* 흐린 배경 사본: 움직임을 멈춰 가볍게 */
+.jg-ambient *,
+.jg-ambient *::before,
+.jg-ambient *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
+}
