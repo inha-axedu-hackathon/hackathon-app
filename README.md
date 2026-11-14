@@ -13,24 +13,50 @@
 | [docs/GAMIFICATION.md](docs/GAMIFICATION.md) | 징검런 규칙, 화면 문구, 페이스패스, 근거, 예상 질문 |
 | [AGENTS.md](AGENTS.md) | AI 코딩 도구가 지킬 규칙 (CLAUDE.md는 이 파일을 불러옴) |
 
-## 폴더와 담당
-코드 폴더는 Next.js 세팅 후에 생겨요. 담당은 "주로 누가 만드는지"를 나눈 거예요. 다른 폴더도 고칠 수 있어요.
+## 작업 분할 (11/14 10:15 확정 · 충돌 방지용)
+**원칙: 한 파일의 주인은 한 명.** 남의 파일은 고치지 않고 말로 요청해요. 새 파일은 아래 표의 내 경로에만 만들어요.
 
-| 폴더 | 내용 | 담당 |
-|---|---|---|
-| `docs/` | 기획 문서 (SPEC, GAMIFICATION) | 같이 |
-| `docs/design/` | 화면 시안, 캡처 | 신재우 |
-| `docs/notes/` | 각자 메모 (`docs/notes/이름.md`) | 본인 |
-| `lib/`, `data/`, `app/api/` | 타입, 시연 상태, 규칙, AI, 데이터, API | 정환희 |
-| `app/teacher/`, `app/checkin/`, `app/student/welcome/` | 교사 화면, 교실 태블릿 체크인, 안내·동의 | 정환희 |
-| `app/student/`(welcome 제외), `app/class/`, `app/demo/`, `components/`, `public/lab/` | 학생·교실·시연 화면, 공용 컴포넌트, 실험실 사본 | 신재우 |
+### 신재우 — 학생·교실 화면 = 시그니처 90초
+| 파일 | 할 일 |
+|---|---|
+| `app/layout.tsx`, `app/globals.css`, `app/page.tsx` | 글꼴·색 토큰, 시작 화면 (환희는 Tailwind 클래스만 씀) |
+| `app/student/page.tsx` | S1 징검런 홈(진행 링, 1칸 남음, 오늘은 여기까지) |
+| `app/student/stone/[id]/page.tsx` | S2 돌 굳히기(실험실 + 2문항 + 변형 + 첨벙) → 성공 시 `demo.reach(1)` |
+| `app/student/explain/page.tsx` | S3 도착 관문 → `/api/explain` 호출, 통과 시 `demo.reach(2)` + 해례 |
+| `app/class/page.tsx` | C1~C4 교실 다리, 물때, 함께 놓기 O/X(`demo.reach(4)`), 개통, 제자표 |
+| `app/demo/page.tsx` | 분할 화면 배치 |
+| `components/LabFrame.tsx` | `docs/notes/lab-integration.md` 코드 그대로 |
+| `components/student/*`, `components/class/*`, `components/ProgressRing.tsx` | 학생·교실 전용 컴포넌트 |
+| `components/StepBadge.tsx` | 13:15 전에는 지우지 않음(교사 화면이 씀) |
+| `data/stones.json` | 돌 카드·굳히기 문항·함께 놓기 O/X·관문 질문과 문장 틀·해례 원문 (내용: 진선우) |
+| `public/lab/`, `docs/design/*`(시안 제외), `docs/notes/재우.md` | 실험실 사본은 고치지 않음 |
+
+### 정환희 — 데이터·AI·교사 화면·정적 화면
+| 파일 | 할 일 |
+|---|---|
+| `lib/types.ts`, `lib/store.ts` | 주인. 재우가 필요한 필드·이벤트·시각 변경은 말로 요청 → 환희가 추가하고 바로 push |
+| `lib/llm.ts`, `lib/prompts.ts`, `lib/rules/*` | AI 호출, 규칙(미리 계산한 JSON 읽기 가능) |
+| `app/api/*` | `/api/explain`(먼저), `/api/analyze`, `/api/plan`, `/api/checkin` |
+| `data/class-2-3.json`, `data/concepts.json`, `data/analysis.saved.json` | 30명, 개념·오개념·관문 키워드, AI 저장본 |
+| `app/teacher/page.tsx`, `app/teacher/approve/page.tsx` | T1 예보 + AI 장면 15초(근거 형광펜), T3 확인 도장 |
+| `app/checkin/page.tsx`, `app/student/welcome/page.tsx`, `app/student/river/page.tsx` | 정적 화면: 체크인 키오스크, 안내·동의, 나의 강 지도 |
+| `components/DemoKeys.tsx`, `components/teacher/*` | 단축키, 교사 확인 알림(VerifyNotice) 등 |
+| `docs/SPEC.md`, `docs/GAMIFICATION.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `package.json` | 문서·설정은 환희만. 재우는 `docs/notes/재우.md`에 적고 알림 |
+
+### 둘이 맞춘 약속 (바꾸려면 먼저 말하기)
+- 라우트: `/`, `/student`, `/student/stone/[id]`, `/student/explain`, `/student/welcome`, `/student/river`, `/class`, `/teacher`, `/teacher/approve`, `/checkin`, `/demo`
+- 단계 이동은 `demo.reach(n)`만 씀(1 ㅌ 완성 · 2 관문 통과 · 3 수업 시작 · 4 함께 놓기 · 5 개통). 시각은 `d.now`, `d.minutesToLesson`만 읽고 화면에 시각을 직접 쓰지 않음
+- 돌 ID: `st-n`, `st-d`, `st-t`, `st-kk` · 시연 학생 `s07`
+- `/api/explain`: 요청 `{ studentId, stoneId, text }` → 응답 `{ passed, ideas, misconception, feedback, source }`. 서버가 안 되면 화면은 "선생님이 확인할게요"로
+- 오늘은 **새 패키지를 설치하지 않음**(애니메이션은 CSS로). 꼭 필요하면 환희가 설치하고 바로 push
+- 다리 칸 숫자·개통 기준(80%)은 `data/` 값으로 계산해서 화면에 숫자를 직접 쓰지 않음
 
 ## 작업 규칙
-1. 작업 시작 전에 `git pull --rebase`
-2. 주로 내 담당 폴더에서 작업한다. 다른 폴더를 고칠 때는 한마디 하고 고친다.
-3. 같이 쓰는 파일(`lib/types.ts`, `lib/store.ts`, `package.json`)은 누구나 고칠 수 있다. 대신 고친 뒤 바로 커밋·push하고 상대에게 알린다. 상대는 `git pull --rebase`, 패키지가 바뀌었으면 `npm install`.
-4. 같이 쓰는 파일에서는 기존 이름을 지우거나 바꾸지 말고 추가하는 방식으로 고친다. 상대 코드가 깨지는 걸 막기 위해서다.
-5. 30~40분마다 작게 커밋하고, 메시지 앞에 `[환희]` 또는 `[재우]`를 붙인다.
-6. push 전에 `npm run build`가 통과하는지 확인한다.
-7. 충돌이 나면 상대 변경을 지우지 말고 같이 본다. AI 도구로 해결할 때도 상대 코드가 남아 있는지 확인한다.
-8. `.env.local`(API 키)은 절대 커밋하지 않는다.
+1. 작업 시작 전과 push 직전에 `git pull --rebase`
+2. 커밋할 때 `git add .` 대신 **내 파일 경로만** 적어서 add
+3. 30분마다 작게 커밋·push, 메시지 앞에 `[환희]` 또는 `[재우]`
+4. push 전에 `npm run build` 통과 확인
+5. 남의 파일이 바뀌어 있으면(`git status`) 커밋하지 말고 `git restore 파일`로 되돌린 뒤 말하기. `next dev`가 `AGENTS.md`를 다시 쓰면 그대로 둠
+6. 저장소 전체에 포맷터·`lint --fix`를 돌리지 않음
+7. 충돌이 나면 상대 변경을 지우지 말고 같이 본다. AI 도구로 해결할 때도 상대 코드가 남아 있는지 확인한다
+8. `.env.local`(API 키)은 절대 커밋하지 않는다. Vercel 환경 변수는 환희가 넣음
