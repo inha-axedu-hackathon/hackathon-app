@@ -254,7 +254,7 @@ export function StudentView(v: Record<string, any>) {
             <div className="a" style={{display: 'flex', flexDirection: 'column', gap: '6px', padding: '16px 6px 0', animation: 'jg-fade 600ms var(--ease-standard) 2000ms both'} as any}>
               <span style={{fontSize: '15px', fontWeight: '700', letterSpacing: '.06em', color: '#8A7F70'} as any}>훈민정음 해례 · 제자해 (1446) · 오른쪽부터 세로로 읽어요</span>
               <span style={{fontSize: '19px', lineHeight: '1.6', color: '#3E3A35'} as any}>ㅋ은 ㄱ에 비해 소리가 조금 세게 나므로 획을 더했다. ㄷ에서 ㅌ도, 소리에 따라 획을 더한 뜻은 모두 같다.</span>
-              <span style={{fontSize: '24px', fontWeight: '800', color: '#9B3A51'} as any}>580년 전 해례본과 같은 설명이에요</span>
+              <span style={{fontSize: '24px', fontWeight: '800', color: '#9B3A51'} as any}>집현전 학자들이랑 같은 답 씀</span>
             </div>
           </div>
         </div>
