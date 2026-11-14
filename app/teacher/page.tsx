@@ -73,7 +73,9 @@ export default function TeacherPage() {
   const lockedNames = b.sections.filter((s) => s.locked).map((s) => s.name);
   const lockedNow = b.lessonStarted && !b.together && lockedNames.length > 0;
   const model = run.model ?? "claude-haiku-5-5";
-  const source = run.live ? `AI 분석 · 방금 다시 실행 (${model}, ${run.llmCount ?? run.results.length}명)` : `AI 분석 저장본 · 말해보기 제출 직후 (${model})` + (run.live && run.tokens?.used === 0 ? " · 같은 답이라 직전 결과 재사용" : "");
+  const source = run.live
+    ? `AI 분석 · 방금 다시 실행 (${model}, ${run.llmCount ?? run.results.length}명)` + (run.tokens?.used === 0 ? " · 같은 답이라 직전 결과 재사용" : "")
+    : `AI 분석 저장본 · 말해보기 제출 직후 (${model})`;
   const agree = run.agreement ? ` · 오개념 탐지 일치 ${run.agreement.matched}/${run.agreement.total}` : "";
 
   function toggle(key: string) {

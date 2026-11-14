@@ -26,7 +26,7 @@ try {
   // 시연 대본(SPEC 9-2): 낱말 상자 [세게]·[획을] → 키워드로 바로 통과
   let r = await ex("ㅌ은 ㄷ보다 소리가 세게 나서 획을 하나 더했다.");
   check("관문: 시연 문장 틀 정답 → 키워드 통과", r.status === 200 && r.json?.passed === true && r.json?.source === "keyword", JSON.stringify(r.json));
-  check("관문: 통과 문구", r.json?.feedback === "집현전 학자들이랑 같은 답 씀", r.json?.feedback);
+  check("관문: 통과 문구", r.json?.feedback === "집현전 학자들이랑 같은 답을 썼어요", r.json?.feedback);
 
   r = await ex("ㅌ은 ㄷ보다 소리가 크게 나서 획을 하나 더했다.");
   check("관문: '크게' → M2 피드백(AI 없이)", r.json?.passed === false && r.json?.misconception === "M2" && r.json?.source === "keyword", JSON.stringify(r.json));
