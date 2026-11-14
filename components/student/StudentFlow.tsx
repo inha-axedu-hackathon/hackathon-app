@@ -9,14 +9,16 @@ import { FitStage } from "@/components/FitStage";
 import { LabFrame } from "@/components/LabFrame";
 import { isLabKey, onLabDone, postLabDone } from "@/components/student/labSignal";
 import { myProgress } from "@/components/student/progress";
-import { DEMO_STUDENT, EXPLAIN } from "@/components/student/stones";
+import { DEMO_STUDENT, EXPLAIN, stoneCard } from "@/components/student/stones";
 import { StudentView } from "@/components/student/StudentView";
 import { useDemo } from "@/lib/store";
 
 export type Screen = "home" | "concept" | "lab" | "quiz" | "splash" | "gate" | "pass";
 
-// 굳히기 문항 (디자인 확정본, 해례 '聲出稍厲' 기준 · 진선우 검수)
-const Q = [
+type Q = { tag: string; text: string; opts: string[]; ans: number; serif: boolean; explain: string; fix: string };
+
+// 굳히기 문항 (ㅌ: 디자인 확정본, 해례 '聲出稍厲' 기준 · 진선우 검수)
+const Q_T: Q[] = [
   { tag: "굳히기 1/2", text: "ㄷ에 획을 하나 더해 ㅌ을 만든 까닭은?", opts: ["소리가 조금 세게 나서", "글자를 더 크게 쓰려고", "같은 글자를 나란히 쓰려고"], ans: 0, serif: false,
     explain: '해례는 "소리가 조금 세지면 획을 더한다(聲出稍厲)"고 설명해요.', fix: "‘크게’가 아니라 ‘세게’예요. 큰 소리가 아니라 소리가 조금 세게 나는 거예요." },
   { tag: "굳히기 2/2", text: "ㅌ과 같은 원리로 만든 글자는?", opts: ["ㄲ", "ㅋ", "ㄹ"], ans: 1, serif: true,
@@ -26,21 +28,68 @@ const Q = [
   { tag: "굳히기 1/2 · 비슷한 문제", text: "ㄱ에 획을 하나 더해 ㅋ을 만든 까닭은?", opts: ["글자를 나란히 쓰려고", "소리가 조금 세게 나서", "글자 모양을 예쁘게 하려고"], ans: 1, serif: false,
     explain: "ㅋ도 ㅌ처럼 소리가 조금 세져서 획을 더했어요(聲出稍厲).", fix: "나란히 쓰는 건 병서(ㄲ)예요. 획을 더하는 까닭은 소리가 세지는 것이에요." },
 ];
-// 문항마다 비슷한 문제가 하나씩: 1번(0) → 3, 2번(1) → 2. 비슷한 문제를 맞히면 그 문항을 통과한 것으로 보고 다음 문항으로 간다(건너뛰지 않음)
-const VARIANT_OF = [3, 2] as const;
+// ㄴ·ㄷ: data/stones.json 문항 그대로(1·2번 + 비슷한 문제 1개). 틀렸을 때 문구는 답을 바로 말하지 않는 힌트로
+const fromJson = (id: string, fixes: string[]): Q[] => {
+  const qs = stoneCard(id)?.questions ?? [];
+  return qs.slice(0, 3).map((q, i) => ({
+    tag: i === 2 ? "비슷한 문제" : `굳히기 ${i + 1}/2`,
+    text: q.prompt,
+    opts: q.options,
+    ans: q.answer,
+    serif: false,
+    explain: q.explain,
+    fix: fixes[i] ?? "개념 카드를 떠올려 다시 골라 봐요.",
+  }));
+};
+
+export type StoneId = "st-n" | "st-d" | "st-t";
+type StoneMeta = {
+  char: string;
+  plain: string; // 학생 말로 한 줄 (모양 본뜨기 / 획 하나 더하기)
+  section: string;
+  lab?: { target: string; seed: string; goal: string; chain: string[] };
+  concept: { from?: string; head: string; sub: string; hanja: string; caption?: string };
+  qs: Q[];
+  variantOf: [number, number]; // 1번·2번을 틀렸을 때 낼 비슷한 문제 위치
+};
+const STONE: Record<StoneId, StoneMeta> = {
+  "st-n": {
+    char: "ㄴ", plain: "모양 본뜨기", section: "상형",
+    concept: { head: "ㄴ은 혀끝이 윗잇몸에 닿는 모양", sub: "자음 기본자(ㄱ ㄴ ㅁ ㅅ ㅇ)는 소리 낼 때 발음 기관의 모양을 본떴어요.", hanja: "舌附上腭之形", caption: "혀끝이 윗잇몸에 닿는 모양" },
+    qs: fromJson("st-n", ["ㄴ을 소리 내 보면 혀끝이 어디에 닿는지 느껴 봐요.", "하늘·땅·사람은 모음 이야기예요. 자음 기본자는 몸의 어느 부분을 본떴을까요?", "ㅁ을 소리 내 보면 입술이 붙어요."]),
+    variantOf: [2, 2],
+  },
+  "st-d": {
+    char: "ㄷ", plain: "획 하나 더하기", section: "가획",
+    lab: { target: "ㄷ", seed: "ㄴ", goal: "ㄴ에 획을 더해 ㄷ 만들기", chain: ["ㄴ", "ㄷ"] },
+    concept: { from: "ㄴ", head: "ㄴ에 획을 하나 더하면 ㄷ", sub: "소리가 조금 세게 나면 획을 하나 더해요.", hanja: "聲出稍厲 故加畫" },
+    qs: fromJson("st-d", ["기본자는 다섯 개뿐이에요. ㄷ이 그 안에 있을까요?", "획을 한 번만 더해요. 두 번 더하면 다른 글자가 돼요.", "지금 자음 순서(ㄱ ㄴ ㄷ…)와 헷갈리지 않게!"]),
+    variantOf: [2, 2],
+  },
+  "st-t": {
+    char: "ㅌ", plain: "획 한 번 더 더하기", section: "가획",
+    lab: { target: "ㅌ", seed: "ㄴ", goal: "ㄴ에 획을 더해 ㅌ 만들기", chain: ["ㄴ", "ㄷ", "ㅌ"] },
+    concept: { from: "ㄷ", head: "ㄷ에 획을 하나 더하면 ㅌ", sub: "소리가 조금 세게 나면 획을 하나 더해요.", hanja: "聲出稍厲 故加畫" },
+    qs: Q_T,
+    variantOf: [3, 2],
+  },
+};
 
 type Judge = { passed: boolean; feedback: string; source: string; misconception?: string | null; needsTeacher?: boolean };
 
-export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
+export function StudentFlow({ initial = "home", initialStone = "st-t" }: { initial?: Screen; initialStone?: StoneId }) {
   const d = useDemo();
   const router = useRouter();
   const p = useMemo(() => myProgress(DEMO_STUDENT, d.events), [d.events]);
   const [screen, setScreen] = useState<Screen>(initial);
+  const [stone, setStone] = useState<StoneId>(initialStone); // 지금 밟는 돌(ㅌ = 오늘 할 돌, ㄴ·ㄷ = 이미 놓은 돌 다시 해 보기)
   const [labCur, setLabCur] = useState<string | null>("ㄴ"); // 실험실 작업판의 지금 글자(목표 띠 표시용)
   const [q, setQ] = useState(0);
+  const [slot, setSlot] = useState<0 | 1>(0); // 지금 풀고 있는 문항 (1번 또는 2번)
   const [picked, setPicked] = useState<number | null>(null);
   const [usedVariant, setUsedVariant] = useState(false);
   const [touched, setTouched] = useState(false);
+  const [replayDone, setReplayDone] = useState(false); // ㄴ·ㄷ 다시 해 보기를 마쳤을 때(다리 상태는 그대로)
   const [tab, setTab] = useState<"frame" | "free">("frame");
   const [b1, setB1] = useState("");
   const [b2, setB2] = useState("");
@@ -59,8 +108,9 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     else if (d.step >= 1) setScreen((s) => (s === "concept" || s === "lab" || s === "quiz" ? "splash" : s));
   }, [d.step]);
 
+  const meta = STONE[stone];
   const tPlaced = d.events.some((e) => e.type === "stone_placed" && e.studentId === DEMO_STUDENT && e.stoneId === "st-t");
-  const placedT = tPlaced || screen === "splash" || screen === "gate" || screen === "pass";
+  const placedT = tPlaced || (stone === "st-t" && (screen === "splash" || screen === "gate" || screen === "pass"));
   const passed = p.arrived || screen === "pass";
 
   // 숨은 키 K: 실험실 완성 처리 (/demo의 어느 창에서 눌러도)
@@ -79,11 +129,39 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     [router],
   );
 
+  const resetQuiz = () => {
+    setQ(0);
+    setSlot(0);
+    setPicked(null);
+    setUsedVariant(false);
+  };
+
+  // 돌 하나 시작: ㄴ·ㄷ은 이미 놓인 돌을 다시 해 보기(이벤트를 남기지 않아 시연 단계는 그대로), ㅌ은 오늘 할 돌
+  const startStone = (id: StoneId) => {
+    if (id === "st-t" && closed && !placedT) return; // 밤 10시 마감 뒤에는 열지 않는다
+    if (id === "st-t" && placedT) {
+      setScreen(passed ? "home" : "gate");
+      return;
+    }
+    setStone(id);
+    setLabCur(STONE[id].lab?.seed ?? null);
+    resetQuiz();
+    setReplayDone(false);
+    if (id === "st-t") setTouched(true);
+    setScreen("concept");
+  };
+
   const place = () => {
+    if (stone !== "st-t") {
+      setReplayDone(true); // 이미 놓인 돌: 다리는 그대로, 축하만
+      setScreen("splash");
+      return;
+    }
     if (!tPlaced) {
       d.add({ type: "stone_placed", studentId: DEMO_STUDENT, stoneId: "st-t" });
       d.reach(1); // 시연 단계 1: ㅌ 첨벙
     }
+    setReplayDone(false);
     setScreen("splash");
   };
 
@@ -121,20 +199,70 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     }
   };
 
-  const cq = Q[q];
+  const cq = meta.qs[q] ?? meta.qs[0];
   const closed = d.minutesToDeadline <= 0 && d.step < 3; // 전날 밤 22:00 마감 ~ 수업 시작 전
-  const slot: 0 | 1 = q === 0 || q === 3 ? 0 : 1; // 지금 풀고 있는 문항 (1번 또는 2번)
   const answered = picked !== null;
   const ok = answered && picked === cq.ans;
-  const stepIdx = screen === "concept" ? 1 : screen === "lab" ? 2 : 3;
-  const dot = (n: number) => (n < stepIdx ? "done" : n === stepIdx ? "on" : "");
   const tState = placedT ? "done" : touched ? "wet" : "next";
+
+  // 돌 안의 단계: 이름까지 보여 준다(점만 있으면 어디쯤인지 몰라서)
+  const stepNames = meta.lab ? ["개념 보기", "실험실에서 만들기", "문제 2개"] : ["개념 보기", "문제 2개"];
+  const stepAt = screen === "concept" ? 0 : screen === "lab" ? 1 : stepNames.length - 1;
+  const steps = stepNames.map((label, i) => ({ label, n: i + 1, state: i < stepAt ? "done" : i === stepAt ? "on" : "todo" }));
+
+  // 홈 '지금 할 일': 화면에서 가장 먼저 보이는 한 가지
+  const mission = placedT
+    ? passed
+      ? { tag: "오늘 완주", title: "오늘 길을 다 건넜어요! 🏁", sub: "수업에서 만나요 · 놓은 돌은 다시 눌러 복습할 수 있어요", steps: null, cta: "시연 처음부터 다시", primary: false, go: () => d.reset() }
+      : { tag: "지금 할 일 · 마지막", title: "도착 관문: 내 말로 설명하기", sub: "ㅌ은 왜 ㄷ에 획을 더했을까? 낱말 상자로 한 문장 · 약 1분", steps: ["낱말 고르기", "제출하기"], cta: "도착 관문 가기 →", primary: true, go: () => setScreen("gate") }
+    : closed
+      ? { tag: "오늘 놓기 마감", title: "오늘 놓기는 밤 10시에 닫혔어요", sub: "수업에서 함께 건너요 · 놓은 돌은 그대로예요", steps: null, cta: null, primary: false, go: () => {} }
+      : { tag: tState === "wet" ? "지금 할 일 · 하다 멈춘 돌" : "지금 할 일 · 1개 남음", title: "ㅌ 돌 놓기", sub: "ㄷ에 획을 하나 더해 ㅌ을 만들고 문제 2개 풀기 · 약 4분", steps: ["개념 보기", "실험실에서 만들기", "문제 2개"], cta: tState === "wet" ? "이어서 하기 →" : "시작하기 →", primary: true, go: () => startStone("st-t") };
+
+  const doneState = (id: StoneId) => (id === "st-t" ? placedT : p.stones.find((x) => x.id === id)?.state === "placed");
+  const stoneCards = (["st-n", "st-d", "st-t"] as StoneId[]).map((id, i) => {
+    const m = STONE[id];
+    const done = doneState(id);
+    const now = id === "st-t" && !placedT && !closed;
+    return {
+      id,
+      num: ["①", "②", "③"][i],
+      char: m.char,
+      section: m.section,
+      title: `${m.char} · ${m.plain}`,
+      desc: id === "st-n" ? "혀끝이 윗잇몸에 닿는 모양을 본떴어요" : id === "st-d" ? "ㄴ에 획을 하나 더하면 ㄷ" : "ㄷ에 획을 하나 더하면 ㅌ",
+      status: done ? "✓ 놓았어요" : now ? (tState === "wet" ? "하다 멈춤" : "지금 할 차례") : closed ? "마감" : "",
+      done,
+      now,
+      cta: done ? (id === "st-t" ? (passed ? "다시 보기" : "도착 관문 가기 →") : "다시 해 보기") : now ? (tState === "wet" ? "이어서 하기 →" : "시작하기 →") : "수업에서",
+      go: () => startStone(id),
+      cls: done ? (id === "st-n" ? "start" : id === "st-t" ? "gold" : "") : now ? (tState === "wet" ? "wet" : "next loop-bob") : "",
+      label: `${["①", "②", "③"][i]} ${m.char} ${done ? "✓ 놓음" : now ? "· 지금 할 차례" : ""}`,
+    };
+  });
 
   const v = {
     liteCls: "",
     controls: false, // 시연용 '완성 처리' 버튼은 숨김(K 키는 그대로 동작)
-    labSlot: screen === "lab" ? <LabFrame target="ㅌ" seed="ㄴ" onDone={labDone} onKey={onLabKey} onChange={setLabCur} /> : null,
+    labSlot:
+      screen === "lab" && meta.lab ? (
+        <LabFrame key={stone} target={meta.lab.target} seed={meta.lab.seed} onDone={labDone} onKey={onLabKey} onChange={setLabCur} />
+      ) : null,
     labCur,
+    labGoal: meta.lab?.goal ?? "",
+    labChain: meta.lab?.chain ?? [],
+    labTarget: meta.lab?.target ?? meta.char,
+    stoneChar: meta.char,
+    stoneTitle: `${meta.char} 돌 · ${meta.plain}`,
+    stoneSection: meta.section,
+    steps,
+    concept: { ...meta.concept, char: meta.char, hasLab: Boolean(meta.lab), replay: stone !== "st-t" },
+    mission,
+    stoneCards,
+    goClass: () => router.push("/student/class"),
+    splash: replayDone
+      ? { char: meta.char, title: `${meta.char} 돌을 다시 굳혔어요`, sub: "이미 놓인 돌이라 다리는 그대로예요 · 복습 끝!", btn: "내 돌로", go: () => setScreen("home") }
+      : { char: "ㅌ", title: "첨벙! 한 칸 놓음", sub: "교실 다리에도 한 칸 놓였어요 · 도착 관문이 열렸어요", btn: "도착 관문으로", go: () => setScreen("gate") },
     isHome: screen === "home",
     isConcept: screen === "concept",
     isLab: screen === "lab",
@@ -143,31 +271,14 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     isGate: screen === "gate",
     isPass: screen === "pass",
     inStone: screen === "concept" || screen === "lab" || screen === "quiz",
-    stepName: screen === "concept" ? "개념" : screen === "lab" ? "실험실" : "굳히기",
-    d1: dot(1),
-    d2: dot(2),
-    d3: dot(3),
-    tNext: tState === "next",
-    tWet: tState === "wet",
-    tDone: tState === "done",
-    tOpen: tState !== "done",
-    tLabel: tState === "done" ? "놓인 돌" : tState === "wet" ? "젖은 돌 · 이어서" : "다음 돌",
     ringText: placedT ? "3/3" : "2/3",
-    ringLabel: placedT ? "진행 3/3" : "진행 2/3",
+    ringLabel: placedT ? "오늘 놓은 돌 3개 중 3개" : "오늘 놓은 돌 3개 중 2개",
     ringDash: placedT ? "3 0" : "2 3",
     ringColor: placedT ? "#C9A227" : "#9B3A51",
-    // 홈에서 지금 할 일을 가장 크게: 돌 밟기 → 도착 관문 → (끝나면) 시연 다시
-    heroCta: placedT ? (passed ? null : "도착 관문 가기 →") : closed ? null : "ㅌ 돌 밟기 · 4분 →",
-    heroGo: () => {
-      setTouched(true);
-      setScreen(placedT ? "gate" : "concept");
-    },
-    heroReplay: placedT && passed,
-    replay: () => d.reset(),
-    tDoneText: passed ? "도착 관문까지 통과" : "굳힘 · 도착 관문이 남았어요",
-    heroLine: placedT ? "완주! 🏁" : closed ? "오늘 놓기는 밤 10시에 닫혔어요" : "1칸 남음 · 4분이면 완주 🏁",
-    heroSub: placedT ? (passed ? "오늘 수업에서 만나요" : "도착 관문이 남았어요") : closed ? "수업에서 함께 건너요 · 놓은 돌은 그대로예요" : "ㄷ → ㅌ 만들기 + 문항 2개",
+    heroLine: placedT ? (passed ? "완주! 🏁" : "돌 3개 다 놓음") : closed ? "오늘 놓기 마감" : "1칸 남음 · 4분이면 완주 🏁",
+    heroSub: placedT ? (passed ? "오늘 수업에서 만나요" : "도착 관문만 남았어요") : closed ? "수업에서 함께 건너요" : "ㅌ 돌 하나만 더 놓으면 돼요",
     titleName: passed ? "집현전 견습생" : "첫걸음 학생",
+    star1: true,
     star2: passed ? "#C9A227" : "none",
     star2w: passed ? "0" : "1.8",
     star2c: passed ? "#1C1A18" : "#6B665F",
@@ -177,17 +288,18 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     qFix: cq.fix,
     fbOk: answered && ok,
     fbNo: answered && !ok,
-    okLabel: slot === 0 ? "다음 문항" : "돌 굳히기",
+    okLabel: slot === 0 ? "다음 문항" : stone === "st-t" ? "돌 놓기" : "돌 굳히기",
     opts: cq.opts.map((t, j) => {
       let cls = "opt";
       if (answered) cls += j === picked ? (ok ? " ok" : " no") : " dim";
-      let mark = ["①", "②", "③"][j];
+      let mark = ["①", "②", "③", "④"][j];
       if (answered && j === picked) mark = ok ? "✓" : "·";
-      return { text: t, mark, cls, font: cq.serif ? "serif" : "", pick: () => !answered && (setPicked(j), setTouched(true)) };
+      return { text: t, mark, cls, font: cq.serif ? "serif" : "", pick: () => !answered && (setPicked(j), stone === "st-t" && setTouched(true)) };
     }),
     afterOk: () => {
       if (slot === 0) {
         setQ(1); // 1번(또는 1번의 비슷한 문제)을 맞혀도 2번은 꼭 푼다
+        setSlot(1);
         setPicked(null);
         setUsedVariant(false); // 비슷한 문제 기회는 문항마다 한 번
       } else place();
@@ -198,21 +310,14 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
         return;
       }
       setUsedVariant(true);
-      setQ(VARIANT_OF[slot]);
+      setQ(meta.variantOf[slot]);
       setPicked(null);
     },
     goHome: () => setScreen("home"),
     variantLabel: usedVariant ? "다음에 이어서" : "비슷한 문제로 다시",
-    goConcept: () => {
-      if (closed && !placedT) return; // 밤 10시 마감 뒤에는 열지 않는다(수업 뒤 밧줄 돌은 따로)
-      setTouched(true);
-      setScreen(placedT ? (passed ? "home" : "gate") : "concept");
-    },
-    goLab: () => setScreen("lab"),
+    goLab: () => (meta.lab ? setScreen("lab") : (resetQuiz(), setScreen("quiz"))),
     goQuiz: () => {
-      setQ(0);
-      setPicked(null);
-      setUsedVariant(false);
+      resetQuiz();
       setScreen("quiz");
     },
     goGate: () => setScreen("gate"),

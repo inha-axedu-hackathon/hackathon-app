@@ -1,14 +1,14 @@
 // scripts/check-api.mjs — 시연 전 API 점검(서버가 떠 있어야 함: npm run dev 또는 npm run demo:local)
 // 사용: npm run check:api            (기본 http://localhost:3000)
 //       BASE=http://localhost:3123 npm run check:api
-//       AI=1 npm run check:api       (AI를 실제로 부르는 경우까지, 약 700토큰)
+//       AI=1 npm run check:api       (AI를 실제로 부르는 경우까지: 관문 약 700토큰 + 문제 만들기 1개)
 // 기본 검사는 키워드·입력 검사·위기 낱말만 써서 AI 토큰을 쓰지 않는다. 학생 글·키는 출력하지 않는다.
 const BASE = (process.env.BASE ?? "http://localhost:3000").replace(/\/+$/, "");
 const withAI = process.env.AI === "1";
 let fail = 0;
 
 async function post(path, body, headers = {}) {
-  const res = await fetch(BASE + path, { method: "POST", headers: { "Content-Type": "application/json", ...headers }, body: JSON.stringify(body), signal: AbortSignal.timeout(20000) });
+  const res = await fetch(BASE + path, { method: "POST", headers: { "Content-Type": "application/json", ...headers }, body: JSON.stringify(body), signal: AbortSignal.timeout(35000) });
   let json = null;
   try {
     json = await res.json();
@@ -52,7 +52,25 @@ try {
   r = await post("/api/analyze", { answers: [{ studentId: "s01", text: "ㄲ도 가획" }] }, { "sec-fetch-site": "cross-site" });
   check("분석: 다른 사이트 요청 막힘", r.status === 403 || r.status === 400, String(r.status));
 
+  // 문제 만들기(/api/generate): 입력 검사·다른 사이트 차단은 AI 없이 확인
+  const gen = { content: "ㄴ은 혀끝이 윗잇몸에 닿는 모양을 본떴고, ㄴ에 획을 더하면 ㄷ, 한 번 더 더하면 ㅌ이 된다. 획을 더한 까닭은 소리가 조금 세지기 때문이다(聲出稍厲).", standards: "[9국04-02] 한글의 창제 원리를 이해한다.", count: 1 };
+  r = await post("/api/generate", { ...gen, content: "ㄴ" });
+  check("문제 만들기: 너무 짧은 학습 내용 → 400", r.status === 400, String(r.status));
+  r = await post("/api/generate", { ...gen, standards: [] });
+  check("문제 만들기: 성취기준 없음 → 400", r.status === 400, String(r.status));
+  r = await post("/api/generate", { ...gen, count: 9 });
+  check("문제 만들기: 돌 개수 범위 밖 → 400", r.status === 400, String(r.status));
+  r = await post("/api/generate", gen, { "sec-fetch-site": "cross-site" });
+  check("문제 만들기: 다른 사이트 요청 막힘", r.status === 403, String(r.status));
+
   if (withAI) {
+    r = await post("/api/generate", gen);
+    const st = r.json?.stones?.[0];
+    const shapeOk =
+      r.status === 200 && r.json?.draft === true && r.json?.needsTeacherReview === true && st?.kind === "card" &&
+      ["상형", "가획", "병서", "기타"].includes(st?.section) && st?.questions?.length === 3 &&
+      st.questions.every((q) => q.options?.length === 3 && q.answer >= 0 && q.answer <= 2 && q.prompt && q.explain);
+    check(`문제 만들기(AI): 초안 1개 형식 맞음 (토큰 ${r.json?.tokens?.used ?? "?"})`, shapeOk, `${r.status} ${JSON.stringify(r.json).slice(0, 200)}`);
     r = await ex("ㄷ 위에 가로줄을 한 번 더 그었더니 숨이 확 터지는 거친 소리가 됐어요", "s08");
     check("관문(AI): 바꿔 쓴 정답 → 통과", r.json?.passed === true && r.json?.source === "llm", JSON.stringify(r.json));
     r = await ex("ㅌ은 ㄷ에 획을 더한 게 아니고 소리가 세진 것도 아니에요", "s09");

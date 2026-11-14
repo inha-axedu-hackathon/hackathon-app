@@ -5,12 +5,12 @@ import { Fragment } from "react";
 import "./stage.css";
 
 export function StageView(v: Record<string, any>) {
-  const { tideBanner, qText, qAns, qExplain, showNav, toRope, chain, clock, controls, isJeja, isOpen, isOpenB, isSplash, isTogether, line, nav, newFlag, next, notRevealed, oCls, ovCaption, ovKor, ovMath, ovName, pickO, pickX, prev, reveal, revealed, rootCls, rows, sections, showCrossing, showLine, showTideBanner, showWx, titleBridge, unitLabel, waterFill, xCls } = v;
+  const { showStartBank, showEndBank, ropeBtn, tideBanner, qText, qAns, qExplain, showNav, toRope, chain, clock, controls, isJeja, isOpen, isOpenB, isSplash, isTogether, line, nav, newFlag, next, notRevealed, oCls, ovCaption, ovKor, ovMath, ovName, pickO, pickX, prev, reveal, revealed, rootCls, rows, sections, showCrossing, showLine, showTideBanner, showWx, titleBridge, unitLabel, waterFill, xCls } = v;
   return (
     <>
 <div className={rootCls} style={{fontFamily: "'Pretendard Variable', Pretendard, sans-serif"} as any}>
   <div className="sky" aria-hidden="true">
-    {(sections as any[]).map((sec: any, __i: number) => (<Fragment key={__i}>
+    {(sections as any[]).map((sec: any) => (<Fragment key={sec.name}>
       <div className={sec.skyCls} style={{left: `${sec.skyX}px`, width: `${sec.skyW}px`} as any}>
         <div className="sl l-clear" style={{opacity: sec.oClear} as any}></div>
         <div className="sl l-cloud" style={{opacity: sec.oCloud} as any}>
@@ -85,7 +85,7 @@ export function StageView(v: Record<string, any>) {
 
   
   {(showWx) && (<>
-    {(sections as any[]).map((sec: any, __i: number) => (<Fragment key={__i}>
+    {(sections as any[]).map((sec: any) => (<Fragment key={sec.name}>
       <div className="wxcell" style={{left: `${sec.x}px`} as any}>
         {(sec.wxClear) && (<><span className="wxicon a"><svg width="104" height="104" viewBox="0 0 120 120" aria-hidden="true" style={{flex: 'none', overflow: 'visible'} as any}><defs><radialGradient id="w2h" cx="60" cy="60" r="60" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#FFE3A0" stopOpacity=".8" /><stop offset=".42" stopColor="#FFD27A" stopOpacity=".28" /><stop offset="1" stopColor="#FFD27A" stopOpacity="0" /></radialGradient><linearGradient id="w2r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#C98A24" /><stop offset="1" stopColor="#FFE7A6" /></linearGradient><radialGradient id="w2c" cx="49" cy="47" r="34" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#FFFCEC" /><stop offset=".32" stopColor="#FFE38E" /><stop offset=".78" stopColor="#F3AC3D" /><stop offset="1" stopColor="#D9862A" /></radialGradient></defs><circle cx="60" cy="60" r="60" fill="url(#w2h)" /><g fill="url(#w2r)"><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(0.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(22.5)" /><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(45.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(67.5)" /><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(90.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(112.5)" /><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(135.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(157.5)" /><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(180.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(202.5)" /><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(225.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(247.5)" /><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(270.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(292.5)" /><path d="M0 -32 L2.6 -38 L0 -54 L-2.6 -38Z" transform="translate(60 60) rotate(315.0)" /><path d="M0 -32 L1.7 -38 L0 -45 L-1.7 -38Z" transform="translate(60 60) rotate(337.5)" /></g><circle cx="60" cy="60" r="34.5" fill="none" stroke="#D9A441" strokeWidth=".8" strokeOpacity=".85" /><circle cx="60" cy="60" r="27" fill="url(#w2c)" /><circle cx="60" cy="60" r="22.5" fill="none" stroke="#FFF7DA" strokeWidth=".9" strokeOpacity=".8" /><ellipse cx="47" cy="45" rx="6" ry="3.6" fill="#fff" fillOpacity=".65" transform="rotate(-32 47 45)" /><ellipse cx="53" cy="59" rx="2.5" ry="3.3" fill="#6B3E0E" /><ellipse cx="67" cy="59" rx="2.5" ry="3.3" fill="#6B3E0E" /><circle cx="53.8" cy="57.8" r=".9" fill="#fff" /><circle cx="67.8" cy="57.8" r=".9" fill="#fff" /><path d="M55.5 66 q4.5 4.5 9 0" fill="none" stroke="#6B3E0E" strokeWidth="2.2" strokeLinecap="round" /><ellipse cx="46.5" cy="65.5" rx="4.6" ry="2.6" fill="#F27C6B" fillOpacity=".5" /><ellipse cx="73.5" cy="65.5" rx="4.6" ry="2.6" fill="#F27C6B" fillOpacity=".5" /></svg></span></>)}
         {(sec.wxCloud) && (<><span className="wxicon a"><svg width="104" height="104" viewBox="0 0 120 120" aria-hidden="true" style={{flex: 'none', overflow: 'visible'} as any}><defs><linearGradient id="w3a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFFFFF" /><stop offset=".55" stopColor="#EEF2F4" /><stop offset="1" stopColor="#C6D0D6" /></linearGradient><linearGradient id="w3b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#F6F8F9" /><stop offset="1" stopColor="#BAC6CD" /></linearGradient><linearGradient id="w3s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#fff" stopOpacity=".95" /><stop offset=".45" stopColor="#fff" stopOpacity="0" /></linearGradient><radialGradient id="w3d" cx=".5" cy=".5" r=".5"><stop offset="0" stopColor="#14262C" stopOpacity=".28" /><stop offset="1" stopColor="#14262C" stopOpacity="0" /></radialGradient><clipPath id="w3k"><path d="M34 92 C20 92 12 83 12 72 C12 61 21 53 32 53 C34 38 46 28 61 28 C74 28 84 35 89 46 C92 45 95 44 98 44 C110 44 118 54 118 66 C118 80 108 92 96 92 Z" /></clipPath></defs><ellipse cx="64" cy="100" rx="46" ry="7" fill="url(#w3d)" /><g><path d="M34 92 C20 92 12 83 12 72 C12 61 21 53 32 53 C34 38 46 28 61 28 C74 28 84 35 89 46 C92 45 95 44 98 44 C110 44 118 54 118 66 C118 80 108 92 96 92 Z" transform="translate(16 -13) scale(.76)" fill="url(#w3b)" /><path d="M34 92 C20 92 12 83 12 72 C12 61 21 53 32 53 C34 38 46 28 61 28 C74 28 84 35 89 46 C92 45 95 44 98 44 C110 44 118 54 118 66 C118 80 108 92 96 92 Z" fill="url(#w3a)" /><g clipPath="url(#w3k)" fill="#6F8591" fillOpacity=".10"><ellipse cx="44" cy="92" rx="34" ry="12" /><ellipse cx="92" cy="94" rx="30" ry="11" /><ellipse cx="66" cy="78" rx="18" ry="5" fillOpacity="0.06" /></g><path d="M34 92 C20 92 12 83 12 72 C12 61 21 53 32 53 C34 38 46 28 61 28 C74 28 84 35 89 46 C92 45 95 44 98 44 C110 44 118 54 118 66 C118 80 108 92 96 92 Z" fill="none" stroke="url(#w3s)" strokeWidth="1.8" /><path d="M34 92 C20 92 12 83 12 72 C12 61 21 53 32 53 C34 38 46 28 61 28 C74 28 84 35 89 46 C92 45 95 44 98 44 C110 44 118 54 118 66 C118 80 108 92 96 92 Z" fill="none" stroke="#8C9DA7" strokeOpacity=".38" strokeWidth="1" /><ellipse cx="54" cy="44" rx="13" ry="6" fill="#fff" fillOpacity=".75" transform="rotate(-18 54 44)" /><g fill="none" stroke="#5B6C76" strokeWidth="2.4" strokeLinecap="round"><path d="M50 69 q4.5 -5 9 0" /><path d="M71 69 q4.5 -5 9 0" /><path d="M61.5 76 q3.5 3.5 7 0" /></g><ellipse cx="46" cy="76" rx="5" ry="2.8" fill="#F4A0AA" fillOpacity=".6" /><ellipse cx="84" cy="76" rx="5" ry="2.8" fill="#F4A0AA" fillOpacity=".6" /></g></svg></span></>)}
@@ -105,7 +105,7 @@ export function StageView(v: Record<string, any>) {
     <div className="wave loop"><svg width="2880" height="44" viewBox="0 0 2880 44" preserveAspectRatio="none"><path d="M0 22 Q60 6 120 22 T240 22 T360 22 T480 22 T600 22 T720 22 T840 22 T960 22 T1080 22 T1200 22 T1320 22 T1440 22 T1560 22 T1680 22 T1800 22 T1920 22 T2040 22 T2160 22 T2280 22 T2400 22 T2520 22 T2640 22 T2760 22 T2880 22 L2880 44 L0 44Z" fill="#7FDFC6" fillOpacity=".55" /></svg></div>
     <div className="wave w2 loop"><svg width="2880" height="44" viewBox="0 0 2880 44" preserveAspectRatio="none"><path d="M0 22 Q60 6 120 22 T240 22 T360 22 T480 22 T600 22 T720 22 T840 22 T960 22 T1080 22 T1200 22 T1320 22 T1440 22 T1560 22 T1680 22 T1800 22 T1920 22 T2040 22 T2160 22 T2280 22 T2400 22 T2520 22 T2640 22 T2760 22 T2880 22 L2880 44 L0 44Z" fill="#F2FFFB" fillOpacity=".45" /></svg></div>
     
-    <svg className="bank" width="250" height="230" viewBox="0 0 250 230" style={{position: 'absolute', left: '-92px', top: '-76px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
+    {(showStartBank) && (<svg className="bank" width="250" height="230" viewBox="0 0 250 230" style={{position: 'absolute', left: '-92px', top: '-76px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
       <defs>
         <linearGradient id="bkR1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#EEE7D8" /><stop offset=".45" stopColor="#C3B8A2" /><stop offset="1" stopColor="#7E7461" /></linearGradient>
         <linearGradient id="bkR2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#F6F1E6" /><stop offset=".5" stopColor="#D2C8B4" /><stop offset="1" stopColor="#958A75" /></linearGradient>
@@ -137,9 +137,9 @@ export function StageView(v: Record<string, any>) {
       <path d="M190 100 v7" stroke="#C9A227" strokeWidth="1.2" />
       <rect x="16" y="168" width="84" height="38" rx="19" fill="#FAFAF7" stroke="#C9A227" strokeWidth=".9" />
       <text x="58" y="193" textAnchor="middle" fontSize="21" fontWeight="800" fill="#1C1A18" fontFamily="Pretendard Variable, Pretendard, sans-serif" letterSpacing="1">출발</text>
-    </svg>
+    </svg>)}
     
-    <svg className="bank" width="260" height="250" viewBox="0 0 260 250" style={{position: 'absolute', right: '-86px', top: '-116px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
+    {(showEndBank) && (<svg className="bank" width="260" height="250" viewBox="0 0 260 250" style={{position: 'absolute', right: '-86px', top: '-116px', overflow: 'visible', zIndex: '3'} as any} aria-hidden="true">
       <defs>
         <linearGradient id="bkP1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#EEE7D8" /><stop offset=".45" stopColor="#C3B8A2" /><stop offset="1" stopColor="#7E7461" /></linearGradient>
         <linearGradient id="bkP2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#6A7279" /><stop offset=".6" stopColor="#343A40" /><stop offset="1" stopColor="#1F2327" /></linearGradient>
@@ -177,7 +177,7 @@ export function StageView(v: Record<string, any>) {
       </>)}
       <rect x="160" y="190" width="84" height="38" rx="19" fill="#FAFAF7" stroke="#C9A227" strokeWidth=".9" />
       <text x="202" y="215" textAnchor="middle" fontSize="21" fontWeight="800" fill="#1C1A18" fontFamily="Pretendard Variable, Pretendard, sans-serif" letterSpacing="1">수업</text>
-    </svg>
+    </svg>)}
     {(isOpenB) && (<>
       <svg width="1440" height="200" viewBox="0 0 1440 200" style={{position: 'absolute', left: '0', top: '0'} as any} aria-hidden="true">
         <path d="M60 104 C 260 92, 420 112, 520 100 S 820 92, 948 104 S 1240 112, 1390 100" fill="none" stroke="#C9B58F" strokeWidth="16" strokeLinecap="round" pathLength="1" strokeDasharray="1" className="a" style={{animation: 'draw 1400ms var(--ease-standard) both'} as any} />
@@ -187,8 +187,8 @@ export function StageView(v: Record<string, any>) {
       <i className="spark loop" style={{right: '92px', top: '-8px', animationDelay: '1.6s', zIndex: '3'} as any}></i>
       <i className="spark loop" style={{right: '20px', top: '20px', animationDelay: '2s', zIndex: '3'} as any}></i>
     </>)}
-    {(sections as any[]).map((sec: any, __i: number) => (<Fragment key={__i}>
-      <div className="sec" style={{left: `${sec.x}px`} as any}>
+    {(sections as any[]).map((sec: any) => (<Fragment key={sec.name}>
+      <div className="sec" style={{left: `${sec.x}px`, width: sec.w ? `${sec.w}px` : undefined} as any}>
         <div className="stones">
           {(sec.stones as any[]).map((st: any, __i: number) => (<Fragment key={__i}>
             <div className={st.wcls}>
@@ -204,7 +204,7 @@ export function StageView(v: Record<string, any>) {
           <i className="glint loop" style={{left: '40px', top: '96px'} as any}></i><i className="glint loop" style={{left: '78px', top: '122px', animationDelay: '.6s'} as any}></i><i className="glint loop" style={{left: '196px', top: '104px', animationDelay: '1.1s'} as any}></i><i className="glint loop" style={{left: '236px', top: '128px', animationDelay: '.3s'} as any}></i><i className="glint loop" style={{left: '320px', top: '110px', animationDelay: '1.4s'} as any}></i>
         </>)}
         {(sec.rope) && (<>
-          <svg className="ropesvg" width="420" height="140" viewBox="0 0 420 140" style={{position: 'absolute', left: '-10px', top: '30px', overflow: 'visible'} as any}>
+          <svg className="ropesvg" width={sec.w ? sec.w + 20 : 420} height="140" viewBox="0 0 420 140" preserveAspectRatio="none" style={{position: 'absolute', left: '-10px', top: '30px', overflow: 'visible'} as any}>
             <g className="a" style={{animation: 'jg-fade 900ms var(--ease-standard) both'} as any}><path d="M0 66 Q 105 98 210 74 T 420 66" fill="none" stroke="#5E432B" strokeOpacity=".35" strokeWidth="8" strokeLinecap="round" transform="translate(0 2)" /><path d="M0 66 Q 105 98 210 74 T 420 66" fill="none" stroke="#D9B98C" strokeWidth="6" strokeLinecap="round" /><path d="M0 66 Q 105 98 210 74 T 420 66" fill="none" stroke="#9A7149" strokeWidth="6" strokeDasharray="3 6" strokeLinecap="butt" /></g>
           </svg>
         </>)}
@@ -263,7 +263,7 @@ export function StageView(v: Record<string, any>) {
         <div style={{fontSize: '32px', fontWeight: '600', lineHeight: '1.4', color: '#F4F2EC'} as any}>{qExplain}</div>
         <div style={{display: 'flex', alignItems: 'center', gap: '28px', marginTop: '4px'} as any}>
           
-          <button type="button" className="pillbtn a" onClick={toRope} style={{background: '#9B3A51', color: '#fff', fontSize: '34px', padding: '18px 36px', minHeight: '72px', animation: 'pop-in 700ms var(--ease-bouncy) 900ms both'} as any}>이제 밧줄을 내려요 →</button>
+          {(ropeBtn) && <button type="button" className="pillbtn a" onClick={toRope} style={{background: '#9B3A51', color: '#fff', fontSize: '34px', padding: '18px 36px', minHeight: '72px', animation: 'pop-in 700ms var(--ease-bouncy) 900ms both'} as any}>이제 밧줄을 내려요 →</button>}
         </div>
       </div>
     </>)}

@@ -10,11 +10,12 @@ const LAB_MIN_W = 1000;
 const LAB_MIN_H = 640;
 
 // 실험실 안쪽을 우리 화면 말투로(실험실 파일은 그대로, 불러온 뒤 스타일만 덧씌움 · 원작자 팀원 동의).
-// 바탕·선·회색·글꼴은 우리 토큰(app/globals.css)으로, 버튼·작업판은 우리 카드처럼 먹 테두리+눌린 그림자로.
+// 실험실 자체 '과제' 줄은 숨긴다(목표는 우리 화면의 목표 띠 하나로: 돌마다 목표 글자가 달라서). 바탕·선·회색·글꼴은 우리 토큰(app/globals.css)으로, 버튼·작업판은 우리 카드처럼 먹 테두리+눌린 그림자로.
 // 자음 주홍(--cons, 우리 인주와 같은 색)·모음 쪽빛(--vow)·명조 글자 모양은 뜻이 있는 색·모양이라 그대로 둔다
 const PRETENDARD = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css";
 const LAB_SKIN = `
 #solo-pill,#rankup,#toast{display:none!important}
+#consonant .mission{display:none!important}
 :root{--paper:#fafaf7;--panel:#ffffff;--line:#e3e0d6;--muted:#6b665f;
   --font-body:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
 :focus-visible{outline-color:#9b3a51}

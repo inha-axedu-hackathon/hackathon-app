@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import "./student.css";
 
 export function StudentView(v: Record<string, any>) {
-  const { heroCta, heroGo, heroReplay, replay, tDoneText, variantLabel, crossing, logout, words, answer, labSlot, labCur, freeText, setFree, gateMsg, busy, afterOk, b1, b2, controls, d1, d2, d3, fbNo, fbOk, finish, frameTab, freeTab, goConcept, goGate, goHome, goLab, goPass, goQuiz, heroLine, heroSub, inStone, isConcept, isGate, isHome, isLab, isPass, isQuiz, isSplash, liteCls, okLabel, opts, qExplain, qFix, qTag, qText, ringColor, ringDash, ringLabel, ringText, segA, segB, setB1, setB2, star2, star2c, star2w, stepName, tDone, tLabel, tNext, tOpen, tWet, tabFrame, tabFree, titleName, toVariant } = v;
+  const { labGoal, labChain, labTarget, stoneTitle, stoneSection, steps, concept, mission, stoneCards, goClass, splash, variantLabel, crossing, logout, words, answer, labSlot, labCur, freeText, setFree, gateMsg, busy, afterOk, b1, b2, controls, fbNo, fbOk, finish, frameTab, freeTab, goHome, goLab, goPass, goQuiz, heroLine, heroSub, inStone, isConcept, isGate, isHome, isLab, isPass, isQuiz, isSplash, liteCls, okLabel, opts, qExplain, qFix, qTag, qText, ringColor, ringDash, ringLabel, ringText, segA, segB, setB1, setB2, star2, star2c, star2w, tabFrame, tabFree, titleName, toVariant } = v;
   return (
     <>
 <div className={`tab on-light ${liteCls}`} style={{fontFamily: "'Pretendard Variable', Pretendard, sans-serif"} as any}>
@@ -26,33 +26,32 @@ export function StudentView(v: Record<string, any>) {
 
   <div style={{flex: '1', minHeight: '0', display: 'flex'} as any}>
     
-    <aside style={{width: '340px', flex: 'none', borderRight: '1px solid #ECE9E1', padding: '36px 32px 28px', display: 'flex', flexDirection: 'column', gap: '22px', background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFAF7 100%)'} as any}>
-      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', textAlign: 'center'} as any}>
-        <svg width="188" height="188" viewBox="0 0 188 188" role="img" aria-label={ringLabel}>
+    <aside style={{width: '340px', flex: 'none', borderRight: '1px solid #ECE9E1', padding: '26px 28px 22px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFAF7 100%)'} as any}>
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', textAlign: 'center'} as any}>
+        <svg width="150" height="150" viewBox="0 0 188 188" role="img" aria-label={ringLabel}>
           <circle cx="94" cy="94" r="78" fill="none" stroke="#F6E9EC" strokeWidth="16" />
           <circle cx="94" cy="94" r="78" fill="none" stroke={ringColor} strokeWidth="16" strokeLinecap="round" pathLength="3" strokeDasharray={ringDash} transform="rotate(-90 94 94)" className="t" style={{transition: 'stroke-dasharray 600ms var(--ease-standard), stroke 600ms'} as any} />
           <circle cx="94" cy="94" r="62" fill="none" stroke="#ECE9E1" strokeWidth=".8" />
           <text x="94" y="104" textAnchor="middle" fontSize="40" fontWeight="800" fill="#1C1A18" fontFamily="Pretendard Variable, sans-serif" style={{fontVariantNumeric: 'tabular-nums'} as any}>{ringText}</text>
-          <text x="94" y="128" textAnchor="middle" fontSize="13" fontWeight="600" fill="#6B665F" fontFamily="Pretendard Variable, sans-serif">오늘의 링</text>
+          <text x="94" y="128" textAnchor="middle" fontSize="13" fontWeight="600" fill="#6B665F" fontFamily="Pretendard Variable, sans-serif">오늘 놓은 돌</text>
         </svg>
         <div style={{display: 'flex', flexDirection: 'column', gap: '6px'} as any}>
           <span style={{fontSize: '22px', fontWeight: '800', letterSpacing: '-0.02em'} as any}>{heroLine}</span>
           <span style={{fontSize: '17px', color: '#4A4641'} as any}>{heroSub}</span>
-          {(heroCta) && (<><button type="button" className="btnp herocta" onClick={heroGo} style={{marginTop: '14px', width: '100%', minHeight: '64px', fontSize: '21px'} as any}>{heroCta}</button></>)}
-          {(heroReplay) && (<><button type="button" className="btns" onClick={replay} style={{marginTop: '14px', width: '100%', minHeight: '48px', fontSize: '15px'} as any}>시연 처음부터 다시 해 보기</button></>)}
         </div>
       </div>
       <div className="hair"></div>
       <div style={{display: 'flex', flexDirection: 'column', gap: '12px'} as any}>
         <span style={{display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: '700', color: '#6B665F'} as any}>이번 단원 별 <span style={{fontWeight: '600'} as any}>나만 봐요</span></span>
-        <span style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: '700'} as any}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill="#C9A227" /></svg>굳힘</span>
-        <span style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: '700', color: star2c} as any}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill={star2} stroke="#B5AFA4" strokeWidth={star2w} /></svg>설명</span>
-        <span style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', fontWeight: '700', color: '#6B665F'} as any}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill="none" stroke="#B5AFA4" strokeWidth="1.8" /></svg>일주일 뒤에도</span>
+        <span style={{display: 'flex', alignItems: 'center', gap: '10px'} as any}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style={{flex: 'none'} as any}><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill="#C9A227" stroke="none" strokeWidth="0" /></svg><span style={{display: 'flex', flexDirection: 'column'} as any}><b style={{fontSize: '15px'} as any}>굳힘</b><span style={{fontSize: '12px', color: '#6B665F'} as any}>문제 2개를 맞혀 돌을 굳혀요</span></span></span>
+        <span style={{display: 'flex', alignItems: 'center', gap: '10px', color: star2c} as any}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style={{flex: 'none'} as any}><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill={star2} stroke="#B5AFA4" strokeWidth={star2w} /></svg><span style={{display: 'flex', flexDirection: 'column'} as any}><b style={{fontSize: '15px'} as any}>설명</b><span style={{fontSize: '12px', color: '#6B665F'} as any}>도착 관문에서 내 말로 설명해요</span></span></span>
+        <span style={{display: 'flex', alignItems: 'center', gap: '10px', color: '#6B665F'} as any}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style={{flex: 'none'} as any}><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z" fill="none" stroke="#B5AFA4" strokeWidth="1.8" /></svg><span style={{display: 'flex', flexDirection: 'column'} as any}><b style={{fontSize: '15px'} as any}>일주일 뒤에도</b><span style={{fontSize: '12px', color: '#6B665F'} as any}>일주일 뒤 다시 풀어도 맞혀요</span></span></span>
       </div>
       <div className="hair"></div>
       <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'} as any}>
         {(crossing) && (<span style={{display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#4A4641'} as any}><span className="pulse" style={{width: '8px', height: '8px', borderRadius: '50%', background: '#9B3A51'} as any}></span>지금 친구들도 함께 건너는 중</span>)}
       </div>
+      <button type="button" className="btns" onClick={goClass} style={{width: '100%', minHeight: '50px', fontSize: '16px', justifyContent: 'space-between'} as any}><span style={{display: 'flex', alignItems: 'center', gap: '8px'} as any}><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16c3-2 6-2 10 0s7 2 10 0" fill="none" stroke="#1E9E87" strokeWidth="2" strokeLinecap="round" /><circle cx="6" cy="11" r="2.6" fill="#D2CABB" stroke="#231F1C" strokeWidth="1.2" /><circle cx="12" cy="10" r="2.6" fill="#D2CABB" stroke="#231F1C" strokeWidth="1.2" /><circle cx="18" cy="11" r="2.6" fill="#D2CABB" stroke="#231F1C" strokeWidth="1.2" /></svg>우리 반 다리 보기</span><span aria-hidden="true">→</span></button>
       <div style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px'} as any}><span style={{color: '#6B665F'} as any}>칭호</span><b style={{color: '#B0371F'} as any}>{titleName}</b></div>
       <div style={{marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px'} as any}>
         <button type="button" className="btns" onClick={logout} style={{width: '100%'} as any}>오늘은 여기까지 · 로그아웃</button>
@@ -65,53 +64,66 @@ export function StudentView(v: Record<string, any>) {
       {(inStone) && (<>
         <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '26px'} as any}>
           <button type="button" className="back" onClick={goHome} aria-label="내 돌로"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="#1C1A18" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
-          <span style={{fontSize: '18px', fontWeight: '800'} as any}>ㅌ 돌 굳히기</span>
-          <span style={{fontSize: '16px', color: '#6B665F'} as any}>{stepName}</span>
-          <span className="dots" aria-hidden="true" style={{marginLeft: 'auto'} as any}><i className={d1}></i><i className={d2}></i><i className={d3}></i></span>
+          <span style={{display: 'flex', flexDirection: 'column'} as any}><span style={{fontSize: '20px', fontWeight: '800', letterSpacing: '-0.02em'} as any}>{stoneTitle}</span><span style={{fontSize: '13px', fontWeight: '700', color: '#9B3A51'} as any}>{stoneSection}</span></span>
+          <ol aria-label="이 돌에서 할 일" style={{marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px', padding: '0', listStyle: 'none'} as any}>
+            {(steps as any[]).map((st: any, i: number) => (<li key={st.label} aria-current={st.state === 'on' ? 'step' : undefined} style={{display: 'flex', alignItems: 'center', gap: '8px'} as any}>
+              {i > 0 && <span aria-hidden="true" style={{width: '18px', height: '2px', background: st.state === 'todo' ? '#E3E0D6' : '#E2AEBA', borderRadius: '2px'} as any}></span>}
+              <span style={{display: 'flex', alignItems: 'center', gap: '7px', padding: '7px 13px 7px 8px', borderRadius: '999px', fontSize: '15px', fontWeight: '800', background: st.state === 'on' ? '#9B3A51' : st.state === 'done' ? '#F9ECEF' : '#F7F6F2', color: st.state === 'on' ? '#fff' : st.state === 'done' ? '#7E2C42' : '#8C8A85'} as any}>
+                <span style={{width: '22px', height: '22px', borderRadius: '50%', display: 'grid', placeItems: 'center', fontSize: '13px', background: st.state === 'on' ? '#fff' : 'transparent', color: st.state === 'on' ? '#9B3A51' : 'inherit', boxShadow: st.state === 'on' ? 'none' : 'inset 0 0 0 1.5px currentColor'} as any}>{st.state === 'done' ? '✓' : st.n}</span>{st.label}
+              </span>
+            </li>))}
+          </ol>
         </div>
       </>)}
 
       
       {(isHome) && (<>
-        <div className="scr">
-          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'} as any}>
-            <div><h1 style={{margin: '0', fontSize: '34px', fontWeight: '800', letterSpacing: '-0.03em'} as any}>내 돌</h1><p style={{margin: '6px 0 0', fontSize: '16px', color: '#4A4641'} as any}>ㄴ에서 ㅌ까지 · 선생님이 놓아 준 나만의 길</p></div>
+        <div className="scr" style={{gap: '18px'} as any}>
+          {/* 지금 할 일: 들어오자마자 '무엇을 누르면 되는지' 한 가지만 크게 */}
+          <div className="card" style={{display: 'flex', alignItems: 'center', gap: '24px', padding: '22px 26px', background: '#FCF5F6'} as any}>
+            <div style={{flex: '1', minWidth: '0', display: 'flex', flexDirection: 'column', gap: '8px'} as any}>
+              <span style={{alignSelf: 'flex-start', fontSize: '14px', fontWeight: '800', color: '#fff', background: '#9B3A51', borderRadius: '999px', padding: '4px 12px'} as any}>{mission.tag}</span>
+              <span style={{fontSize: '30px', fontWeight: '800', letterSpacing: '-0.03em', lineHeight: '1.2'} as any}>{mission.title}</span>
+              <span style={{fontSize: '17px', color: '#4A4641'} as any}>{mission.sub}</span>
+              {(mission.steps) && (<ol aria-label="순서" style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', margin: '4px 0 0', padding: '0', listStyle: 'none', fontSize: '14px', fontWeight: '700', color: '#4A4641'} as any}>
+                {(mission.steps as string[]).map((st: string, i: number) => (<li key={st} style={{display: 'flex', alignItems: 'center', gap: '8px'} as any}>{i > 0 && <span aria-hidden="true" style={{color: '#B9B4AA'} as any}>→</span>}<span style={{background: '#fff', borderRadius: '999px', padding: '4px 11px', boxShadow: 'inset 0 0 0 1.5px #EBC3CC'} as any}>{i + 1}. {st}</span></li>))}
+              </ol>)}
+            </div>
+            {(mission.cta) && (<button type="button" className={mission.primary ? 'btnp' : 'btns'} onClick={mission.go} style={{flex: 'none', minHeight: '72px', padding: '0 34px', fontSize: '22px'} as any}>{mission.cta}</button>)}
           </div>
-          <div style={{position: 'relative', height: '262px', borderRadius: '28px', overflow: 'hidden', background: 'linear-gradient(180deg, #FFFFFF 0%, #F1FBF7 100%)', boxShadow: 'inset 0 0 0 1px #E3F2EC'} as any}>
-            <svg width="100%" height="262" viewBox="0 0 744 262" preserveAspectRatio="none" style={{position: 'absolute', inset: '0'} as any} aria-hidden="true">
+
+          {/* 내 길 지도: 돌을 눌러도 시작돼요 */}
+          <div style={{position: 'relative', height: '214px', flex: 'none', borderRadius: '28px', overflow: 'hidden', background: 'linear-gradient(180deg, #FFFFFF 0%, #F1FBF7 100%)', boxShadow: 'inset 0 0 0 1px #E3F2EC'} as any}>
+            <svg width="100%" height="214" viewBox="0 0 744 262" preserveAspectRatio="none" style={{position: 'absolute', inset: '0'} as any} aria-hidden="true">
               <defs>
                 <linearGradient id="rv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#A9ECDA" /><stop offset=".3" stopColor="#5ED0B3" /><stop offset=".7" stopColor="#1FA88C" /><stop offset="1" stopColor="#0E7D6A" /></linearGradient>
-                <radialGradient id="rvg" cx=".3" cy=".1" r=".6"><stop offset="0" stopColor="#E9FFF8" stopOpacity=".8" /><stop offset="1" stopColor="#E9FFF8" stopOpacity="0" /></radialGradient>
               </defs>
               <path d="M0 132 C120 112 220 152 372 134 S 620 112 744 128 L744 262 L0 262Z" fill="url(#rv)" />
-              <path d="M0 132 C120 112 220 152 372 134 S 620 112 744 128 L744 262 L0 262Z" fill="url(#rvg)" />
               <path d="M0 132 C120 112 220 152 372 134 S 620 112 744 128" fill="none" stroke="#FFFFFF" strokeOpacity=".9" strokeWidth="3" />
-              <g fill="#FFFFFF" fillOpacity=".35"><ellipse cx="150" cy="200" rx="46" ry="3" /><ellipse cx="420" cy="226" rx="60" ry="3" /><ellipse cx="640" cy="196" rx="40" ry="3" /></g>
             </svg>
-            <div style={{position: 'absolute', left: '5%', top: '66px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '22px'} as any}><div className="stone start" style={{'--s': '96px'} as any}>ㄴ</div><span style={{fontSize: '13px', fontWeight: '700', color: '#fff', background: 'rgba(8,72,62,.35)', padding: '3px 10px', borderRadius: '999px'} as any}>출발 돌</span></div>
-            <div style={{position: 'absolute', left: '31%', top: '76px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '22px'} as any}><div className="stone" style={{'--s': '96px'} as any}>ㄷ</div><span style={{fontSize: '13px', fontWeight: '700', color: '#fff', background: 'rgba(8,72,62,.35)', padding: '3px 10px', borderRadius: '999px'} as any}>놓인 돌</span></div>
-            <div style={{position: 'absolute', left: '57%', top: '62px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '22px'} as any}>
-              {(tNext) && (<><div className="stone next loop-bob" style={{'--s': '96px'} as any}>ㅌ</div></>)}
-              {(tWet) && (<><div className="stone wet" style={{'--s': '96px'} as any}>ㅌ</div></>)}
-              {(tDone) && (<><div className="stone gold" style={{'--s': '96px'} as any}>ㅌ</div></>)}
-              <span style={{fontSize: '13px', fontWeight: '700', color: '#fff', background: 'rgba(8,72,62,.35)', padding: '3px 10px', borderRadius: '999px'} as any}>{tLabel}</span>
-            </div>
-            <div className="boat cross" style={{left: '2%', top: '176px', '--bx': '520px', '--bd': '22s'} as any}><svg width="70" height="54" viewBox="0 0 120 94" aria-hidden="true" style={{overflow: 'visible'} as any}><defs><linearGradient id="b109h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#E8BC82" /><stop offset=".45" stopColor="#B98349" /><stop offset="1" stopColor="#7F5330" /></linearGradient><linearGradient id="b109s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#FFFFFF" /><stop offset="1" stopColor="#F3E9D6" /></linearGradient><radialGradient id="b109l" cx=".45" cy=".4" r=".6"><stop offset="0" stopColor="#FFFDF4" /><stop offset=".6" stopColor="#FFE7B0" /><stop offset="1" stopColor="#EDC27A" /></radialGradient></defs><ellipse cx="60" cy="80" rx="56" ry="7" fill="#073F37" fillOpacity=".28" /><path d="M14 78 q10 -5 20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#E8FFF8" strokeOpacity=".75" strokeWidth="2" strokeLinecap="round" /><rect x="57.5" y="8" width="4.5" height="48" rx="2.2" fill="#6E4A2C" /><path d="M63 13 C82 22 92 36 94 50 L63 50Z" fill="url(#b109s)" stroke="#E2D3B8" strokeWidth="1" /><path d="M63 33 C74 35 86 38 92 42" stroke="#E8A1B0" strokeWidth="3" fill="none" strokeLinecap="round" /><path d="M56 18 C46 26 40 38 38 50 L56 50Z" fill="url(#b109s)" stroke="#E2D3B8" strokeWidth="1" opacity=".92" /><path d="M61 8 L76 12 L61 16Z" fill="#C9798A" /><path d="M8 54 Q60 64 112 54 Q108 64 98 72 Q60 84 22 72 Q12 64 8 54Z" fill="url(#b109h)" /><path d="M10 55.5 Q60 65.5 110 55.5" fill="none" stroke="#FCE3BE" strokeWidth="2.6" strokeLinecap="round" /><path d="M17 64 Q60 73 103 64" fill="none" stroke="#C9798A" strokeWidth="3.2" strokeLinecap="round" /><path d="M30 70 q4 1.6 8 1.8 M80 71.6 q4 -.2 8 -1.8" stroke="#6B4426" strokeOpacity=".45" strokeWidth="1.4" strokeLinecap="round" /></svg></div>
-            <div style={{position: 'absolute', right: '4%', top: '22px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px'} as any}>
-              <svg width="118" height="94" viewBox="0 0 200 160" aria-hidden="true" style={{flex: 'none', overflow: 'visible'} as any}><defs><linearGradient id="g110w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFFFFF" /><stop offset="1" stopColor="#EEE7D8" /></linearGradient><linearGradient id="g110s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#6B737A" /><stop offset=".6" stopColor="#363C42" /><stop offset="1" stopColor="#22262A" /></linearGradient><linearGradient id="g110d" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#7A5536" /><stop offset=".5" stopColor="#B48A5E" /><stop offset="1" stopColor="#7A5536" /></linearGradient><linearGradient id="g110v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFF6DD" /><stop offset=".45" stopColor="#C5F3E5" /><stop offset="1" stopColor="#3EC2A2" /></linearGradient><radialGradient id="g110l" cx=".45" cy=".4" r=".6"><stop offset="0" stopColor="#FFFDF4" /><stop offset=".6" stopColor="#FFE7B0" /><stop offset="1" stopColor="#EDC27A" /></radialGradient><clipPath id="g110c"><path d="M40 52 C62 48 76 38 84 24 L116 24 C124 38 138 48 160 52 C152 56 142 55 134 52 L66 52 C58 55 48 56 40 52Z" /></clipPath></defs><ellipse cx="100" cy="150" rx="96" ry="7" fill="#3C2814" fillOpacity=".12" /><rect x="8" y="80" width="52" height="66" rx="2" fill="url(#g110w)" stroke="#E4DCCB" /><rect x="8" y="126" width="52" height="20" fill="#D9CEB9" /><path d="M8 136 h52 M26 126 v10 M44 136 v10" stroke="#BFB29A" strokeWidth="1" /><rect x="140" y="80" width="52" height="66" rx="2" fill="url(#g110w)" stroke="#E4DCCB" /><rect x="140" y="126" width="52" height="20" fill="#D9CEB9" /><path d="M140 136 h52 M158 126 v10 M176 136 v10" stroke="#BFB29A" strokeWidth="1" /><path d="M0 82 Q32 72 64 82 L60 87 L4 87Z" fill="url(#g110s)" /><path d="M136 82 Q168 72 200 82 L196 87 L140 87Z" fill="url(#g110s)" /><rect x="71" y="58" width="58" height="88" fill="url(#g110v)" /><circle cx="100" cy="86" r="9" fill="#FFE9A8" fillOpacity=".9" /><path d="M71 118 C86 112 114 124 129 116 L129 146 L71 146Z" fill="#1FA88C" fillOpacity=".55" /><path d="M71 60 L88 65 L88 140 L71 146Z" fill="url(#g110d)" /><path d="M129 60 L112 65 L112 140 L129 146Z" fill="url(#g110d)" /><g fill="#E3C35C"><circle cx="79" cy="78" r="1.6" /><circle cx="79" cy="96" r="1.6" /><circle cx="79" cy="114" r="1.6" /><circle cx="121" cy="78" r="1.6" /><circle cx="121" cy="96" r="1.6" /><circle cx="121" cy="114" r="1.6" /></g><rect x="62" y="54" width="9" height="94" rx="2" fill="url(#g110d)" /><rect x="129" y="54" width="9" height="94" rx="2" fill="url(#g110d)" /><rect x="56" y="50" width="88" height="8" rx="2" fill="#5E412A" /><path d="M40 52 C62 48 76 38 84 24 L116 24 C124 38 138 48 160 52 C152 56 142 55 134 52 L66 52 C58 55 48 56 40 52Z" fill="url(#g110s)" /><g clipPath="url(#g110c)" stroke="#fff" strokeOpacity=".14" strokeWidth="1"><path d="M70 26v30M78 26v30M86 26v30M94 26v30M102 26v30M110 26v30M118 26v30M126 26v30M134 26v30" /></g><path d="M46 52 C64 49 77 41 85 27" fill="none" stroke="#fff" strokeOpacity=".35" strokeWidth="1.1" /><path d="M80 24 C84 17 116 17 120 24" fill="none" stroke="#1C2024" strokeWidth="4.5" strokeLinecap="round" /><path d="M78 23 c-3 -1 -5 -4 -5 -7 M122 23 c3 -1 5 -4 5 -7" fill="none" stroke="#1C2024" strokeWidth="2.6" strokeLinecap="round" /><rect x="87" y="38" width="26" height="11" rx="1.5" fill="#1C1A18" stroke="#C9A227" strokeWidth=".7" /><text x="100" y="46.4" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#E3C35C" fontFamily="Noto Serif KR, serif" letterSpacing=".8">도착</text><path d="M48 54 v8" stroke="#3A2C20" strokeWidth="1.2" /><circle cx="48" cy="72" r="13" fill="#FFE7B0" fillOpacity=".35" className="loop" style={{animation: 'jg-shimmer 3s ease-in-out infinite'} as any} /><rect x="43" y="61" width="10" height="2.4" rx="1" fill="#5A3A22" /><ellipse cx="48" cy="71.5" rx="7" ry="8.8" fill="url(#g110l)" /><path d="M41.5 68.5 h13 M41.5 74.5 h13" stroke="#C9798A" strokeWidth="1.6" /><rect x="43" y="80" width="10" height="2.4" rx="1" fill="#5A3A22" /><path d="M48 82.4 v5" stroke="#C9798A" strokeWidth="1.4" strokeLinecap="round" /><path d="M152 54 v8" stroke="#3A2C20" strokeWidth="1.2" /><circle cx="152" cy="72" r="13" fill="#FFE7B0" fillOpacity=".35" className="loop" style={{animation: 'jg-shimmer 3s ease-in-out infinite'} as any} /><rect x="147" y="61" width="10" height="2.4" rx="1" fill="#5A3A22" /><ellipse cx="152" cy="71.5" rx="7" ry="8.8" fill="url(#g110l)" /><path d="M145.5 68.5 h13 M145.5 74.5 h13" stroke="#C9798A" strokeWidth="1.6" /><rect x="147" y="80" width="10" height="2.4" rx="1" fill="#5A3A22" /><path d="M152 82.4 v5" stroke="#C9798A" strokeWidth="1.4" strokeLinecap="round" /></svg>
-              <span style={{fontSize: '13px', fontWeight: '800', color: '#9B3A51', background: '#fff', borderRadius: '999px', padding: '5px 12px', boxShadow: '0 4px 12px rgba(155,58,81,.15)'} as any}>도착 관문</span>
+            <span style={{position: 'absolute', left: '18px', top: '14px', fontSize: '14px', fontWeight: '800', color: '#0E6F61'} as any}>내 길 · 선생님이 놓아 준 돌 3개</span>
+            {(stoneCards as any[]).map((c: any, i: number) => (
+              <button key={c.id} type="button" onClick={c.go} aria-label={`${c.label} · 눌러서 ${c.cta}`} style={{position: 'absolute', left: ['5%', '29%', '53%'][i], top: '52px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', background: 'none', border: 'none', padding: '0', cursor: 'pointer'} as any}>
+                <span className={`stone ${c.cls}`} style={{'--s': '92px'} as any}>{c.char}</span>
+                <span style={{fontSize: '14px', fontWeight: '800', color: '#fff', background: c.now ? '#9B3A51' : 'rgba(8,72,62,.6)', padding: '4px 11px', borderRadius: '999px', whiteSpace: 'nowrap'} as any}>{c.label}</span>
+              </button>
+            ))}
+            <div style={{position: 'absolute', right: '3%', top: '22px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'} as any}>
+              <svg width="122" height="98" viewBox="0 0 200 160" aria-hidden="true" style={{flex: 'none', overflow: 'visible'} as any}><defs><linearGradient id="g112w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFFFFF" /><stop offset="1" stopColor="#EEE7D8" /></linearGradient><linearGradient id="g112s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#6B737A" /><stop offset=".6" stopColor="#363C42" /><stop offset="1" stopColor="#22262A" /></linearGradient><linearGradient id="g112d" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#7A5536" /><stop offset=".5" stopColor="#B48A5E" /><stop offset="1" stopColor="#7A5536" /></linearGradient><linearGradient id="g112v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FFF6DD" /><stop offset=".45" stopColor="#C5F3E5" /><stop offset="1" stopColor="#3EC2A2" /></linearGradient><radialGradient id="g112l" cx=".45" cy=".4" r=".6"><stop offset="0" stopColor="#FFFDF4" /><stop offset=".6" stopColor="#FFE7B0" /><stop offset="1" stopColor="#EDC27A" /></radialGradient><clipPath id="g112c"><path d="M40 52 C62 48 76 38 84 24 L116 24 C124 38 138 48 160 52 C152 56 142 55 134 52 L66 52 C58 55 48 56 40 52Z" /></clipPath></defs><ellipse cx="100" cy="150" rx="96" ry="7" fill="#3C2814" fillOpacity=".12" /><rect x="8" y="80" width="52" height="66" rx="2" fill="url(#g112w)" stroke="#E4DCCB" /><rect x="8" y="126" width="52" height="20" fill="#D9CEB9" /><path d="M8 136 h52 M26 126 v10 M44 136 v10" stroke="#BFB29A" strokeWidth="1" /><rect x="140" y="80" width="52" height="66" rx="2" fill="url(#g112w)" stroke="#E4DCCB" /><rect x="140" y="126" width="52" height="20" fill="#D9CEB9" /><path d="M140 136 h52 M158 126 v10 M176 136 v10" stroke="#BFB29A" strokeWidth="1" /><path d="M0 82 Q32 72 64 82 L60 87 L4 87Z" fill="url(#g112s)" /><path d="M136 82 Q168 72 200 82 L196 87 L140 87Z" fill="url(#g112s)" /><rect x="71" y="58" width="58" height="88" fill="url(#g112v)" /><circle cx="100" cy="86" r="9" fill="#FFE9A8" fillOpacity=".9" /><path d="M71 118 C86 112 114 124 129 116 L129 146 L71 146Z" fill="#1FA88C" fillOpacity=".55" /><path d="M71 60 L88 65 L88 140 L71 146Z" fill="url(#g112d)" /><path d="M129 60 L112 65 L112 140 L129 146Z" fill="url(#g112d)" /><g fill="#E3C35C"><circle cx="79" cy="78" r="1.6" /><circle cx="79" cy="96" r="1.6" /><circle cx="79" cy="114" r="1.6" /><circle cx="121" cy="78" r="1.6" /><circle cx="121" cy="96" r="1.6" /><circle cx="121" cy="114" r="1.6" /></g><rect x="62" y="54" width="9" height="94" rx="2" fill="url(#g112d)" /><rect x="129" y="54" width="9" height="94" rx="2" fill="url(#g112d)" /><rect x="56" y="50" width="88" height="8" rx="2" fill="#5E412A" /><path d="M40 52 C62 48 76 38 84 24 L116 24 C124 38 138 48 160 52 C152 56 142 55 134 52 L66 52 C58 55 48 56 40 52Z" fill="url(#g112s)" /><g clipPath="url(#g112c)" stroke="#fff" strokeOpacity=".14" strokeWidth="1"><path d="M70 26v30M78 26v30M86 26v30M94 26v30M102 26v30M110 26v30M118 26v30M126 26v30M134 26v30" /></g><path d="M46 52 C64 49 77 41 85 27" fill="none" stroke="#fff" strokeOpacity=".35" strokeWidth="1.1" /><path d="M80 24 C84 17 116 17 120 24" fill="none" stroke="#1C2024" strokeWidth="4.5" strokeLinecap="round" /><path d="M78 23 c-3 -1 -5 -4 -5 -7 M122 23 c3 -1 5 -4 5 -7" fill="none" stroke="#1C2024" strokeWidth="2.6" strokeLinecap="round" /><rect x="87" y="38" width="26" height="11" rx="1.5" fill="#1C1A18" stroke="#C9A227" strokeWidth=".7" /><text x="100" y="46.4" textAnchor="middle" fontSize="7.5" fontWeight="700" fill="#E3C35C" fontFamily="Noto Serif KR, serif" letterSpacing=".8">도착</text><path d="M48 54 v8" stroke="#3A2C20" strokeWidth="1.2" /><circle cx="48" cy="72" r="13" fill="#FFE7B0" fillOpacity=".35" className="loop" style={{animation: 'jg-shimmer 3s ease-in-out infinite'} as any} /><rect x="43" y="61" width="10" height="2.4" rx="1" fill="#5A3A22" /><ellipse cx="48" cy="71.5" rx="7" ry="8.8" fill="url(#g112l)" /><path d="M41.5 68.5 h13 M41.5 74.5 h13" stroke="#C9798A" strokeWidth="1.6" /><rect x="43" y="80" width="10" height="2.4" rx="1" fill="#5A3A22" /><path d="M48 82.4 v5" stroke="#C9798A" strokeWidth="1.4" strokeLinecap="round" /><path d="M152 54 v8" stroke="#3A2C20" strokeWidth="1.2" /><circle cx="152" cy="72" r="13" fill="#FFE7B0" fillOpacity=".35" className="loop" style={{animation: 'jg-shimmer 3s ease-in-out infinite'} as any} /><rect x="147" y="61" width="10" height="2.4" rx="1" fill="#5A3A22" /><ellipse cx="152" cy="71.5" rx="7" ry="8.8" fill="url(#g112l)" /><path d="M145.5 68.5 h13 M145.5 74.5 h13" stroke="#C9798A" strokeWidth="1.6" /><rect x="147" y="80" width="10" height="2.4" rx="1" fill="#5A3A22" /><path d="M152 82.4 v5" stroke="#C9798A" strokeWidth="1.4" strokeLinecap="round" /></svg>
+              <span style={{fontSize: '14px', fontWeight: '800', color: '#9B3A51', background: '#fff', borderRadius: '999px', padding: '4px 11px', whiteSpace: 'nowrap', boxShadow: '0 4px 12px rgba(155,58,81,.15)'} as any}>④ 도착 관문 · 내 말로 설명</span>
             </div>
           </div>
+
+          {/* 돌 카드: 놓은 돌도 다시 눌러 복습 */}
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '16px'} as any}>
-            <div className="card" style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '6px'} as any}><span style={{fontSize: '12px', fontWeight: '700', color: '#9B3A51'} as any}>출발 돌</span><b style={{fontSize: '18px'} as any}>ㄴ · 기본자</b><span style={{fontSize: '14px', color: '#6B665F', lineHeight: '1.5'} as any}>영상 질문을 첫 시도에 맞혀 켜져 있어요</span></div>
-            <div className="card" style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '6px'} as any}><span style={{fontSize: '12px', fontWeight: '700', color: '#9B3A51'} as any}>놓인 돌</span><b style={{fontSize: '18px'} as any}>ㄴ → ㄷ · 가획</b><span style={{fontSize: '14px', color: '#6B665F', lineHeight: '1.5'} as any}>첨벙! 한 칸 놓음</span></div>
-            <div className="card" style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px', boxShadow: '0 0 0 2px #9B3A51, 0 12px 28px rgba(155,58,81,.12)'} as any}>
-              <span style={{fontSize: '12px', fontWeight: '700', color: '#9B3A51'} as any}>{tLabel}</span><b style={{fontSize: '18px'} as any}>ㄷ → ㅌ · 가획</b>
-              {(tDone) && (<><span style={{fontSize: '14px', color: '#6B665F'} as any}>{tDoneText}</span></>)}
-              {(tDone && heroCta) && (<><button type="button" className="btnp" onClick={heroGo} style={{minHeight: '56px', fontSize: '19px'} as any}>{heroCta}</button></>)}
-              {(tDone && heroReplay) && (<><button type="button" className="btns" onClick={replay} style={{minHeight: '52px', fontSize: '16px'} as any}>오늘 완주! · 처음부터 다시 해 보기</button></>)}
-              {(tOpen) && (<><button type="button" className="btnp" onClick={goConcept} style={{minHeight: '56px', fontSize: '19px'} as any}>밟기 · 4분 →</button></>)}
-            </div>
+            {(stoneCards as any[]).map((c: any) => (
+              <div key={c.id} className="card" style={{padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: '6px', background: c.now ? '#FCF5F6' : '#fff'} as any}>
+                <span style={{display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: '800'} as any}><span style={{color: '#6B665F'} as any}>{c.num} {c.section}</span><span style={{color: c.done ? '#0E6F61' : '#9B3A51'} as any}>{c.status}</span></span>
+                <b style={{fontSize: '20px', letterSpacing: '-0.02em'} as any}>{c.title}</b>
+                <span style={{fontSize: '14px', color: '#6B665F', lineHeight: '1.5'} as any}>{c.desc}</span>
+                <button type="button" className={c.now ? 'btnp' : 'btns'} onClick={c.go} style={{marginTop: '8px', minHeight: '50px', fontSize: '17px'} as any}>{c.cta}</button>
+              </div>
+            ))}
           </div>
         </div>
       </>)}
@@ -119,17 +131,20 @@ export function StudentView(v: Record<string, any>) {
       
       {(isConcept) && (<>
         <div className="scr" style={{flexDirection: 'row', gap: '40px', alignItems: 'stretch'} as any}>
-          <div style={{flex: '1.1', borderRadius: '28px', background: 'radial-gradient(80% 70% at 50% 40%, #FFFFFF 0%, #F3F1EA 100%)', boxShadow: 'inset 0 0 0 1px #ECE9E1', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '26px'} as any}>
-            <div className="stone" style={{'--s': '120px'} as any}>ㄷ</div>
-            <svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 20h24M20 8v24" stroke="#9B3A51" strokeWidth="3.5" strokeLinecap="round" /></svg>
-            <div className="stone next loop-bob" style={{'--s': '170px'} as any}>ㅌ</div>
+          <div style={{flex: '1.1', borderRadius: '28px', background: 'radial-gradient(80% 70% at 50% 40%, #FFFFFF 0%, #F3F1EA 100%)', boxShadow: 'inset 0 0 0 1px #ECE9E1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '22px'} as any}>
+            <div style={{display: 'flex', alignItems: 'center', gap: '26px'} as any}>
+              {(concept.from) && (<><div className="stone" style={{'--s': '120px'} as any}>{concept.from}</div>
+              <span style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '15px', fontWeight: '800', color: '#9B3A51'} as any}><svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><path d="M8 20h24M20 8v24" stroke="#9B3A51" strokeWidth="3.5" strokeLinecap="round" /></svg>획 하나</span></>)}
+              <div className={concept.replay ? 'stone' : 'stone next loop-bob'} style={{'--s': '170px'} as any}>{concept.char}</div>
+            </div>
+            {(concept.caption) && (<span style={{fontSize: '18px', fontWeight: '800', color: '#4A4641', background: '#fff', borderRadius: '999px', padding: '8px 18px', boxShadow: 'inset 0 0 0 1.5px #E3E0D6'} as any}>{concept.caption}</span>)}
           </div>
           <div style={{flex: '1', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '18px'} as any}>
-            <span style={{fontSize: '14px', fontWeight: '700', color: '#9B3A51'} as any}>개념 카드</span>
-            <h2 style={{margin: '0', fontSize: '38px', fontWeight: '800', letterSpacing: '-0.03em', lineHeight: '1.25'} as any}>ㄷ에 획을 하나 더하면 ㅌ</h2>
-            <p style={{margin: '0', fontSize: '19px', lineHeight: '1.7', color: '#4A4641'} as any}>소리가 조금 세게 나면 획을 하나 더해요.</p>
-            <div className="serif" style={{fontSize: '26px', fontWeight: '700', color: '#6B665F', letterSpacing: '.08em'} as any}>聲出稍厲 故加畫</div>
-            <button type="button" className="btnp" onClick={goLab} style={{alignSelf: 'flex-start', marginTop: '12px'} as any}>실험실에서 만들어 보기</button>
+            <span style={{fontSize: '14px', fontWeight: '700', color: '#9B3A51'} as any}>① 개념 보기 · 읽고 다음으로</span>
+            <h2 style={{margin: '0', fontSize: '38px', fontWeight: '800', letterSpacing: '-0.03em', lineHeight: '1.25'} as any}>{concept.head}</h2>
+            <p style={{margin: '0', fontSize: '19px', lineHeight: '1.7', color: '#4A4641'} as any}>{concept.sub}</p>
+            <div className="serif" style={{fontSize: '26px', fontWeight: '700', color: '#6B665F', letterSpacing: '.08em'} as any}>{concept.hanja}</div>
+            <button type="button" className="btnp" onClick={goLab} style={{alignSelf: 'flex-start', marginTop: '12px'} as any}>{concept.hasLab ? '② 실험실에서 만들어 보기 →' : '② 문제 2개 풀기 →'}</button>
           </div>
         </div>
       </>)}
@@ -142,9 +157,9 @@ export function StudentView(v: Record<string, any>) {
             <div style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px 24px', padding: '14px 20px', background: '#F7F6F2', borderBottom: '1px solid #ECE9E1'} as any}>
               <div style={{display: 'flex', alignItems: 'center', gap: '12px'} as any}>
                 <span style={{fontSize: '13px', fontWeight: '800', color: '#fff', background: '#9B3A51', borderRadius: '999px', padding: '3px 10px'} as any}>목표</span>
-                <span style={{fontSize: '19px', fontWeight: '800', color: '#1C1A18', letterSpacing: '-0.02em'} as any}>ㄴ에 획을 더해 ㅌ 만들기</span>
+                <span style={{fontSize: '19px', fontWeight: '800', color: '#1C1A18', letterSpacing: '-0.02em'} as any}>{labGoal}</span>
                 <span aria-label={`지금 글자 ${labCur ?? ''}`} style={{display: 'flex', alignItems: 'center', gap: '6px'} as any}>
-                  {['ㄴ', 'ㄷ', 'ㅌ'].map((c, i, all) => {
+                  {(labChain as string[]).map((c: string, i: number, all: string[]) => {
                     const at = all.indexOf(labCur ?? '');
                     const on = i === at, past = at > i;
                     return (<span key={c} style={{display: 'flex', alignItems: 'center', gap: '6px'} as any}>
@@ -157,13 +172,13 @@ export function StudentView(v: Record<string, any>) {
               <ol style={{display: 'flex', flexWrap: 'wrap', gap: '6px 16px', margin: '0 0 0 auto', padding: '0', listStyle: 'none', fontSize: '14px', color: '#4A4641'} as any}>
                 <li><b style={{color: '#9B3A51'} as any}>①</b> 깜빡이는 <b>더하기</b> 줄에서 획 카드를 끌어</li>
                 <li><b style={{color: '#9B3A51'} as any}>②</b> 글자 둘레 <b>점선 칸</b>에 놓아요</li>
-                <li><b style={{color: '#9B3A51'} as any}>③</b> ㅌ이 되면 저절로 다음</li>
+                <li><b style={{color: '#9B3A51'} as any}>③</b> {labTarget}이 되면 저절로 다음</li>
               </ol>
             </div>
             <div style={{flex: '1', position: 'relative', display: 'flex'} as any}>{labSlot}</div>
           </div>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'} as any}>
-            <span style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', color: '#4A4641'} as any}><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="loop" style={{animation: 'spin 1.2s linear infinite'} as any}><circle cx="12" cy="12" r="9" fill="none" stroke="#F6E9EC" strokeWidth="3" /><path d="M21 12a9 9 0 00-9-9" fill="none" stroke="#9B3A51" strokeWidth="3" strokeLinecap="round" /></svg>ㅌ이 만들어지면 자동으로 넘어가요</span>
+            <span style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', color: '#4A4641'} as any}><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="loop" style={{animation: 'spin 1.2s linear infinite'} as any}><circle cx="12" cy="12" r="9" fill="none" stroke="#F6E9EC" strokeWidth="3" /><path d="M21 12a9 9 0 00-9-9" fill="none" stroke="#9B3A51" strokeWidth="3" strokeLinecap="round" /></svg>{labTarget}이 만들어지면 자동으로 문제로 넘어가요</span>
             <span style={{fontSize: '12px', color: '#8C8A85'} as any}>한글 창제 원리 실험실 · 팀원 제작</span>
             {(controls) && (<><button type="button" className="btns" onClick={goQuiz} style={{color: '#6B665F', fontSize: '14px'} as any}>시연: 완성 처리 (숨은 키 K)</button></>)}
           </div>
@@ -201,11 +216,11 @@ export function StudentView(v: Record<string, any>) {
           <div style={{position: 'relative', width: '460px', height: '280px'} as any}>
             <div style={{position: 'absolute', left: '40px', right: '40px', bottom: '30px', height: '90px', borderRadius: '50%', background: 'radial-gradient(closest-side, #5ED0B3, #CDEFE4 78%, rgba(205,239,228,0))'} as any}></div>
             <i className="ripple a" style={{top: '205px'} as any}></i><i className="ripple r2 a" style={{top: '205px'} as any}></i><i className="ripple r3 a" style={{top: '205px'} as any}></i>
-            <div className="stone a" style={{'--s': '150px', position: 'absolute', left: '155px', top: '100px', animation: 'drop-in 1000ms var(--ease-bouncy) both'} as any}>ㅌ</div>
+            <div className="stone a" style={{'--s': '150px', position: 'absolute', left: '155px', top: '100px', animation: 'drop-in 1000ms var(--ease-bouncy) both'} as any}>{splash.char}</div>
           </div>
-          <div className="a" style={{fontSize: '44px', fontWeight: '800', letterSpacing: '-0.03em', animation: 'pop-in 600ms var(--ease-bouncy) 900ms both'} as any}>첨벙! 한 칸 놓음</div>
-          <div className="a" style={{fontSize: '17px', color: '#4A4641', animation: 'rise-in 600ms var(--ease-standard) 1200ms both'} as any}>교실 다리에도 한 칸 놓였어요 · <b style={{color: '#1C1A18'} as any}>도착 관문이 열렸어요</b></div>
-          <button type="button" className="btnp a" onClick={goGate} style={{marginTop: '6px', animation: 'rise-in 600ms var(--ease-standard) 1400ms both'} as any}>도착 관문으로</button>
+          <div className="a" style={{fontSize: '44px', fontWeight: '800', letterSpacing: '-0.03em', animation: 'pop-in 600ms var(--ease-bouncy) 900ms both'} as any}>{splash.title}</div>
+          <div className="a" style={{fontSize: '17px', color: '#4A4641', animation: 'rise-in 600ms var(--ease-standard) 1200ms both'} as any}>{splash.sub}</div>
+          <button type="button" className="btnp a" onClick={splash.go} style={{marginTop: '6px', animation: 'rise-in 600ms var(--ease-standard) 1400ms both'} as any}>{splash.btn}</button>
         </div>
       </>)}
 
@@ -235,7 +250,7 @@ export function StudentView(v: Record<string, any>) {
                 {(words as any[]).map((w: any) => (<button key={w.w} type="button" className={w.cls} onClick={w.fill}>{w.w}</button>))}
               </div>
             </div>
-            <span style={{fontSize: '14px', color: '#6B665F'} as any}>빈칸 2개 · 다음 단원부터는 첫 낱말만 보여요</span>
+            <span style={{fontSize: '15px', fontWeight: '700', color: '#4A4641'} as any}>하는 법: 낱말 상자의 낱말을 누르면 빈칸에 차례로 들어가요 → 다 채우면 [제출하기]</span>
           </>)}
           {(freeTab) && (<>
             <label className="paper" style={{display: 'flex', flexDirection: 'column', gap: '10px', padding: '24px 28px', fontSize: '14px', fontWeight: '700', color: '#8A7F70'} as any}>내 설명<textarea maxLength={300} rows={4} value={freeText} onChange={setFree} placeholder="예) ㅌ은 ㄷ보다…" style={{font: 'inherit', fontSize: '24px', fontWeight: '500', lineHeight: '1.6', color: '#1C1A18', border: 'none', background: 'transparent', resize: 'none', outline: 'none'} as any}></textarea></label>

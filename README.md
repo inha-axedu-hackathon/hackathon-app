@@ -14,7 +14,8 @@ AI가 학생들의 '개념 말해보기' 답을 읽어 막힌 곳을 찾고(읽�
 | 주소 | 화면 |
 |---|---|
 | `/student` | 학생 징검런: 홈 → 돌 굳히기(실험실) → 도착 관문 |
-| `/class` | 교실 프로젝터: 우리 반 다리(날씨로만) → 함께 놓기 → 개통 → 제자표 |
+| `/class` | 교실 프로젝터: 우리 반 다리(한 화면에 구간 하나·날씨 하나, ←/→·밀어서 넘김) → 함께 놓기 → 개통 → 제자표 |
+| `/student/class` | 학생이 보는 우리 반 다리(같은 화면, 보기만 · "← 내 징검런") |
 | `/teacher`, `/teacher/approve` | 교사: 오늘의 수업 예보(AI 근거·학생 정보 잠금), 아침 예외 결재 |
 | `/student/welcome`, `/student/river` | 첫 수업 안내·분리 동의, 나의 강 지도 |
 | `/demo` | 시연 분할 화면 |
@@ -81,7 +82,7 @@ npm run dev                  # http://localhost:3000
 | `docs/SPEC.md`, `docs/GAMIFICATION.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `package.json` | 문서·설정은 환희만. 재우는 `docs/notes/재우.md`에 적고 알림 |
 
 ### 둘이 맞춘 약속 (바꾸려면 먼저 말하기)
-- 라우트: `/`, `/student`, `/student/stone/[id]`, `/student/explain`, `/student/welcome`, `/student/river`, `/class`, `/teacher`, `/teacher/approve`, `/demo` (`/checkin`은 11/14 삭제)
+- 라우트: `/`, `/student`, `/student/stone/[id]`, `/student/explain`, `/student/welcome`, `/student/river`, `/student/class`, `/class`, `/teacher`, `/teacher/approve`, `/demo` (`/checkin`은 11/14 삭제)
 - 단계 이동은 `demo.reach(n)`만 씀(1 ㅌ 완성 · 2 관문 통과 · 3 수업 시작 · 4 함께 놓기 · 5 개통). 시각은 `d.now`, `d.minutesToLesson`만 읽고 화면에 시각을 직접 쓰지 않음
 - 돌 ID: `st-n`, `st-d`, `st-t`, `st-kk` · 시연 학생 `s07`
 - `/api/explain`: 요청 `{ studentId, stoneId, text }` → 응답 `{ passed, ideas, misconception, feedback, source }`. 서버가 안 되면 화면은 "선생님이 확인할게요"로

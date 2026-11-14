@@ -18,6 +18,9 @@ const XS = [168, 536, 904]; // 양쪽 둑에 돌이 가리지 않게 (구간 폭
 const SKX = [-100, 400, 840];
 const SKW = [820, 760, 700];
 const NAMES = ["상형", "가획", "병서"];
+/** 한 화면에 한 구간(날씨 하나)씩: 0 상형(출발 둑 → 가획 앞) · 1 가획(→ 병서 앞) · 2 병서(→ 도착 관문) */
+export const PAGE_NAMES = NAMES;
+const PAGE_SEC = { x: 200, w: 1040 }; // 한 구간을 화면 가득(양쪽 둑·화살표 자리는 비움)
 const GLYPH = [
   ["ㄱ", "ㄴ", "ㅁ", "ㅅ", "ㅇ"],
   ["ㅋ", "ㄷ", "ㅌ", "ㅂ", "ㅍ"],
@@ -39,6 +42,15 @@ export function sceneOf(step: number, togetherOpen: boolean): Scene {
   if (step === 3) return togetherOpen ? "together" : "tide";
   if (step === 1) return "splash";
   return "forecast";
+}
+
+/** 시연 단계가 바뀔 때 저절로 넘길 쪽: 0 예보 → 상형, 1 ㅌ 첨벙 → 가획(ㅌ이 가획 돌), 3 이후 → 잠긴 구간(함께 놓기·밧줄·개통). 2는 그대로 */
+export function autoPage(step: number, bridge: BridgeState): number | null {
+  if (step <= 0) return 0;
+  if (step === 1) return 1;
+  if (step === 2) return null;
+  const i = bridge.sections.findIndex((s) => s.locked || s.rope > 0);
+  return i >= 0 ? i : 2;
 }
 
 /** 날씨에 맞춰 돌 모양을 고른다. 칸 수가 아니라 날씨만 본다 */
@@ -67,8 +79,12 @@ export function stageVals(opts: {
   onPick: (v: "O" | "X") => void;
   onReveal: () => void;
   onRope: () => void;
+  page?: number; // 지금 보이는 구간(0 상형 · 1 가획 · 2 병서)
+  viewer?: "class" | "student"; // 학생이 보는 교실 화면은 보기만(정답 공개·밧줄 버튼 없음)
 }) {
   const { bridge, scene: k, step, minutesToLesson, pick, revealed } = opts;
+  const page = Math.min(2, Math.max(0, opts.page ?? 0));
+  const student = opts.viewer === "student";
   const sections = bridge.sections.map((s, i) => {
     const rope = s.rope > 0 && !bridge.opened;
     // 개통 전 밧줄 구간은 구름(아직 굳히는 중), 개통 후 맑음
@@ -106,16 +122,17 @@ export function stageVals(opts: {
       }),
     };
   });
-  const L = sections.map((s) => s.lvl);
-  const line = `M0 ${L[0]} L488 ${L[0]} C528 ${L[0]} 536 ${L[1]} 576 ${L[1]} L856 ${L[1]} C896 ${L[1]} 904 ${L[2]} 944 ${L[2]} L1440 ${L[2]}`;
+  // 한 화면에는 지금 구간 하나만: 하늘은 화면 전체, 돌 5개는 화면 가득 펼친다
+  const cur = { ...sections[page], x: PAGE_SEC.x, w: PAGE_SEC.w, skyX: 0, skyW: 1440, skyCls: "skyp" };
+  const lv = cur.lvl;
+  const line = `M0 ${lv} L488 ${lv} C528 ${lv} 536 ${lv} 576 ${lv} L856 ${lv} C896 ${lv} 904 ${lv} 944 ${lv} L1440 ${lv}`;
+  const curState = bridge.sections[page];
+  const curWord = cur.wxWord;
+  const pageLine =
+    curWord === "맑음" ? `${cur.name}${cur.name === "병서" ? "는" : "은"} 맑아요` : curWord === "구름" ? `${cur.name}엔 구름이 꼈어요` : curWord === "소나기" ? `${cur.name}엔 소나기가 와요` : `${cur.name}엔 먹구름이 꼈어요`;
 
   const locked = bridge.sections.filter((s) => s.locked).map((s) => s.name);
-  const cloudy = bridge.sections.filter((s) => s.weather !== "맑음");
   const tq = TOGETHER[(locked[0] ?? "병서") as keyof typeof TOGETHER]; // 잠긴 구간의 함께 놓기 문항 (data/stones.json)
-  const forecastLine =
-    cloudy.length === 0
-      ? "모든 구간이 맑아요"
-      : bridge.sections.map((s) => `${s.name}${s.weather === "맑음" ? "은 맑고" : s.weather === "구름" ? "은 구름" : "엔 먹구름"}`).join(", ").replace(/, ([^,]*)$/, ", $1");
 
   let n = 0;
   const rows = ROWS.map((r, ri) => ({
@@ -134,8 +151,8 @@ export function stageVals(opts: {
     jejapyo: "3교시 · 위에서 보기",
   };
   const LINE: Partial<Record<Scene, string>> = {
-    forecast: forecastLine,
-    splash: cloudy.length ? `해가 났어요 · ${cloudy.map((s) => `${s.name}엔 아직 ${s.weather}`).join(", ")}` : "모든 구간이 맑아요",
+    forecast: pageLine,
+    splash: curState && curState.weather !== "맑음" ? `첨벙! · ${cur.name}엔 아직 ${curState.weather}` : `해가 났어요 · ${pageLine}`,
     rope: "구름이 걷히고, 잠긴 돌이 밧줄에 묶여 떠올라요",
   };
 
@@ -154,7 +171,11 @@ export function stageVals(opts: {
     showTideBanner: k === "tide" && locked.length > 0,
     showWx: k !== "together" && k !== "jejapyo",
     newFlag: step >= 2 && step <= 5,
-    sections,
+    sections: [cur],
+    page,
+    pageWx: sections.map((x) => x.wxWord as Weather), // 아래 점(구간 이름+날씨)용, 숫자 없음
+    showStartBank: page === 0, // 출발 둑은 상형 화면에만
+    showEndBank: page === 2, // 도착(수업) 둑은 병서 화면에만
     rows,
     chain: [],
     waterFill: `${line} L1440 340 L0 340 Z`,
@@ -171,7 +192,8 @@ export function stageVals(opts: {
     qExplain: tq.explain,
     notRevealed: !revealed,
     revealed,
-    controls: true, // '정답 공개' 버튼
+    controls: !student, // '정답 공개' 버튼(학생 화면에서는 숨김)
+    ropeBtn: !student, // '이제 밧줄을 내려요' 버튼(학생 화면에서는 숨김)
     showNav: false, // 디자인 프로토타입의 장면 이동 막대는 쓰지 않음(단축키 N·T 사용)
     pickO: () => opts.onPick("O"),
     pickX: () => opts.onPick("X"),

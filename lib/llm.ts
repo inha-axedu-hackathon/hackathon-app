@@ -52,9 +52,12 @@ export function quoted(text: string, quote: string): boolean {
 // 서버 메모리에서 세므로 서버를 다시 켜면 0부터 센다(Vercel은 인스턴스마다 따로). 실제 도입 땐 DB·KV로 옮긴다.
 const DAILY_TOKENS = Number(process.env.LLM_DAILY_TOKENS) || 100_000;
 const spent = { date: "", tokens: 0, calls: 0, cached: 0 };
-// 분석 몫은 따로 센다: 30명 분석을 여러 번 돌려도 학생 채점(explain) 몫(하루 상한 - 분석 몫)은 늘 남게
-const POOL_CAP = { analyze: Number(process.env.LLM_ANALYZE_TOKENS) || 40_000 } as const;
-const poolSpent: Record<keyof typeof POOL_CAP, number> = { analyze: 0 };
+// 분석 몫·문제 만들기 몫은 따로 센다: 여러 번 돌려도 학생 채점(explain) 몫(하루 상한 - 두 몫)은 늘 남게
+const POOL_CAP = {
+  analyze: Number(process.env.LLM_ANALYZE_TOKENS) || 40_000,
+  generate: Number(process.env.LLM_GENERATE_TOKENS) || 20_000, // 교사가 학습 내용으로 징검돌 초안을 만들 때(/api/generate)
+} as const;
+const poolSpent: Record<keyof typeof POOL_CAP, number> = { analyze: 0, generate: 0 };
 
 /** 오늘(한국 시간) 쓴 토큰·호출 수. 학생 글은 들어 있지 않다 */
 export function usageToday() {
@@ -62,6 +65,7 @@ export function usageToday() {
   if (spent.date !== date) {
     Object.assign(spent, { date, tokens: 0, calls: 0, cached: 0 });
     poolSpent.analyze = 0;
+    poolSpent.generate = 0;
   }
   return { ...spent, limit: DAILY_TOKENS };
 }
@@ -78,7 +82,7 @@ type Options = {
   timeoutMs?: number; // 기다리는 시간 전체 상한(다시 묻기 포함). 기본 6초
   allow?: () => boolean; // 실제로 AI를 부르기 직전에 확인(예: 학생별 횟수 제한). 저장된 답으로 끝나면 부르지 않는다
   effort?: "low"; // 생각을 조금 켠다. 한 번만 돌리고 정확도가 중요한 일(30명 분석)에만. 비우면 생각 끔
-  pool?: keyof typeof POOL_CAP; // 따로 세는 몫(분석)
+  pool?: keyof typeof POOL_CAP; // 따로 세는 몫(분석·문제 만들기)
 };
 
 type Reply = {
