@@ -11,7 +11,7 @@
 |---|---|
 | [docs/SPEC.md](docs/SPEC.md) | 총기획안. 무엇을, 왜, 어떻게 만드는지의 기준 문서 |
 | [docs/GAMIFICATION.md](docs/GAMIFICATION.md) | 징검런 규칙, 화면 문구, 페이스패스, 근거, 예상 질문 |
-| [CLAUDE.md](CLAUDE.md) | AI 코딩 도구가 지킬 규칙 |
+| [AGENTS.md](AGENTS.md) | AI 코딩 도구가 지킬 규칙 (CLAUDE.md는 이 파일을 불러옴) |
 
 ## 폴더와 담당
 코드 폴더는 Next.js 세팅 후에 생겨요. 담당은 "주로 누가 만드는지"를 나눈 거예요. 다른 폴더도 고칠 수 있어요.

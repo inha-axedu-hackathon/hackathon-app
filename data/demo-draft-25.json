@@ -1,0 +1,92 @@
+{
+  "_readme": "징검다리 시연용 단일 JSON(public/data/demo.json). 시연 시작 = 물때 12분 전. 상태는 seed + events 리듀서로 계산하고, BroadcastChannel('jingum-sync')로 events만 주고받으며 localStorage('jingum:v2')에 저장한다. 실명은 교사 화면에서만 쓰고 외부 AI에는 학생 id·답안 텍스트만 보낸다. 얼굴 이미지·특징값을 담는 필드는 어디에도 없다.",
+  "meta": {"version": "demo-2", "now": "2026-11-14T10:38:00+09:00", "storageKey": "jingum:v2", "syncChannel": "jingum-sync", "labStoragePrefix": "hg-"},
+  "class": {"id": "2-3", "name": "2학년 3반 국어", "teacherId": "t-01", "teacherNameTeacherOnly": "진선우(시연용)", "size": 25, "unit": "중2-1 국어(미래엔) 3-1 음운 체계와 문자 체계 > 소단원 2 국어의 문자 체계", "goal": "가획과 병서를 구분해 자음자의 제자 원리를 설명할 수 있다"},
+  "cycle": {"id": "cy-1114", "videoOpenAt": "2026-11-13T15:00:00+09:00", "approvedAt": "2026-11-13T20:10:00+09:00", "tideAt": "2026-11-14T10:50:00+09:00", "tideLabel": "오늘 3교시 국어", "tideWarnMin": 30, "quietHours": ["22:00", "07:00"], "checkEverySec": 180, "season": {"id": "S1", "week": 2, "weeks": 4}},
+  "rules": {
+    "evidenceOnly": "진행·배지·칭호는 확인된 학습 증거(영상 확인 질문 정답, 굳히기 문항 정답, 실험실 글자 완성, 말해보기 통과)로만 쌓인다",
+    "noScore": ["시청 시간", "접속 시간", "화면 체류 시간", "풀이 속도", "정답 개수 자체", "얼굴 인증 여부"],
+    "stone": {"checkQs": 2, "variantRetry": 1, "cooldownMin": 10, "attemptsPerDay": 3, "dailyMax": 8, "rescueAfterFails": 2, "etaMin": {"small": 1, "normal": 2, "lab": 4}},
+    "path": {"minStones": 1, "maxStones": 5, "startStonesMax": 2, "startStoneEvidence": "그 개념의 영상 확인 질문 첫 시도 정답", "lowMotivationToday": 2},
+    "explain": {"ideasPerConcept": 2, "passAt": 2, "minChars": 12, "llmTimeoutMs": 3000, "frameLevels": ["빈칸 2개", "첫 낱말만", "자유 서술"], "frameStepDownAfterPasses": 1},
+    "ring": {"segments": "내 경로 돌 수 + 말해보기 1칸", "shadowTick": "지난 사이클에서 물때까지 남은 시간이 지금과 같았을 때의 내 진행률"},
+    "weather": [{"minPct": 100, "label": "맑음"}, {"minPct": 85, "label": "구름 조금"}, {"minPct": 60, "label": "소나기"}, {"minPct": 0, "label": "장대비"}],
+    "together": {"discussSec": 30, "crewsToRaise": 3, "crewCount": 5, "backupQuestion": true, "raisedAs": "rope", "ropeToPlaced": "주인이 그날 안에 굳히기 2문항 정답"},
+    "streak": {"countIf": "물때 전에 새로 놓은 돌 1개 이상(출발 돌 제외, 종이 돌 포함)", "restStart": 1, "restEvery": 3, "restMax": 2, "autoProtect": ["기기 없음", "인터넷 없음", "가정 사정", "교사 보호"]},
+    "shadow": {"metric": "굳히기 첫 시도 정답률(출발 돌 제외)", "base": "최근 3사이클 평균", "passIf": "base + 0.10 이상 또는 0.90 이상", "fewRecordsPassIf": "0.70 이상", "lowerBaseAfterLosses": 2},
+    "ranks": [{"min": 0, "name": "첫걸음 학생", "seal": "첫걸음"}, {"min": 1, "name": "집현전 견습생", "seal": "견습", "hat": "yugeon"}, {"min": 4, "name": "집현전 학사", "seal": "학사", "hat": "samo"}, {"min": 7, "name": "집현전 학자", "seal": "학자", "hat": "samo", "trim": 1}, {"min": 10, "name": "집현전 대제학", "seal": "대제학", "hat": "samo", "trim": 1, "gwanja": "gold"}, {"min": 12, "name": "집현전 영전사", "seal": "영전사", "hat": "samo", "trim": 1, "gwanja": "jade"}]
+  },
+  "sections": [{"id": "sh", "name": "상형", "order": 1}, {"id": "gh", "name": "가획", "order": 2}, {"id": "bs", "name": "병서", "order": 3}, {"id": "ic", "name": "이체(숨은 돌·등불)", "order": 4, "optional": true}],
+  "crews": [
+    {"id": "cr-eo", "name": "어금닛소리 공사단", "lane": ["ㄱ", "ㅋ", "ㄲ"], "lantern": "ㆁ", "members": ["s01", "s06", "s11", "s16", "s21"]},
+    {"id": "cr-hyeo", "name": "혓소리 공사단", "lane": ["ㄴ", "ㄷ", "ㅌ", "ㄸ"], "lantern": "ㄹ", "members": ["s02", "s07", "s12", "s17", "s22"]},
+    {"id": "cr-ip", "name": "입술소리 공사단", "lane": ["ㅁ", "ㅂ", "ㅍ", "ㅃ"], "lantern": null, "members": ["s03", "s08", "s13", "s18", "s23"]},
+    {"id": "cr-i", "name": "잇소리 공사단", "lane": ["ㅅ", "ㅈ", "ㅊ", "ㅆ", "ㅉ"], "lantern": "ㅿ", "members": ["s04", "s09", "s14", "s19", "s24"]},
+    {"id": "cr-mok", "name": "목구멍소리 공사단", "lane": ["ㅇ", "ㆆ", "ㅎ", "ㆅ"], "lantern": null, "members": ["s05", "s10", "s15", "s20", "s25"]}
+  ],
+  "stones": [
+    {"id": "st-n", "section": "sh", "letter": "ㄴ", "kind": "card", "size": "small", "card": "ㄴ은 혀끝이 윗잇몸에 닿는 모양을 본뜬 기본자예요.", "checkQs": [{"id": "q-n1", "type": "mcq", "q": "ㄴ은 무엇을 본떠 만들었을까?", "choices": ["혀끝이 윗잇몸에 닿는 모양", "입 모양", "산 모양"], "answer": 0, "feedback": "자음 기본자는 소리 낼 때 발음 기관의 모양을 본떴어요."}, {"id": "q-n2", "type": "ox", "q": "자음 기본자는 ㄱ ㄴ ㄷ ㅁ ㅅ 다섯 개다.", "answer": false, "wobble": "dIsBase", "feedback": "기본자는 ㄱ ㄴ ㅁ ㅅ ㅇ. ㄷ은 ㄴ에 획을 더한 글자예요."}]},
+    {"id": "st-t", "section": "gh", "letter": "ㅌ", "kind": "lab", "size": "lab", "card": "ㄴ에 획 하나를 더하면 ㄷ, 하나 더 더하면 ㅌ. 획이 늘수록 숨이 거세게 나와요.", "lab": {"src": "/lab/index.html#consonant", "target": "ㅌ", "doneWhen": {"key": "hg-cons", "includesAll": ["ㄷ", "ㅌ"]}}, "checkQs": [{"id": "q-t1", "type": "mcq", "q": "ㄴ → ㄷ → ㅌ, 획이 늘수록 소리는?", "choices": ["세진다(숨이 거세짐)", "커진다(볼륨)", "그대로다"], "answer": 0, "wobble": "volume", "feedback": "커지는 게 아니라 숨이 거세게 나와요."}, {"id": "q-t2", "type": "frame", "q": "ㅌ은 ㄷ에 [ ]을 하나 더한 글자이고, ㄷ보다 소리가 더 [ ].", "accept": [["획", "가로획"], ["세다", "세진다", "거세다"]], "feedback": "ㅌ = ㄷ + 획, 그래서 소리가 더 세요."}], "variants": [{"id": "q-t1b", "type": "ox", "q": "획을 더하면 소리가 더 크게(볼륨) 난다.", "answer": false, "wobble": "volume", "feedback": "크기가 아니라 숨이 거세게 나오는 정도가 달라져요."}], "rescueCard": {"title": "한 획 더!", "body": "ㄴ에 획 하나 → ㄷ, ㄷ 가운데에 획 하나 더 → ㅌ. 획이 늘 때마다 숨이 세게 나와."}},
+    {"id": "st-kk", "section": "bs", "letter": "ㄲ", "kind": "lab", "size": "lab", "card": "ㄲ은 ㄱ을 나란히 쓴 글자(병서)예요. ㄱ에 획을 더한 글자는 ㅋ이에요.", "lab": {"src": "/lab/index.html#consonant", "target": "ㄲ", "doneWhen": {"key": "hg-cons", "includesAll": ["ㄲ"]}}, "checkQs": [{"id": "q-kk1", "type": "ox", "q": "ㄲ은 ㄱ에 획을 하나 더해 만든 글자다.", "answer": false, "wobble": "twinIsStroke", "feedback": "ㄲ은 ㄱ을 나란히 쓴 병서! 획을 더한 글자는 ㅋ이에요."}, {"id": "q-kk2", "type": "mcq", "q": "ㅋ과 ㄲ을 만든 방법을 바르게 짝지은 것은?", "choices": ["ㅋ 가획 / ㄲ 병서", "ㅋ 병서 / ㄲ 가획", "둘 다 가획"], "answer": 0, "feedback": "센 소리처럼 보여도 만든 원리가 달라요."}]}
+  ],
+  "_stonesNote": "나머지 돌(ㄱ ㅁ ㅅ ㅇ ㅋ ㄷ ㅂ ㅍ ㅈ ㅊ ㆆ ㅎ ㄸ ㅃ ㅆ ㅉ ㆅ, 숨은 돌 ㆁ ㄹ ㅿ)도 같은 형식. 상형 돌은 card, 가획·병서 돌은 lab.",
+  "explainPrompts": {
+    "gh": {"q": "ㅌ은 ㄷ에 무엇을 더한 글자이고, 왜 그렇게 만들었을까? 친구에게 설명하듯 써 봐.", "frames": ["ㅌ은 ㄷ보다 소리가 ___ 나서 ___을(를) 더했다.", "ㅌ은 …", ""], "ideas": [{"id": "addStroke", "label": "획을 더함", "keywords": ["획", "그었", "긋", "더했", "더해", "추가"]}, {"id": "stronger", "label": "소리가 더 셈", "keywords": ["세게", "세서", "세다", "센 소리", "거세", "강하게"]}], "misconceptions": [{"id": "volume", "keywords": ["크게", "커서", "큰 소리", "커지"], "feedback": "‘크게’가 아니라 ‘세게’예요. 숨이 거세게 나오는 정도랍니다."}], "haerye": {"parts": [{"text": "ㅋ比ㄱ", "idea": null}, {"text": "聲出稍厲", "idea": "stronger"}, {"text": "故加畫", "idea": "addStroke"}], "ko": "ㅋ은 ㄱ에 견주어 소리가 조금 세게 나므로 획을 더하였다.", "source": "『훈민정음』 해례본 제자해(1446), 원문 대조는 국어교육 팀원 확인"}}
+  },
+  "students": [
+    {"id": "s07", "nick": "여린히읗 ㆆ", "realNameTeacherOnly": "가상학생07", "crew": "cr-hyeo", "type": {"code": "M+A-E!", "label": "의욕 신호 높음 · 선수 개념 보충 · 시간 부족", "teacherOnly": true, "source": "rule+ai-tag", "approvedSig": "sig-01"}, "barriers": ["시간 부족"], "path": {"stones": ["st-n", "st-d", "st-t"], "startStones": ["st-n"], "explainSection": "gh"}, "progress": {"st-n": {"state": "placed", "via": "start", "evidence": "영상 확인 질문 1번 첫 시도 정답"}, "st-d": {"state": "placed", "firstTry": [true, false], "retried": true, "at": "2026-11-13T20:31:00+09:00"}, "st-t": {"state": "wet", "attempts": 1, "lastTry": [false, true], "rescue": "rq-03"}}, "ring": {"segments": 4, "done": 2, "shadowTick": 0.25}, "arrival": {"arrived": false, "explain": null, "stamp": null}, "badges": ["first-stone", "first-gahoek"], "streak": {"count": 4, "rest": 1, "protected": ["cy-1110"]}, "shadow": {"history": [0.5, 0.6, 0.7], "base": 0.6}, "weekly": {"W44": 0.55, "W45": 0.6, "W43": 0.4, "best": 0.7}, "facepass": {"orientationSeen": true, "guardianConsent": true, "studentOn": false}},
+    {"id": "s03", "nick": "하늘점 ㆍ", "realNameTeacherOnly": "가상학생03", "crew": "cr-ip", "type": {"code": "M+A+E0", "label": "의욕 신호 높음 · 준비됨 · 걸림돌 없음", "teacherOnly": true, "source": "rule+ai-tag", "approvedSig": "sig-01"}, "barriers": [], "path": {"stones": ["st-p", "st-pp"], "startStones": ["st-p"], "explainSection": "bs"}, "progress": {"st-p": {"state": "placed", "via": "start"}, "st-pp": {"state": "placed", "firstTry": [true, true], "at": "2026-11-13T19:05:00+09:00"}}, "ring": {"segments": 3, "done": 3, "shadowTick": 1.0}, "arrival": {"arrived": true, "beforeTide": true, "explain": {"text": "ㅍ은 ㅁ에 획을 더해 소리가 세진 글자고, ㅃ은 ㅂ을 나란히 쓴 병서라 원리가 달라.", "ideas": ["side", "notStroke"], "frameLevel": 3, "engine": "keyword"}, "stamp": "sig-02"}, "badges": ["first-stone", "first-gahoek", "retry-stone", "wobble-3", "match-580", "own-words", "dry-feet"], "streak": {"count": 7, "rest": 2, "protected": []}, "shadow": {"history": [0.8, 0.85, 0.9], "base": 0.85}, "facepass": {"orientationSeen": true, "guardianConsent": true, "studentOn": true}},
+    {"id": "s15", "nick": "반치음 ㅿ", "realNameTeacherOnly": "가상학생15", "crew": "cr-mok", "type": {"code": "M-A-E!", "label": "의욕 신호 낮음 · 선수 개념 보충 · 기기 없음(면담 권장)", "teacherOnly": true, "source": "rule+ai-tag", "approvedSig": "sig-01", "counsel": true}, "barriers": ["기기 없음"], "path": {"stones": ["st-o"], "startStones": [], "explainSection": "sh", "paperCard": true}, "progress": {"st-o": {"state": "placed", "paper": true, "confirmedBy": "t-01", "firstTry": [true, true], "at": "2026-11-14T08:35:00+09:00"}}, "ring": {"segments": 2, "done": 1, "shadowTick": 0}, "arrival": {"arrived": false, "explain": null, "stamp": null}, "badges": ["first-stone"], "streak": {"count": 2, "rest": 1, "protected": ["cy-1112"]}, "shadow": {"history": [], "base": null, "hidden": true}, "facepass": {"orientationSeen": true, "guardianConsent": false, "studentOn": false}}
+  ],
+  "_studentsNote": "나머지 22명은 김나희 표를 스크립트로 변환. 25명 경로 돌 합계 65칸(상형 12 / 가획 32 / 병서 21), 출발 돌 포함.",
+  "bridge": {"total": 65, "placed": 57, "rope": 0, "flags": 15, "activeNow": 7, "lanterns": 2, "bySection": {"sh": {"assigned": 12, "placed": 12}, "gh": {"assigned": 32, "placed": 31}, "bs": {"assigned": 21, "placed": 14}}, "opened": false, "demoScript": {"afterLive": {"placed": 58, "gh": "32/32", "flags": 16}, "atTide": {"sunken": 7, "section": "bs", "bs": "14/21"}, "afterTogether": {"rope": 7, "opened": true}}},
+  "forecast": {"lesson": "3교시 10:50", "weatherBySection": {"sh": "맑음", "gh": "구름 조금", "bs": "소나기"}, "topStuck": [{"tag": "twinIsStroke", "label": "ㄲ도 획을 더한 글자", "count": 7}, {"tag": "volume", "label": "소리의 세기 = 소리 크기", "count": 5}, {"tag": "dIsBase", "label": "ㄷ도 기본자", "count": 4}], "envSupport": {"기기 없음": 3, "시간 부족": 4, "가정 사정": 1}, "counsel": 2, "rescueOpen": 3, "approvals": {"total": 25, "signed": 25, "editedBeforeSign": 3}, "togetherSuggest": "첫 8분: 함께 놓기 — 가획 vs 병서"},
+  "rescues": [{"id": "rq-03", "stone": "st-t", "from": "s07", "publicText": "ㅌ 돌에서 구조 신호", "status": "card-sent", "card": "st-t.rescueCard", "at": "2026-11-13T20:46:00+09:00"}],
+  "signatures": [
+    {"id": "sig-01", "kind": "path-approve", "actor": "t-01", "method": "facepass-mock", "result": "verified", "at": "2026-11-13T20:10:00+09:00", "scope": "cy-1114 경로 25건 윤허(수정 3건)", "stamp": "윤허"},
+    {"id": "sig-02", "kind": "student-self-done", "actor": "s03", "method": "facepass-mock", "result": "verified", "at": "2026-11-13T19:20:00+09:00", "stamp": "학자"}
+  ],
+  "authLog": [
+    {"who": "t-01", "purpose": "login", "method": "facepass-mock", "result": "verified", "at": "2026-11-13T20:05:00+09:00"},
+    {"who": "t-01", "purpose": "path-approve", "method": "facepass-mock", "result": "verified", "at": "2026-11-13T20:10:00+09:00"},
+    {"who": "s03", "purpose": "self-done", "method": "facepass-mock", "result": "verified", "at": "2026-11-13T19:20:00+09:00"}
+  ],
+  "events": [
+    {"t": "path_approved", "sig": "sig-01", "at": "2026-11-13T20:10:00+09:00"},
+    {"t": "rescue_called", "student": "s07", "stone": "st-t", "at": "2026-11-13T20:46:00+09:00"},
+    {"t": "paper_confirmed", "student": "s15", "stone": "st-o", "by": "t-01", "at": "2026-11-14T08:35:00+09:00"},
+    {"t": "_live_demo_from_here"},
+    {"t": "stone_placed", "student": "s07", "stone": "st-t", "firstTry": [true, true], "newBadges": ["rescue-call"]},
+    {"t": "explain_passed", "student": "s07", "section": "gh", "ideas": ["addStroke", "stronger"], "newBadges": ["match-580", "shadow-pass"], "rank": ["집현전 견습생", "집현전 학사"]},
+    {"t": "stamp", "student": "s07", "method": "pin"},
+    {"t": "tide"},
+    {"t": "together_answer", "q": "q-kk1", "correctCrews": 5},
+    {"t": "rope_raised", "section": "bs", "count": 7},
+    {"t": "bridge_opened"}
+  ],
+  "badgeDefs": [
+    {"id": "first-stone", "name": "첫 돌", "ladder": true, "when": "출발 돌이 아닌 돌을 처음 놓음"},
+    {"id": "first-gahoek", "name": "첫 가획", "ladder": true, "fromLab": "hg-cons-ach:first"},
+    {"id": "retry-stone", "name": "다시 밟은 돌", "ladder": true, "when": "교정 설명 뒤 변형 문항 정답 1회"},
+    {"id": "wobble-3", "name": "흔들돌 잡기", "ladder": true, "when": "오개념 문항 첫 시도 정답 누적 3"},
+    {"id": "match-580", "name": "580년 만의 일치", "ladder": true, "when": "말해보기 핵심 생각 2/2 첫 통과"},
+    {"id": "own-words", "name": "내 말로", "ladder": true, "when": "문장 틀 없이 통과 + 교사 확인"},
+    {"id": "dry-feet", "name": "마른 발", "ladder": true, "when": "물때 전 도착 누적 3"},
+    {"id": "shadow-pass", "name": "어제의 나 추월", "ladder": true, "when": "rules.shadow.passIf 충족"},
+    {"id": "rescue-call", "name": "구조 신호", "ladder": true, "when": "구조 신호 보낸 돌을 놓음"},
+    {"id": "opening", "name": "개통 공신", "ladder": true, "when": "개통된 사이클에 내 돌 1개 이상 굳힘(밧줄 돌 포함)"},
+    {"id": "lantern", "name": "등불", "ladder": true, "secret": true, "fromLab": "hg-cons-tries>=3 && hg-cons-ach:s1 && 숨은 돌 굳힘"},
+    {"id": "iche-all", "name": "이체자 탐험가", "ladder": true, "secret": true, "fromLab": "hg-cons-ach:s2 && 숨은 돌 2개 이상 굳힘"},
+    {"id": "everyone", "name": "사람마다", "ladder": false, "when": "반 다리 개통 시 반 전원"},
+    {"id": "diver", "name": "다이버", "ladder": false, "when": "(여유 시) 희망자가 설명 카드로 출동 1회"}
+  ],
+  "labIntegration": {
+    "hostPath": "/public/lab/index.html (팀원 동의 후 원본을 수정 없이 복사, 같은 출처)",
+    "beforeMount": "sessionStorage.setItem('hg-class', JSON.stringify({role:'solo'}))",
+    "src": "/lab/index.html#consonant",
+    "setTarget": "iframe.contentDocument.querySelector('[data-ctarget=\"ㅌ\"]')?.click()",
+    "detect": ["window storage 이벤트(hg-cons, hg-cons-ach, hg-cons-tries)", "500ms 폴링 iframe.contentWindow.__lab.snapshot().c.made"],
+    "resetKeys": ["hg-cons", "hg-cons-ach", "hg-cons-tries", "hg-cons-solved", "hg-vow", "hg-vow-ach", "hg-vow-tries", "hg-vow-solved", "hg-cards", "jingum:v2"],
+    "fallback": "교차 출처 iframe(https://hangul-class.netlify.app/) + '다 만들었어요' 버튼"
+  }
+}
