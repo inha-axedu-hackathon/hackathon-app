@@ -9,6 +9,29 @@ import { useEffect, useRef, useState } from "react";
 const LAB_MIN_W = 1000;
 const LAB_MIN_H = 640;
 
+// 실험실 안쪽을 우리 화면 말투로(실험실 파일은 그대로, 불러온 뒤 스타일만 덧씌움 · 원작자 팀원 동의).
+// 바탕·선·회색·글꼴은 우리 토큰(app/globals.css)으로, 버튼·작업판은 우리 카드처럼 먹 테두리+눌린 그림자로.
+// 자음 주홍(--cons, 우리 인주와 같은 색)·모음 쪽빛(--vow)·명조 글자 모양은 뜻이 있는 색·모양이라 그대로 둔다
+const PRETENDARD = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css";
+const LAB_SKIN = `
+#solo-pill,#rankup,#toast{display:none!important}
+:root{--paper:#fafaf7;--panel:#ffffff;--line:#e3e0d6;--muted:#6b665f;
+  --font-body:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+:focus-visible{outline-color:#9b3a51}
+.btn{font-weight:600;border:1.5px solid #1c1a18;padding:6px 16px;transition:background-color .2s}
+.btn:hover{background:#f9ecef;color:#1c1a18}
+.btn.primary{background:#9b3a51;color:#fff;box-shadow:0 2px 0 #1c1a18}
+.btn.primary:hover{background:#833044;color:#fff}
+.btn:disabled:hover{background:transparent;color:#1c1a18}
+.mission,.tool{border-radius:14px}
+.tool{transition:border-color .2s,box-shadow .2s}
+.tool:hover{border-color:#c9798a}
+.tool.active{border-color:#9b3a51;box-shadow:inset 0 0 0 1px #9b3a51;background:#fcf5f6}
+.board{border-radius:14px;box-shadow:0 3px 0 #1c1a18}
+.explain{border-radius:16px;box-shadow:0 1px 2px rgb(28 26 24/.06),0 2px 8px rgb(28 26 24/.06)}
+.ex-glyph{border-radius:12px}
+`;
+
 type LabSnap = { tab: string; c: { cur: string | null; made: string[]; ach: number; tier: number } };
 type LabWin = Window & { __lab?: { snapshot(): LabSnap } };
 type Props = { target: string; seed?: string; onDone: () => void; onKey?: (e: KeyboardEvent) => void };
@@ -87,8 +110,12 @@ export function LabFrame({ target, seed, onDone, onKey }: Props) {
     const doc = ref.current?.contentDocument;
     const win = ref.current?.contentWindow;
     if (!doc || !win || !win.location.pathname.startsWith("/lab/")) return; // 빈 iframe의 load는 무시
+    const font = doc.createElement("link");
+    font.rel = "stylesheet";
+    font.href = PRETENDARD; // 우리 화면과 같은 글꼴(app/layout.tsx와 같은 주소)
+    doc.head.appendChild(font);
     const st = doc.createElement("style");
-    st.textContent = "#solo-pill,#rankup,#toast{display:none!important}"; // '수업에 참여하기'·승급·알림 숨김
+    st.textContent = LAB_SKIN; // '수업에 참여하기'·승급·알림 숨김 + 우리 화면 말투
     doc.head.appendChild(st);
     if (seed) {
       doc
