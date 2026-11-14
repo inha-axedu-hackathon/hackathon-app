@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment } from "react";
 import "./student.css";
+import { TitleBadge } from "./TitleBadge";
 
 export function StudentView(v: Record<string, any>) {
   const { labGoal, labChain, labTarget, stoneTitle, stoneSection, steps, concept, mission, stoneCards, goClass, splash, variantLabel, crossing, logout, words, answer, labSlot, labCur, freeText, setFree, gateMsg, busy, afterOk, b1, b2, controls, fbNo, fbOk, finish, frameTab, freeTab, goHome, goLab, goPass, goQuiz, heroLine, heroSub, inStone, isConcept, isGate, isHome, isLab, isPass, isQuiz, isSplash, liteCls, okLabel, opts, qExplain, qFix, qTag, qText, ringColor, ringDash, ringLabel, ringText, segA, segB, setB1, setB2, star2, star2c, star2w, tabFrame, tabFree, titleName, toVariant } = v;
@@ -52,7 +53,7 @@ export function StudentView(v: Record<string, any>) {
         {(crossing) && (<span style={{display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#4A4641'} as any}><span className="pulse" style={{width: '8px', height: '8px', borderRadius: '50%', background: 'var(--jg-accent)'} as any}></span>지금 친구들도 함께 건너는 중</span>)}
       </div>
       <button type="button" className="btns" onClick={goClass} style={{width: '100%', minHeight: '50px', fontSize: '16px', justifyContent: 'space-between'} as any}><span style={{display: 'flex', alignItems: 'center', gap: '8px'} as any}><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16c3-2 6-2 10 0s7 2 10 0" fill="none" stroke="#1E9E87" strokeWidth="2" strokeLinecap="round" /><circle cx="6" cy="11" r="2.6" fill="#D2CABB" stroke="#231F1C" strokeWidth="1.2" /><circle cx="12" cy="10" r="2.6" fill="#D2CABB" stroke="#231F1C" strokeWidth="1.2" /><circle cx="18" cy="11" r="2.6" fill="#D2CABB" stroke="#231F1C" strokeWidth="1.2" /></svg>우리 반 다리 보기</span><span aria-hidden="true">→</span></button>
-      <div style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px'} as any}><span style={{color: '#6B665F'} as any}>칭호</span><b style={{color: '#B0371F'} as any}>{titleName}</b></div>
+      <TitleBadge name={titleName} next={titleName === '첫걸음 학생' ? '도착 관문을 통과하면' : undefined} />
       <div style={{marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px'} as any}>
         <button type="button" className="btns" onClick={logout} style={{width: '100%'} as any}>오늘은 여기까지 · 로그아웃</button>
         <span style={{display: 'flex', justifyContent: 'center', gap: '6px', alignItems: 'center', fontSize: '12px', color: '#6B665F', textAlign: 'center'} as any}><svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="M5.5 7V5a2.5 2.5 0 015 0v2" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg>놓은 칸은 안 사라져요 · 성적·학생부에 들어가지 않아요</span>
@@ -109,7 +110,7 @@ export function StudentView(v: Record<string, any>) {
             {(stoneCards as any[]).map((c: any, i: number) => (
               <button key={c.id} type="button" onClick={c.go} aria-label={`${c.label} · 눌러서 ${c.cta}`} style={{position: 'absolute', left: ['5%', '29%', '53%'][i], top: '52px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', background: 'none', border: 'none', padding: '0', cursor: 'pointer'} as any}>
                 <span className={`stone ${c.cls}`} style={{'--s': '92px'} as any}>{c.char}</span>
-                <span style={{fontSize: '14px', fontWeight: '800', color: c.now ? '#231F1C' : '#fff', background: c.now ? 'var(--jg-main)' : 'rgba(8,72,62,.6)', padding: '4px 11px', borderRadius: '999px', whiteSpace: 'nowrap'} as any}>{c.label}</span>
+                <span style={{fontSize: '14px', fontWeight: '800', color: c.now ? '#fff' : 'var(--jg-now)', background: c.now ? 'var(--jg-now)' : 'rgba(255,255,255,.94)', boxShadow: c.now ? '0 3px 0 #231F1C' : 'inset 0 0 0 1.5px rgba(179,38,30,.4)', padding: '4px 11px', borderRadius: '999px', whiteSpace: 'nowrap'} as any}>{c.label}</span>
               </button>
             ))}
             <div style={{position: 'absolute', right: '3%', top: '22px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'} as any}>
@@ -281,7 +282,7 @@ export function StudentView(v: Record<string, any>) {
             </div>
             <div style={{display: 'flex', alignItems: 'center', gap: '16px', padding: '16px 18px', borderRadius: '20px', background: 'linear-gradient(135deg, #FFF8F1, #FFFFFF)', boxShadow: 'inset 0 0 0 1px #F9CDAE'} as any}>
               <div className="seal a"><span className="serif" style={{fontSize: '22px', fontWeight: '900', lineHeight: '1.05', textAlign: 'center'} as any}>稱<br />號</span></div>
-              <div style={{display: 'flex', flexDirection: 'column', gap: '4px'} as any}><span style={{fontSize: '13px', color: '#6B665F'} as any}>칭호가 올랐어요</span><span style={{fontSize: '19px', fontWeight: '800'} as any}><span style={{color: '#8A857D', fontWeight: '600', textDecoration: 'line-through'} as any}>첫걸음 학생</span> → <span style={{color: '#B0371F'} as any}>집현전 견습생</span></span></div>
+              <div style={{display: 'flex', flexDirection: 'column', gap: '6px', flex: '1', minWidth: '0'} as any}><span style={{fontSize: '13px', color: '#6B665F'} as any}>칭호가 올랐어요 · <span style={{textDecoration: 'line-through'} as any}>첫걸음 학생</span> →</span><TitleBadge name="집현전 견습생" size="lg" /></div>
             </div>
             <button type="button" className="btnp" onClick={finish} style={{marginTop: 'auto', alignSelf: 'flex-start'} as any}>내 징검런으로</button>
           </div>

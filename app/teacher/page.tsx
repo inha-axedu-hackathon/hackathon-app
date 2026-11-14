@@ -377,8 +377,9 @@ export default function TeacherPage() {
     ) : null,
     tab,
     tabsBar: (
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-      <div role="tablist" aria-label="예보 화면 고르기" className="console-tabs" style={{ flex: "1 1 auto" }}>
+      <div className="console-tabs">
+      {/* 탭 5개 + 문제 만들기 링크를 한 줄(같은 격자·같은 모양)로. 링크는 다른 화면으로 가므로 tablist 밖에 둔다 */}
+      <div role="tablist" aria-label="예보 화면 고르기" style={{ display: "contents" }}>
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -394,8 +395,9 @@ export default function TeacherPage() {
           </button>
         ))}
       </div>
-      <Link href="/teacher/generate" className="btn bs" style={{ minHeight: 48, fontSize: 15 }}>
-        ＋ 징검돌 문제 만들기
+      <Link href="/teacher/generate" className="console-gen">
+        <span className="t">＋ 징검돌 문제 만들기</span>
+        <span className="s">성취기준 → AI 초안 → 검토</span>
       </Link>
       </div>
     ),

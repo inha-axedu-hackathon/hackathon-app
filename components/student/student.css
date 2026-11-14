@@ -125,7 +125,7 @@
 .tab .btnp.now{background:var(--jg-now);color:#fff}
 .tab .btnp.now:hover{background:var(--jg-now-hover)}
 .tab .btnp:focus-visible,.tab .btns:focus-visible,.tab .opt:focus-visible,.tab .seg button:focus-visible,.tab .back:focus-visible,.tab .blank:focus{outline-color:var(--jg-accent)}
-.tab .stone.next{border-color:var(--jg-accent) !important;color:var(--jg-accent);box-shadow:0 0 0 6px rgba(242,154,92,.22) !important}
+.tab .stone.next{border-color:var(--jg-now) !important;color:var(--jg-now);box-shadow:0 0 0 6px rgba(179,38,30,.18) !important}
 .tab .blank{background:var(--jg-tint);box-shadow:inset 0 -2.5px 0 var(--jg-accent);color:var(--jg-accent-ink)}
 .tab .okchip{background:var(--jg-main);color:#231F1C}
 .tab .seg button.on{background:var(--jg-main) !important;color:#231F1C !important}
@@ -144,3 +144,12 @@
 @keyframes gstar-spark{0%,62%,100%{opacity:0;transform:scale(.3) rotate(0)}74%{opacity:1;transform:scale(1) rotate(45deg)}86%{opacity:0;transform:scale(.5) rotate(90deg)}}
 @media (prefers-reduced-motion:reduce){.gstar>svg,.gstar::before,.gstar::after{animation:none !important}.gstar::before,.gstar::after{display:none}}
 .lite .gstar>svg,.lite .gstar::before,.lite .gstar::after{animation:none !important}
+
+/* 징검돌은 붉은색(학생 화면 '지금 할 일'과 같은 --jg-now). 주황은 버튼·배경에만. 젖은 돌(해 봤지만 아직)은 회청색 그대로 */
+.tab .stone:not(.next):not(.wet):not(.sunk){background:radial-gradient(130% 100% at 32% 22%,#FBD3CC 0%,#E0675B 30%,#B3261E 66%,#7E1913 100%);color:#fff;text-shadow:0 2px 0 rgba(70,10,8,.4)}
+body .tab div:has(> svg[viewBox="0 0 744 262"]) .stone:not(.next):not(.wet){color:#fff !important;text-shadow:0 2px 0 rgba(70,10,8,.55) !important}
+/* 그림 돌(Higgsfield)의 질감은 살리고 붉게: 붉은 그러데이션 × 돌 그림(곱하기), 돌 모양으로 가림 */
+body .tab div:has(> svg[viewBox="0 0 744 262"]) .stone:not(.next):not(.wet)::before{
+  background:linear-gradient(160deg,#F59A8F 0%,#D0443A 45%,#9E2219 100%),url("/art/stone-dry.webp") !important;
+  background-size:100% 100% !important;background-repeat:no-repeat !important;background-blend-mode:multiply !important;
+  -webkit-mask:url("/art/stone-dry.webp") center/100% 100% no-repeat;mask:url("/art/stone-dry.webp") center/100% 100% no-repeat;filter:none !important}
