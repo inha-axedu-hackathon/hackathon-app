@@ -272,12 +272,11 @@ app/
   student/explain/page.tsx    S3 도착 관문
   student/welcome/page.tsx    S5 안내·동의 (P1)
   class/page.tsx              C1~C4 교실 다리
-  checkin/page.tsx            S4 아침 교실 태블릿 체크인(키오스크 화면)
+  (checkin/ — 11/14 삭제: 학교 지급 태블릿으로 집에서, 밤 10시 마감이라 아침 체크인을 뺌)
   demo/page.tsx               D1 시연 컨트롤
   api/analyze/route.ts        AI-1
   api/explain/route.ts        AI-2
   api/plan/route.ts           8유형 + 경로 + 예보 (규칙)
-  api/checkin/route.ts        모의 슈퍼패스 체크인 (결과만 돌려줌)
 lib/
   types.ts                    모든 타입 (같이 씀: 기존 이름은 지우지 말고 추가만)
   store.ts                    useDemo(): 상태 + localStorage + BroadcastChannel + 장면 단계
@@ -375,7 +374,7 @@ export interface DemoState { step: 0 | 1 | 2 | 3 | 4 | 5 | 6; now: string; event
 | `POST /api/analyze` | `{ answers: [{ studentId, text, label? }] }` (최대 40명, 5명씩 묶어 3묶음씩 동시에) | `{ results: Analysis[], agreement, keywordAgreement, usedLLM, llmCount, model, tokens }` | 실패한 묶음은 키워드 결과. 배포 주소는 403(`ANALYZE_ENABLED=1`일 때만 열림), 다른 사이트 요청 403 |
 | `POST /api/explain` | `{ studentId, text }` | `{ passed, ideas:[{id,hit,quote}], misconception, feedback, source, needsTeacher? }` | `{ passed:false, feedback:"선생님이 확인할게요", source:"saved", needsTeacher:true }` |
 | (계산) 예보·유형·예외 | — | `lib/rules/bridge.ts`(구간·날씨), `lib/rules/forecast.ts`(헤드라인·TOP 3·AI 예시), `lib/rules/exceptions.ts`(8유형·예외 제안) | 순수 계산(API 없음) |
-| (모의) 체크인 | 키오스크(`/checkin`)가 `checked_in {studentId, method, place}` 이벤트만 남긴다 — 이미지·특징값 필드 없음(실제로는 슈퍼패스가 인증하고 결과만 넘겨 줌) | | 다른 방법(QR·바코드) 안내 |
+| (삭제) 체크인 | 11/14 아침 체크인 기능을 뺐다(학교 지급 태블릿으로 집에서, 밤 10시 마감). 얼굴은 교사 재인증(T7)에만 쓰고 징검다리에는 결과만 남김 | | |
 
 `forecast` 형식:
 ```json
@@ -522,10 +521,10 @@ export interface DemoState { step: 0 | 1 | 2 | 3 | 4 | 5 | 6; now: string; event
 
 | 구분 | 내용 |
 |---|---|
-| 개인정보 | 얼굴로 학생의 화면·시선·표정을 보지 않음(숫자로 바꿔 저장하는 방식도 쓰지 않음), 대신 학생 정보 열람에 교사 재인증(T7)과 열람 기록, 가명 ID만 외부 AI로, 이름·연락처 패턴 가림, 얼굴 인증은 슈퍼패스가 처리하고 징검다리는 결과·방법·장소·시각만 받음, QR·바코드로 언제든 대체, 서비스 이용과 얼굴 인증 동의 분리, 만 14세 미만 보호자 동의, 보관·삭제·공개 범위는 10-1, 학생부 미반영 |
+| 개인정보 | 얼굴로 학생의 화면·시선·표정을 보지 않음(숫자로 바꿔 저장하는 방식도 쓰지 않음), 대신 학생 정보 열람에 교사 재인증(T7)과 열람 기록, 가명 ID만 외부 AI로, 이름·연락처 패턴 가림, 교사 얼굴 인증은 슈퍼패스가 처리하고 징검다리는 결과·방법·시각만 받음, 비밀번호로 언제든 대체, 학생 얼굴은 쓰지 않음, 만 14세 미만 보호자 동의, 보관·삭제·공개 범위는 10-1, 학생부 미반영 |
 | 책임 | 모든 AI 결과에 교사 확인 알림, 규칙과 예외 모두 교사 승인, 승인 기록, AI 결과에 출처 표시 |
 | 저작권 | 교과서 지문·삽화를 옮기지 않고 팀이 만든 요약만 사용, 해례본 원문은 공공 영역(1446), 실험실은 팀원 저작물(사용 동의·출처 표기), 글꼴은 공개 라이선스(Google Fonts) |
-| 형평성 | 기기 없는 학생은 종이 징검돌·아침 교실 태블릿, 얼굴 미사용 불이익 0, 돌 개수와 관계없이 깃발 1개, 교실 화면에 누가 안 했는지 비노출, 순위 없음 |
+| 형평성 | 기기 없는 학생은 학교 지급 태블릿·종이 징검돌, 돌 개수와 관계없이 깃발 1개, 교실 화면에 누가 안 했는지 비노출, 순위 없음 |
 | 법·제도 | EU AI법: 교육기관 감정 추론 금지 → 얼굴로 집중도·표정 안 봄. 인공지능기본법: 학생 평가는 고영향 AI → 교사 최종 결정 |
 
 **시연판의 한계(정직하게 말하기)**: 학생 정보 잠금(T7)은 지금 화면에서만 가린다(가상 데이터가 브라우저에 있음). 실제 도입에서는 슈퍼패스 재인증을 서버가 확인한 뒤에만 학생별 정보를 10분짜리 열쇠로 내려 주고, 학생·교실 화면에는 날씨·잠김·개통·본인 경로만 담긴 응답을 주며, 열람 기록은 학교 서버에 지울 수 없게(append-only) 남긴다. 학생 화면(/student/welcome, /student/river)은 이미 반 전체 명단을 불러오지 않는다.
@@ -549,7 +548,7 @@ FE·BE로 나누면 서로 기다리게 돼요. 대신 **기능 하나를 화면
 
 | 담당 | 맡는 기능 | 소유 폴더 |
 |---|---|---|
-| **정환희** | 데이터·규칙·AI + 교사 화면 + 슈퍼패스 체크인·동의 | `lib/`(types, rules, llm, prompts), `data/`, `app/api/`, `app/teacher/`, `app/student/welcome/`, `app/checkin/` |
+| **정환희** | 데이터·규칙·AI + 교사 화면 + 교사 재인증(T7)·동의 | `lib/`(types, rules, llm, prompts), `data/`, `app/api/`, `app/teacher/`, `app/student/welcome/` |
 | **신재우** | 학생·교실 화면 + 실험실 + 시연 | `app/student/`(welcome 제외), `app/class/`, `app/demo/`, `components/`, `public/lab/` |
 | 함께 | 처음 30분 세팅, 통합, 리허설 | - |
 

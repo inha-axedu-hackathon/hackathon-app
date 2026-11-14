@@ -8,7 +8,7 @@
 
 AI가 학생들의 '개념 말해보기' 답을 읽어 막힌 곳을 찾고(읽기만), 교사가 승인한 규칙이 학생마다 다른 개수의 징검돌을 고르고, 반 전체가 다리를 완성해 같은 수업에 도착해요. 슈퍼스쿨(수업활동·슈퍼패스) 안의 메뉴로 붙는 구조예요.
 
-> **시연용 가상 학생 데이터 · 모의 인증**: 학생 30명(2학년 3반)은 모두 가상이고, 얼굴·QR·바코드 인증은 흉내만 내요(얼굴 정보를 받거나 저장하지 않음).
+> **시연용 가상 학생 데이터 · 모의 인증**: 학생 30명(2학년 3반)은 모두 가상이고, 교사 얼굴 인증(학생 정보 열기)은 흉내만 내요(얼굴 정보를 받거나 저장하지 않음). 학생 얼굴은 쓰지 않아요.
 
 ### 화면
 | 주소 | 화면 |
@@ -69,19 +69,19 @@ npm run dev                  # http://localhost:3000
 | `components/StepBadge.tsx` | 13:15 전에는 지우지 않음(교사 화면이 씀) |
 | `data/stones.json` | 돌 카드·굳히기 문항·함께 놓기 O/X·관문 질문과 문장 틀·해례 원문 (내용: 진선우) |
 | `public/lab/`, `docs/design/*`(시안 제외), `docs/notes/재우.md` | 실험실 사본은 고치지 않음 |
-| **11/14 11:55 환희에게서 넘겨받음** `app/teacher/*`(예보·결재·레이아웃), `app/checkin/page.tsx`, `app/student/welcome/page.tsx`, `app/student/river/page.tsx`, `components/teacher/*`, `components/DemoKeys.tsx`, `lib/student/me.ts` | 화면은 전부 재우. 화면별 설명·지키는 원칙·주의점은 `docs/notes/handoff-screens.md` |
+| **11/14 11:55 환희에게서 넘겨받음** `app/teacher/*`(예보·결재·레이아웃), `app/student/welcome/page.tsx`, `app/student/river/page.tsx`, `components/teacher/*`, `components/DemoKeys.tsx`, `lib/student/me.ts` | 화면은 전부 재우. 화면별 설명·지키는 원칙·주의점은 `docs/notes/handoff-screens.md` |
 
 ### 정환희 — 데이터·AI·규칙·문서 (화면은 11/14 11:55부터 재우)
 | 파일 | 할 일 |
 |---|---|
 | `lib/types.ts`, `lib/store.ts` | 주인. 재우가 필요한 필드·이벤트·시각 변경은 말로 요청 → 환희가 추가하고 바로 push |
 | `lib/llm.ts`, `lib/prompts.ts`, `lib/content.ts`, `lib/rules/*` | AI 호출, 규칙(구간·예보·8유형·예외 제안). 화면 문구가 여기서 나오면 재우가 말로 요청 → 환희가 고침 |
-| `app/api/*` | `/api/explain`, `/api/analyze` (예보·체크인은 API 없이 규칙·이벤트로) |
+| `app/api/*` | `/api/explain`, `/api/analyze` (예보·8유형·예외는 API 없이 규칙으로) |
 | `data/class-2-3.json`, `data/concepts.json`, `data/analysis.saved.json` | 30명, 개념·오개념·관문 키워드, AI 저장본 |
 | `docs/SPEC.md`, `docs/GAMIFICATION.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `package.json` | 문서·설정은 환희만. 재우는 `docs/notes/재우.md`에 적고 알림 |
 
 ### 둘이 맞춘 약속 (바꾸려면 먼저 말하기)
-- 라우트: `/`, `/student`, `/student/stone/[id]`, `/student/explain`, `/student/welcome`, `/student/river`, `/class`, `/teacher`, `/teacher/approve`, `/checkin`, `/demo`
+- 라우트: `/`, `/student`, `/student/stone/[id]`, `/student/explain`, `/student/welcome`, `/student/river`, `/class`, `/teacher`, `/teacher/approve`, `/demo` (`/checkin`은 11/14 삭제)
 - 단계 이동은 `demo.reach(n)`만 씀(1 ㅌ 완성 · 2 관문 통과 · 3 수업 시작 · 4 함께 놓기 · 5 개통). 시각은 `d.now`, `d.minutesToLesson`만 읽고 화면에 시각을 직접 쓰지 않음
 - 돌 ID: `st-n`, `st-d`, `st-t`, `st-kk` · 시연 학생 `s07`
 - `/api/explain`: 요청 `{ studentId, stoneId, text }` → 응답 `{ passed, ideas, misconception, feedback, source }`. 서버가 안 되면 화면은 "선생님이 확인할게요"로

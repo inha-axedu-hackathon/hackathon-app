@@ -7,10 +7,10 @@
 
 | 라우트 | 파일 | 하는 일 | 읽는 것 | 남기는 이벤트 |
 |---|---|---|---|---|
-| `/teacher` | `app/teacher/page.tsx` + `components/teacher/*` | T1 예보(헤드라인·구간 3개·TOP 3·AI 근거·8유형·예외·체크인), T2 [AI 분석 다시 실행], T4 원문 펼치기 | `bridgeState(events)`, `lib/rules/forecast.ts`, `data/analysis.saved.json` | `class_started`(수업 시작 버튼 = T), `info_viewed` |
+| `/teacher` | `app/teacher/page.tsx` + `components/teacher/*` | T1 예보(헤드라인·구간 3개·TOP 3·AI 근거·8유형·예외), T2 [AI 분석 다시 실행], T4 원문 펼치기 | `bridgeState(events)`, `lib/rules/forecast.ts`, `data/analysis.saved.json` | `class_started`(수업 시작 버튼 = T), `info_viewed` |
 | `/teacher/approve` | `app/teacher/approve/page.tsx` | T3 결재: 규칙 안 27명 자동, 예외 3건, 돌 빼기·더하기, 붉은 도장 | `lib/rules/exceptions.ts`(`proposalFor`, `TYPE_DEFS`) | `approved {count, edited, changes}` |
 | (공통) | `app/teacher/layout.tsx`, `components/teacher/InfoLock.tsx` | T7 학생 정보 잠금: 얼굴 또는 비밀번호로 10분, 교사 화면을 떠나면 다시 잠김, 내 열람 기록 | — | `info_opened`, `info_viewed` |
-| `/checkin` | `app/checkin/page.tsx` | S4 아침 키오스크: QR·바코드·얼굴 → 1초 모의 → "15번 여울 맞나요?"(10초) → 돌 1개 → ㅇ O/X → 첨벙 → 30초 무입력 자동 로그아웃 | `STUDENTS`(s15) | `checked_in`, `stone_placed(s15, st-o)` |
+| ~~`/checkin`~~ | (삭제) | 11/14 재우가 뺌: 학교 지급 태블릿으로 집에서 하고 밤 10시 마감. 학생 얼굴은 쓰지 않음 | — | — |
 | `/student/welcome` | `app/student/welcome/page.tsx` | S5 카드 3장 + 분리 동의 | `lib/student/me.ts` | 없음(저장 안 함) |
 | `/student/river` | `app/student/river/page.tsx` | S8 나의 강 지도: 제자표 위 내 돌·숙달 단계·이해한 개념, 지도 저장(인쇄) | `lib/student/me.ts`, 내 이벤트, `opened` 여부 | 없음 |
 
@@ -22,27 +22,23 @@
 2. **AI 결과 바로 옆에 `VerifyNotice`**("꼭 교사 본인이 직접 확인하시길 바랍니다" — SPEC 문구 그대로)와 출처.
 3. **과장 금지:** "키워드만으로 틀린 답 10개 중 AI가 라벨대로 바로잡은 답 9개 · 예시 3개", "가상 답 30개 · 파일럿에서 다시 재요"를 그대로.
 4. **이름은 기본 가림**(번호+가명). 프로젝터에 비칠 수 있어서. 잠긴 동안 8유형 표의 1~2명 칸은 "1~2"로 묶음.
-5. **얼굴과 비밀번호, QR·바코드·얼굴은 같은 무게**(색·크기·순서로 한쪽을 밀지 않기). 키오스크엔 실명 대신 번호+가명.
+5. **교사 재인증의 얼굴과 비밀번호는 같은 무게**(색·크기·순서로 한쪽을 밀지 않기). 학생 얼굴은 어디에도 쓰지 않음.
 6. **8유형 표기는 SPEC 8-1-1**: "참여 신호 있음/낮음/낮아 보임"(의욕이라고 쓰지 않음). 학생 카드에는 ID 꼬리표 대신 지원 문구만.
-7. **동의 화면**: 처음엔 모두 꺼짐, 얼굴은 서비스 동의 뒤에만, 동의마다 왜·무엇을·언제까지·안 하면, 만 14세 미만 보호자.
+7. **동의 화면**: 처음엔 꺼짐, 학생 얼굴은 쓰지 않는다고 안내, 동의마다 왜·무엇을·언제까지·안 하면, 만 14세 미만 보호자.
 8. **학생 화면은 반 전체 명단을 import하지 않음**(`lib/student/me.ts`만). `STUDENTS`를 학생 화면에 다시 들이지 말아 주세요.
 
 ## 3. 주의점 (버그로 이미 한 번 밟은 것)
 
 - **단축키 A**: 교사 화면에서는 잠겨 있으면 승인 대신 열기 창이 떠요(`InfoLock`·결재 화면이 capture 단계에서 먼저 받음). DemoKeys를 고칠 때 이 흐름을 깨지 않게.
-- **키오스크가 돌을 놓아도** N은 옛이응 ㅌ을 그대로 놓아요(store가 학생·돌까지 비교). store를 고칠 땐 환희에게.
+- **다른 학생의 돌 이벤트가 있어도** N은 옛이응 ㅌ을 그대로 놓아요(store가 학생·돌까지 비교). store를 고칠 땐 환희에게.
 - **`lib/student/me.ts`는 `data/class-2-3.json`의 s07과 같아야** 해요. 김나희가 s07을 바꾸면 같이 고쳐 주세요(환희에게 말해도 됨).
 - **[AI 분석 다시 실행]**은 로컬(`npm run dev`)에서만 실제 호출, 배포 주소는 403 → 저장본 유지 문구가 떠요. 약 12초, 약 1만 3천 토큰.
 - 새 라우트를 만든 직후 dev 서버가 404를 내면 파일을 한 번 저장(touch)하면 잡혀요.
 - 발표 노트북은 `npm run demo:local`(127.0.0.1에만 열림).
 
-## 3-1. 재우에게 부탁 (한 줄씩, 친구 정보가 학생 브라우저로 안 가게)
+## 3-1. 명단 분리 (완료, 11/14 12:30)
 
-명단이 둘로 나뉘었어요(11/14 12:00). 교실 화면은 이미 깨끗해졌고(번들에서 교사 전용 정보 0), 아래만 바꾸면 학생·키오스크도 깨끗해져요.
-- `components/student/progress.ts`: `import { STUDENTS } from "@/lib/rules/bridge"` → `import { PUBLIC_STUDENTS as STUDENTS } from "@/lib/rules/bridge"` (쓰는 필드 alias·path·progress·start·arrived가 다 들어 있음)
-- `app/teacher/page.tsx`, `app/teacher/approve/page.tsx`: `STUDENTS`를 `@/lib/rules/roster`에서 import(교사 화면은 전체 명단이 필요)
-- `app/checkin/page.tsx`: 15번 한 명만 필요하니 `PUBLIC_STUDENTS`에서 찾고 번호는 `15`로 직접 써도 됨
-- 다 바꾸면 환희가 `bridge.ts`의 옛 `STUDENTS` 다시 내보내기 줄을 지워요.
+교사 전용 전체 명단은 교사 화면(`app/teacher/*`)만 `@/lib/rules/roster`에서 import해요. 학생·교실 화면은 `lib/student/me.ts`나 `PUBLIC_STUDENTS`만 써요. `bridge.ts`는 전체 명단을 내보내지 않아서, 학생·교실 화면에서 실수로 불러오면 빌드가 멈춰요. `npm run check:secrets`가 교사 화면이 아닌 모든 화면을 검사해요.
 
 ## 4. 디자인 캔버스로 옮길 때
 
