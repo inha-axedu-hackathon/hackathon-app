@@ -682,6 +682,8 @@ curl -X POST http://localhost:3000/api/explain -H "Content-Type: application/jso
 - [ ] README: 서비스 소개, 실행 방법, 배포 주소, 팀원, 실험실 출처, "시연용 가상 데이터·모의 인증" 표기
 - [ ] `.env.local`이 저장소에 올라가지 않았는지 확인(`npm run check:secrets`)
 - [ ] I-FOSS 제출은 폴더를 통째로 압축하지 말고 `git archive -o jinggeom.zip HEAD`로 만든다(`.env.local`이 빠짐)
+- [ ] (최종 제출 때) 팀 코드 라이선스 정해서 루트 `LICENSE` + `package.json` "license" 추가, 실험실(`public/lab/`) 공개 조건은 만든 팀원에게 확인 후 README 출처에 한 줄
+- [ ] (최종 제출 전) 서버 켜고 `npm run check:api`, 빌드 뒤 `npm run check:secrets`
 - [ ] Vercel에 LLM 키를 넣었다면: 배포 보호(Deployment Protection) 켜기, `LLM_DAILY_TOKENS`를 30000 정도로, 행사가 끝나면 키 삭제·재발급
 - [ ] 발표 노트북은 `npm run demo:local`(127.0.0.1에만 열려 같은 와이파이에서 API를 부를 수 없음)
 - [ ] 90초 백업 녹화 2개
