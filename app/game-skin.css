@@ -351,3 +351,10 @@
   box-shadow: 0 4px 0 #000 !important;
   rotate: -2deg;
 }
+/* 학생 홈: 지금 할 일 버튼을 가장 크게, 살짝 숨 쉬듯 */
+.herocta {
+  animation: jg-bob 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .herocta { animation: none; }
+}

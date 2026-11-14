@@ -154,6 +154,15 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     ringLabel: placedT ? "진행 3/3" : "진행 2/3",
     ringDash: placedT ? "3 0" : "2 3",
     ringColor: placedT ? "#C9A227" : "#9B3A51",
+    // 홈에서 지금 할 일을 가장 크게: 돌 밟기 → 도착 관문 → (끝나면) 시연 다시
+    heroCta: placedT ? (passed ? null : "도착 관문 가기 →") : closed ? null : "ㅌ 돌 밟기 · 4분 →",
+    heroGo: () => {
+      setTouched(true);
+      setScreen(placedT ? "gate" : "concept");
+    },
+    heroReplay: placedT && passed,
+    replay: () => d.reset(),
+    tDoneText: passed ? "도착 관문까지 통과" : "굳힘 · 도착 관문이 남았어요",
     heroLine: placedT ? "완주! 🏁" : closed ? "오늘 놓기는 밤 10시에 닫혔어요" : "1칸 남음 · 4분이면 완주 🏁",
     heroSub: placedT ? (passed ? "오늘 수업에서 만나요" : "도착 관문이 남았어요") : closed ? "수업에서 함께 건너요 · 놓은 돌은 그대로예요" : "ㄷ → ㅌ 만들기 + 문항 2개",
     titleName: passed ? "집현전 견습생" : "첫걸음 학생",

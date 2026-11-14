@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import "./student.css";
 
 export function StudentView(v: Record<string, any>) {
-  const { variantLabel, crossing, logout, words, answer, labSlot, freeText, setFree, gateMsg, busy, afterOk, b1, b2, controls, d1, d2, d3, fbNo, fbOk, finish, frameTab, freeTab, goConcept, goGate, goHome, goLab, goPass, goQuiz, heroLine, heroSub, inStone, isConcept, isGate, isHome, isLab, isPass, isQuiz, isSplash, liteCls, okLabel, opts, qExplain, qFix, qTag, qText, ringColor, ringDash, ringLabel, ringText, segA, segB, setB1, setB2, star2, star2c, star2w, stepName, tDone, tLabel, tNext, tOpen, tWet, tabFrame, tabFree, titleName, toVariant } = v;
+  const { heroCta, heroGo, heroReplay, replay, tDoneText, variantLabel, crossing, logout, words, answer, labSlot, freeText, setFree, gateMsg, busy, afterOk, b1, b2, controls, d1, d2, d3, fbNo, fbOk, finish, frameTab, freeTab, goConcept, goGate, goHome, goLab, goPass, goQuiz, heroLine, heroSub, inStone, isConcept, isGate, isHome, isLab, isPass, isQuiz, isSplash, liteCls, okLabel, opts, qExplain, qFix, qTag, qText, ringColor, ringDash, ringLabel, ringText, segA, segB, setB1, setB2, star2, star2c, star2w, stepName, tDone, tLabel, tNext, tOpen, tWet, tabFrame, tabFree, titleName, toVariant } = v;
   return (
     <>
 <div className={`tab on-light ${liteCls}`} style={{fontFamily: "'Pretendard Variable', Pretendard, sans-serif"} as any}>
@@ -38,6 +38,8 @@ export function StudentView(v: Record<string, any>) {
         <div style={{display: 'flex', flexDirection: 'column', gap: '6px'} as any}>
           <span style={{fontSize: '22px', fontWeight: '800', letterSpacing: '-0.02em'} as any}>{heroLine}</span>
           <span style={{fontSize: '17px', color: '#4A4641'} as any}>{heroSub}</span>
+          {(heroCta) && (<><button type="button" className="btnp herocta" onClick={heroGo} style={{marginTop: '14px', width: '100%', minHeight: '64px', fontSize: '21px'} as any}>{heroCta}</button></>)}
+          {(heroReplay) && (<><button type="button" className="btns" onClick={replay} style={{marginTop: '14px', width: '100%', minHeight: '48px', fontSize: '15px'} as any}>시연 처음부터 다시 해 보기</button></>)}
         </div>
       </div>
       <div className="hair"></div>
@@ -105,8 +107,8 @@ export function StudentView(v: Record<string, any>) {
             <div className="card" style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '6px'} as any}><span style={{fontSize: '12px', fontWeight: '700', color: '#9B3A51'} as any}>놓인 돌</span><b style={{fontSize: '18px'} as any}>ㄴ → ㄷ · 가획</b><span style={{fontSize: '14px', color: '#6B665F', lineHeight: '1.5'} as any}>첨벙! 한 칸 놓음</span></div>
             <div className="card" style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px', boxShadow: '0 0 0 2px #9B3A51, 0 12px 28px rgba(155,58,81,.12)'} as any}>
               <span style={{fontSize: '12px', fontWeight: '700', color: '#9B3A51'} as any}>{tLabel}</span><b style={{fontSize: '18px'} as any}>ㄷ → ㅌ · 가획</b>
-              {(tDone) && (<><span style={{fontSize: '14px', color: '#6B665F'} as any}>도착 관문까지 통과</span></>)}
-              {(tOpen) && (<><button type="button" className="btnp" onClick={goConcept} style={{minHeight: '52px', fontSize: '17px'} as any}>밟기 · 4분</button></>)}
+              {(tDone) && (<><span style={{fontSize: '14px', color: '#6B665F'} as any}>{tDoneText}</span></>)}
+              {(tOpen) && (<><button type="button" className="btnp" onClick={goConcept} style={{minHeight: '56px', fontSize: '19px'} as any}>밟기 · 4분 →</button></>)}
             </div>
           </div>
         </div>
