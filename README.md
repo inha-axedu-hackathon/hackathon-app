@@ -30,17 +30,15 @@
 | `components/StepBadge.tsx` | 13:15 전에는 지우지 않음(교사 화면이 씀) |
 | `data/stones.json` | 돌 카드·굳히기 문항·함께 놓기 O/X·관문 질문과 문장 틀·해례 원문 (내용: 진선우) |
 | `public/lab/`, `docs/design/*`(시안 제외), `docs/notes/재우.md` | 실험실 사본은 고치지 않음 |
+| **11/14 11:55 환희에게서 넘겨받음** `app/teacher/*`(예보·결재·레이아웃), `app/checkin/page.tsx`, `app/student/welcome/page.tsx`, `app/student/river/page.tsx`, `components/teacher/*`, `components/DemoKeys.tsx`, `lib/student/me.ts` | 화면은 전부 재우. 화면별 설명·지키는 원칙·주의점은 `docs/notes/handoff-screens.md` |
 
-### 정환희 — 데이터·AI·교사 화면·정적 화면
+### 정환희 — 데이터·AI·규칙·문서 (화면은 11/14 11:55부터 재우)
 | 파일 | 할 일 |
 |---|---|
 | `lib/types.ts`, `lib/store.ts` | 주인. 재우가 필요한 필드·이벤트·시각 변경은 말로 요청 → 환희가 추가하고 바로 push |
-| `lib/llm.ts`, `lib/prompts.ts`, `lib/rules/*` | AI 호출, 규칙(미리 계산한 JSON 읽기 가능) |
-| `app/api/*` | `/api/explain`(먼저), `/api/analyze`, `/api/plan`, `/api/checkin` |
+| `lib/llm.ts`, `lib/prompts.ts`, `lib/content.ts`, `lib/rules/*` | AI 호출, 규칙(구간·예보·8유형·예외 제안). 화면 문구가 여기서 나오면 재우가 말로 요청 → 환희가 고침 |
+| `app/api/*` | `/api/explain`, `/api/analyze` (예보·체크인은 API 없이 규칙·이벤트로) |
 | `data/class-2-3.json`, `data/concepts.json`, `data/analysis.saved.json` | 30명, 개념·오개념·관문 키워드, AI 저장본 |
-| `app/teacher/page.tsx`, `app/teacher/approve/page.tsx` | T1 예보 + AI 장면 15초(근거 형광펜), T3 확인 도장 |
-| `app/checkin/page.tsx`, `app/student/welcome/page.tsx`, `app/student/river/page.tsx` | 정적 화면: 체크인 키오스크, 안내·동의, 나의 강 지도 |
-| `components/DemoKeys.tsx`, `components/teacher/*` | 단축키, 교사 확인 알림(VerifyNotice) 등 |
 | `docs/SPEC.md`, `docs/GAMIFICATION.md`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `package.json` | 문서·설정은 환희만. 재우는 `docs/notes/재우.md`에 적고 알림 |
 
 ### 둘이 맞춘 약속 (바꾸려면 먼저 말하기)
