@@ -56,8 +56,9 @@ const spent = { date: "", tokens: 0, calls: 0, cached: 0 };
 const POOL_CAP = {
   analyze: Number(process.env.LLM_ANALYZE_TOKENS) || 40_000,
   generate: Number(process.env.LLM_GENERATE_TOKENS) || 20_000, // 교사가 학습 내용으로 징검돌 초안을 만들 때(/api/generate)
+  guide: Number(process.env.LLM_GUIDE_TOKENS) || 20_000, // 학생 유형 모달의 "제시 방향" 조언(/api/guide)
 } as const;
-const poolSpent: Record<keyof typeof POOL_CAP, number> = { analyze: 0, generate: 0 };
+const poolSpent: Record<keyof typeof POOL_CAP, number> = { analyze: 0, generate: 0, guide: 0 };
 
 /** 오늘(한국 시간) 쓴 토큰·호출 수. 학생 글은 들어 있지 않다 */
 export function usageToday() {
@@ -66,6 +67,7 @@ export function usageToday() {
     Object.assign(spent, { date, tokens: 0, calls: 0, cached: 0 });
     poolSpent.analyze = 0;
     poolSpent.generate = 0;
+    poolSpent.guide = 0;
   }
   return { ...spent, limit: DAILY_TOKENS };
 }

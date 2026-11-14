@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { TYPE_INFO, TypeSpace3D, keyOf, type TypeCell, type TypePoint } from "@/components/teacher/TypeSpace3D";
 import { VerifyNotice } from "@/components/teacher/VerifyNotice";
+import { GuidePanel } from "@/components/teacher/GuidePanel";
 import type { TypePosition } from "@/lib/rules/typePosition";
 import type { TypeHypothesis } from "@/lib/rules/typeRules";
 import type { Student } from "@/lib/types";
@@ -25,6 +26,7 @@ export function StudentTypeModal({
   cells,
   classPoints,
   stones,
+  misconceptions,
   source,
   onClose,
   onPrev,
@@ -39,6 +41,8 @@ export function StudentTypeModal({
   cells: TypeCell[];
   classPoints: TypePoint[];
   stones: string;
+  /** AI가 읽은 오개념 ID (제시 방향에 씀) */
+  misconceptions: string[];
   source: string;
   onClose: () => void;
   onPrev?: () => void;
@@ -165,6 +169,21 @@ export function StudentTypeModal({
                 </div>
               ))}
             </section>
+
+            <GuidePanel
+              input={{
+                participation: pos.axes[0].value,
+                readinessValue: pos.axes[1].value,
+                environment: pos.axes[2].value,
+                pStrength: pos.axes[0].strength,
+                rStrength: pos.axes[1].strength,
+                eStrength: pos.axes[2].strength,
+                participationSide: pos.axes[0].side as "있음" | "낮음" | "낮아 보임",
+                readiness: hyp.readiness,
+                misconceptions,
+                barriers: student.signals.barriers,
+              }}
+            />
 
             {hyp.borderline && <p className="stm-border">경계인 까닭: {hyp.borderline} · 선생님이 직접 읽어 주세요</p>}
             <p className="stm-note">칸은 규칙이 정한 유형이고, 칸 안의 위치는 관찰한 근거가 얼마나 뚜렷한지예요. 학생에게 보이지 않고 단원이 끝나면 지워요.</p>

@@ -439,6 +439,7 @@ export default function TeacherPage() {
           cells={typeCells}
           classPoints={classPoints.filter((_, i) => STUDENTS[i].id !== typeRow.student.id)}
           stones={tIdx >= 0 ? TYPES[tIdx].stones : "—"}
+          misconceptions={run.results.find((r) => r.studentId === typeRow.student.id)?.misconceptions ?? []}
           source={source}
           onClose={closeType}
           onPrev={typeIdx > 0 ? () => setTypeFor(shownRoster[typeIdx - 1].student.id) : undefined}
