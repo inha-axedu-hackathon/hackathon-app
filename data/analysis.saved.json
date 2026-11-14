@@ -1,0 +1,377 @@
+{
+  "_readme": "AI 분석 저장본. 시연 중에는 이걸 쓰고, 교사 화면 [AI 분석]은 로컬에서만 실제로 다시 돌린다. 말해보기 답이 초안이라 진선우·김나희가 답을 바꾸면 다시 만든다.",
+  "createdAt": "2026-11-14T02:05:04.382Z",
+  "model": "claude-haiku-5-5",
+  "answers": "draft",
+  "seconds": 33.6,
+  "tokens": {
+    "used": 12640,
+    "calls": 6
+  },
+  "agreement": {
+    "matched": 29,
+    "total": 30,
+    "missed": 1,
+    "wrong": 0
+  },
+  "keywordAgreement": {
+    "matched": 20,
+    "total": 30,
+    "missed": 9,
+    "wrong": 1
+  },
+  "results": [
+    {
+      "studentId": "s01",
+      "conceptsHit": [
+        "C1"
+      ],
+      "misconceptions": [],
+      "evidence": "혀뿌리가 목구멍을 막는 모양을 본떠",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s02",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M1"
+      ],
+      "evidence": "ㄱ에 획을 하나 더 그어서 만든 글자",
+      "confidence": 0.85,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s03",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M2"
+      ],
+      "evidence": "소리가 크게 나요",
+      "confidence": 0.8,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s04",
+      "conceptsHit": [
+        "C1",
+        "C2",
+        "C3"
+      ],
+      "misconceptions": [],
+      "evidence": "ㅅ에 획을 더해서 소리가 세져요",
+      "confidence": 0.8,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s05",
+      "conceptsHit": [
+        "C1"
+      ],
+      "misconceptions": [],
+      "evidence": "목구멍 모양을 본뜬 기본자예요",
+      "confidence": 0.8,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s06",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M1"
+      ],
+      "evidence": "쌍기역도 기역에다 선 하나 더 그은 거라서 가획이에요",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s07",
+      "conceptsHit": [
+        "C2"
+      ],
+      "misconceptions": [
+        "M2"
+      ],
+      "evidence": "소리가 더 커져요",
+      "confidence": 0.6,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s08",
+      "conceptsHit": [
+        "C1",
+        "C2",
+        "C3"
+      ],
+      "misconceptions": [],
+      "evidence": "",
+      "confidence": 0.8,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s09",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M2"
+      ],
+      "evidence": "목소리를 키워서 내는 소리",
+      "confidence": 0.7,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s10",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M5"
+      ],
+      "evidence": "모음도 ㅏ에 점을 하나 더 찍으면 ㅑ가 되니까 가획이에요",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s11",
+      "conceptsHit": [
+        "C2",
+        "C4"
+      ],
+      "misconceptions": [],
+      "evidence": "ㄲ은 ㄱ을 나란히 쓴 병서고",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s12",
+      "conceptsHit": [
+        "C3"
+      ],
+      "misconceptions": [
+        "M1"
+      ],
+      "evidence": "ㄲ은 ㄱ에 획을 더한 가획자라서",
+      "confidence": 0.8,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s13",
+      "conceptsHit": [
+        "C6"
+      ],
+      "misconceptions": [
+        "M4"
+      ],
+      "evidence": "ㄷ도 기본 글자라서",
+      "confidence": 0.8,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s14",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M2"
+      ],
+      "evidence": "소리 볼륨이 올라가요",
+      "confidence": 0.85,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s15",
+      "conceptsHit": [
+        "C1"
+      ],
+      "misconceptions": [],
+      "evidence": "혀가 윗잇몸에 닿는 모양이에요",
+      "confidence": 0.7,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s16",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M1"
+      ],
+      "evidence": "ㄲ도 ㅋ처럼 ㄱ에서 하나 늘린 거라 만드는 법이 같아요",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s17",
+      "conceptsHit": [
+        "C2"
+      ],
+      "misconceptions": [
+        "M1",
+        "M3"
+      ],
+      "evidence": "둘 다 ㄱ에서 나온 글자고 똑같이 획을 더해서 만들었어요",
+      "confidence": 0.7,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s18",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M6"
+      ],
+      "evidence": "ㅅ은 산 모양을 보고 만든 글자예요",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s19",
+      "conceptsHit": [
+        "C2"
+      ],
+      "misconceptions": [
+        "M2"
+      ],
+      "evidence": "ㅊ은 ㅈ보다 더 큰 소리를 내려고 획을 더했어요",
+      "confidence": 0.8,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s20",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M7"
+      ],
+      "evidence": "ㅇ은 소리가 없어서 목구멍소리가 아닌 것 같아요",
+      "confidence": 0.85,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s21",
+      "conceptsHit": [],
+      "misconceptions": [],
+      "evidence": "",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s22",
+      "conceptsHit": [
+        "C1"
+      ],
+      "misconceptions": [
+        "M4"
+      ],
+      "evidence": "기본자는 ㄱ ㄴ ㄷ ㅁ ㅅ ㅇ이에요",
+      "confidence": 0.5,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s23",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M1"
+      ],
+      "evidence": "ㄱ에 한 번 더 그으면 ㄲ",
+      "confidence": 0.85,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s24",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M3"
+      ],
+      "evidence": "ㅋ이랑 ㄲ은 둘 다 센소리라서 같은 원리로 만든 거예요",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s25",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M4"
+      ],
+      "evidence": "ㄷ도 처음에 만든 글자예요",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s26",
+      "conceptsHit": [
+        "C1"
+      ],
+      "misconceptions": [],
+      "evidence": "",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s27",
+      "conceptsHit": [
+        "C4"
+      ],
+      "misconceptions": [
+        "M1"
+      ],
+      "evidence": "ㄱ에 획을 추가한 거랑 같아요",
+      "confidence": 0.85,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s28",
+      "conceptsHit": [
+        "C2"
+      ],
+      "misconceptions": [
+        "M4"
+      ],
+      "evidence": "ㄷ은 기본자고",
+      "confidence": 0.9,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s29",
+      "conceptsHit": [],
+      "misconceptions": [
+        "M1"
+      ],
+      "evidence": "ㄲ도 가획이에요",
+      "confidence": 0.85,
+      "needsTeacher": false,
+      "source": "llm"
+    },
+    {
+      "studentId": "s30",
+      "conceptsHit": [
+        "C3"
+      ],
+      "misconceptions": [
+        "M2"
+      ],
+      "evidence": "소리가 우렁차서 획이 하나 더 있어요",
+      "confidence": 0.5,
+      "needsTeacher": false,
+      "source": "llm"
+    }
+  ]
+}

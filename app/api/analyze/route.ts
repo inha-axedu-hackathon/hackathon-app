@@ -39,7 +39,14 @@ function keywordAnalysis(a: Answer): Analysis {
 async function analyzeBatch(batch: Answer[]): Promise<Analysis[]> {
   try {
     const user = batch.map((a, i) => `${i + 1}) ${maskPII(a.text)}`).join("\n");
-    const r = await callLLM<{ r?: Item[] }>(SYSTEM, user, { label: `analyze×${batch.length}`, maxTokens: 1000, timeoutMs: 12000 });
+    // 한 번만 돌리는 분석이라 생각을 조금 켠다(effort low): 생각 끔 26/30 → 측정은 docs/notes/token-fit.md
+    const r = await callLLM<{ r?: Item[] }>(SYSTEM, user, {
+      label: `analyze×${batch.length}`,
+      maxTokens: 1000,
+      timeoutMs: 30000,
+      effort: "low",
+      pool: "analyze", // 분석 몫은 따로 세서 학생 채점 몫을 지킨다
+    });
     const items = Array.isArray(r.r) ? r.r : [];
     return batch.map((a, i): Analysis => {
       const x = items.find((y) => Number(y?.n) === i + 1);
@@ -47,13 +54,14 @@ async function analyzeBatch(batch: Answer[]): Promise<Analysis[]> {
       const evidence = typeof x.e === "string" ? x.e.trim() : "";
       const grounded = evidence === "" || quoted(a.text, evidence); // 근거가 학생 글에 실제로 있는지
       const confidence = typeof x.p === "number" ? Math.min(1, Math.max(0, x.p)) : 0.5;
+      const ms = only(x.m, M_IDS);
       return {
         studentId: a.studentId,
         conceptsHit: only(x.c, C_IDS),
-        misconceptions: only(x.m, M_IDS),
+        misconceptions: ms,
         evidence: grounded ? evidence : "",
         confidence,
-        needsTeacher: !grounded || confidence < 0.5,
+        needsTeacher: !grounded || confidence < 0.5 || (ms.length > 0 && evidence === ""), // 근거 없는 오개념 판정은 교사에게
         source: "llm",
       };
     });
@@ -86,16 +94,23 @@ export async function POST(req: Request) {
     return Response.json({ error: "분석은 시연 전에 로컬에서 한 번만 돌려요" }, { status: 403 });
   }
 
+  if (Number(req.headers.get("content-length") ?? 0) > 50_000) {
+    return Response.json({ error: "요청이 너무 커요" }, { status: 413 });
+  }
   const body = (await req.json().catch(() => null)) as { answers?: unknown } | null;
   const answers = Array.isArray(body?.answers) ? (body.answers as Partial<Answer>[]) : [];
+  const seen = new Set<string>();
   const valid: Answer[] = answers
     .filter((a) => typeof a?.studentId === "string" && /^s[0-9]{2}$/.test(a.studentId) && typeof a?.text === "string" && a.text.trim() !== "")
+    .filter((a) => !seen.has(a.studentId as string) && Boolean(seen.add(a.studentId as string))) // 같은 학생은 한 번만
     .slice(0, 40)
     .map((a) => ({
       studentId: a.studentId as string,
-      text: (a.text as string).trim().slice(0, 300),
-      label: Array.isArray(a.label) ? a.label.filter((m): m is string => typeof m === "string") : undefined,
-    }));
+      // 줄바꿈·"2) " 같은 번호를 지워 한 학생 답이 묶음 안 다른 번호 답처럼 보이지 않게 한다
+      text: (a.text as string).replace(/\s+/g, " ").replace(/(^|\s)\d+\)\s*/g, "$1").trim().slice(0, 300),
+      label: Array.isArray(a.label) ? a.label.filter((m): m is string => typeof m === "string" && M_IDS.has(m)).slice(0, 7) : undefined,
+    }))
+    .filter((a) => a.text !== "");
   if (valid.length === 0) return Response.json({ error: "answers: [{studentId, text, label?}] 가 필요해요" }, { status: 400 });
 
   const before = usageToday();
@@ -110,10 +125,16 @@ export async function POST(req: Request) {
   if (!llmReady()) {
     toAsk.forEach((i) => (results[i] = keywordAnalysis(valid[i]))); // 키가 없으면 키워드로만
   } else {
-    for (let k = 0; k < toAsk.length; k += BATCH) {
-      const idx = toAsk.slice(k, k + BATCH);
-      const out = await analyzeBatch(idx.map((i) => valid[i]));
-      idx.forEach((i, j) => (results[i] = out[j]));
+    // 5명 묶음을 3개씩 동시에 묻는다(30명 = 6번 호출, 약 12초. 한꺼번에 다 보내면 게이트웨이 속도 제한에 걸릴 수 있음)
+    const groups: number[][] = [];
+    for (let k = 0; k < toAsk.length; k += BATCH) groups.push(toAsk.slice(k, k + BATCH));
+    for (let g = 0; g < groups.length; g += 3) {
+      await Promise.all(
+        groups.slice(g, g + 3).map(async (idx) => {
+          const out = await analyzeBatch(idx.map((i) => valid[i]));
+          idx.forEach((i, j) => (results[i] = out[j]));
+        }),
+      );
     }
   }
   const after = usageToday();
@@ -123,7 +144,9 @@ export async function POST(req: Request) {
     results,
     agreement: agreement(valid, results), // AI(또는 대체) 결과의 일치율
     keywordAgreement: agreement(valid, keywordOnly), // 키워드만 썼을 때의 일치율 (비교 기준선)
-    usedLLM: llmReady(),
+    usedLLM: results.some((r) => r.source === "llm"), // 키가 있어도 AI가 하나도 못 읽었으면 false
+    llmCount: results.filter((r) => r.source === "llm").length, // AI가 실제로 읽은 학생 수(나머지는 키워드 대체)
+    model: process.env.LLM_MODEL,
     tokens: { used: after.tokens - before.tokens, calls: after.calls - before.calls }, // 이번 분석에 쓴 토큰(같은 날 안에서 셈)
   });
 }

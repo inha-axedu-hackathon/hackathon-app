@@ -40,13 +40,20 @@ JSON만: {"I1":"","I2":"","M2":false}`;
 const WINDOW_MS = 10 * 60_000;
 const PER_STUDENT = 5;
 const recent = new Map<string, number[]>(); // 학생 ID는 s00~s99뿐이라 100개를 넘지 않는다
+// 서버 전체 상한: 학생 ID를 바꿔 가며 부르는 남용 막기. 10분에 40번(30명 반에 넉넉함)
+const ALL_MAX = 40;
+let all: number[] = [];
 
 function allowFor(studentId: string) {
   return () => {
     const now = Date.now();
+    all = all.filter((t) => now - t < WINDOW_MS);
     const list = (recent.get(studentId) ?? []).filter((t) => now - t < WINDOW_MS);
-    const ok = list.length < PER_STUDENT;
-    if (ok) list.push(now);
+    const ok = list.length < PER_STUDENT && all.length < ALL_MAX;
+    if (ok) {
+      list.push(now);
+      all.push(now);
+    }
     recent.set(studentId, list);
     return ok;
   };
