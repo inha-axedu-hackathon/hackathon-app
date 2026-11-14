@@ -3,6 +3,7 @@
 import type { AiWin, AnalysisRun } from "@/lib/rules/forecast";
 import { MISCONCEPTION_SHORT } from "@/lib/rules/forecast";
 import { Highlight } from "./Highlight";
+import { LockGate } from "./InfoLock";
 
 const names = (list: string[]) => (list.length ? list.map((id) => MISCONCEPTION_SHORT[id] ?? id).join(", ") : "못 찾음");
 
@@ -39,6 +40,7 @@ export function AiEvidence({ run, wins, total }: { run: AnalysisRun; wins: AiWin
           <p className="mb-1.5 text-base font-semibold">
             키워드만으로 틀린 답 {k.total - k.matched}개 중 AI가 라벨대로 바로잡은 답 {total}개 · 예시 {wins.length}개
           </p>
+          <LockGate what="AI 근거 예시 원문" ids={wins.map((w) => w.student.id)}>
           <ul className="flex flex-col gap-2">
             {wins.map((w) => (
               <li key={w.student.id} className="rounded-xl border border-line bg-white px-3 py-2">
@@ -52,6 +54,7 @@ export function AiEvidence({ run, wins, total }: { run: AnalysisRun; wins: AiWin
               </li>
             ))}
           </ul>
+          </LockGate>
         </div>
       )}
     </div>

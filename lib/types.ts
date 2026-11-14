@@ -83,11 +83,15 @@ export type DemoEvent =
   | { type: "stone_placed"; studentId: string; stoneId: string; at: string }
   | { type: "explain_passed"; studentId: string; at: string }
   | { type: "sos"; studentId: string; stoneId: string; at: string }
-  | { type: "approved"; who: "teacher"; count: number; at: string }
+  // edited: 교사가 경로를 고친 건수, changes: 고친 경로(학생 글은 넣지 않음)
+  | { type: "approved"; who: "teacher"; count: number; edited?: number; changes?: { studentId: string; path: string[] }[]; at: string }
   | { type: "checked_in"; studentId: string; method: "qr" | "barcode" | "face"; place: string; at: string }
   | { type: "class_started"; at: string }
   | { type: "together_done"; correctTeams: number; at: string }
-  | { type: "opened"; at: string };
+  | { type: "opened"; at: string }
+  // 학생 정보 잠금(SPEC 5-1 T7): 교사가 얼굴 1초·비밀번호로 열고, 무엇을 봤는지 기록한다(학생 글은 넣지 않음)
+  | { type: "info_opened"; who: "teacher"; method: "face" | "password"; at: string }
+  | { type: "info_viewed"; who: "teacher"; what: string; studentIds: string[]; at: string };
 
 export interface DemoState {
   step: 0 | 1 | 2 | 3 | 4 | 5 | 6;

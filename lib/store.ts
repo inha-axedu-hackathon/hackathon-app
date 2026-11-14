@@ -82,12 +82,19 @@ function commit(next: Demo) {
 // 늘 저장본을 다시 읽고 고친다 → 두 탭이 서로의 변경을 덮어쓰지 않게
 const update = (fn: (s: Demo) => Demo) => commit(fn(readSaved()));
 
+// 같은 일인지: 종류가 같고, 학생·돌이 있는 이벤트는 그것까지 같아야 한다
+// (아침 체크인 키오스크에서 다른 학생이 돌을 놓아도 옛이응의 ㅌ 단계가 막히지 않게)
+const same = (a: DemoEvent | NewEvent, b: DemoEvent | NewEvent) =>
+  a.type === b.type &&
+  (!("studentId" in a) || ("studentId" in b && a.studentId === b.studentId)) &&
+  (!("stoneId" in a) || ("stoneId" in b && a.stoneId === b.stoneId));
+
 function reach(s: Demo, target: Step): Demo {
   if (target <= s.step) return s; // 뒤로는 가지 않는다
   let events = s.events;
   for (let i = s.step + 1; i <= target; i++) {
     const e = STEP_EVENT[i];
-    if (e && !events.some((x) => x.type === e.type)) events = [...events, { ...e, at: timeOf(i as Step) }];
+    if (e && !events.some((x) => same(x, e))) events = [...events, { ...e, at: timeOf(i as Step) }];
   }
   return { ...s, step: target, now: timeOf(target), events };
 }

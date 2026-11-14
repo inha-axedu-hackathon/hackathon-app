@@ -9,6 +9,7 @@ import savedJson from "@/data/analysis.saved.json";
 import { AiEvidence } from "@/components/teacher/AiEvidence";
 import { BlockedTop3 } from "@/components/teacher/BlockedTop3";
 import { CheckInPanel, ExceptionPanel, TypeGrid } from "@/components/teacher/ClassPanels";
+import { LockGate, LockStatus, useInfoLock } from "@/components/teacher/InfoLock";
 import { SectionCards } from "@/components/teacher/SectionCards";
 import { VerifyNotice } from "@/components/teacher/VerifyNotice";
 import { STUDENTS, bridgeState } from "@/lib/rules/bridge";
@@ -28,6 +29,7 @@ type RunState = "idle" | "running" | "saved-only";
 
 export default function TeacherPage() {
   const d = useDemo();
+  const lock = useInfoLock(); // 학생 정보 잠금(T7): 열렸을 때만 이름을 보일 수 있다
   const mounted = useSyncExternalStore(noop, () => true, () => false); // 첫 프레임(서버 초기값)에 잘못된 예보가 비치지 않게
   const b = useMemo(() => bridgeState(d.events), [d.events]);
   const [live, setLive] = useState<AnalysisRun | null>(null);
@@ -105,14 +107,17 @@ export default function TeacherPage() {
           <p className="text-sm text-mute">
             수업활동 › 성찰 「개념 말해보기」 {run.results.length}/{STUDENTS.length} 제출 · 누가 냈는지를 넘어 <b className="text-ink">무엇을 모르는지</b>
           </p>
-          <button
-            type="button"
-            aria-pressed={showNames}
-            onClick={() => setShowNames((v) => !v)}
-            className="rounded-lg border border-line px-2.5 py-1 text-sm hover:border-ink"
-          >
-            {showNames ? "이름 가리기" : "이름 보기"} <span className="text-mute">· 프로젝터에 띄울 땐 가려요</span>
-          </button>
+          <LockStatus />
+          {lock.open && (
+            <button
+              type="button"
+              aria-pressed={showNames}
+              onClick={() => setShowNames((v) => !v)}
+              className="rounded-lg border border-line px-2.5 py-1 text-sm hover:border-ink"
+            >
+              {showNames ? "이름 가리기" : "이름도 보기"} <span className="text-mute">· 프로젝터에 띄울 땐 번호만</span>
+            </button>
+          )}
         </div>
       </header>
 
@@ -149,17 +154,21 @@ export default function TeacherPage() {
             </h2>
             <span className="text-sm text-mute">원문을 열어 근거 확인 · 틀린 판단은 선생님이 뺄 수 있어요</span>
           </div>
-          <BlockedTop3 items={blocked} showNames={showNames} startSections={startSections} onToggle={toggle} />
+          <BlockedTop3 items={blocked} showNames={showNames && lock.open} startSections={startSections} onToggle={toggle} />
           {check.length > 0 && (
             <details className="rounded-lg border border-line bg-white px-3 py-2 text-base">
               <summary className="cursor-pointer font-semibold">선생님이 직접 읽어야 할 답 {check.length}건 · 눌러서 보기</summary>
-              <ul className="mt-1 text-mute">
-                {check.map((c) => (
-                  <li key={c.student.id}>
-                    {c.student.no}번 “{c.student.signals.explain1}”
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-1">
+                <LockGate what="AI가 판단을 미룬 답" ids={check.map((c) => c.student.id)}>
+                  <ul className="text-mute">
+                    {check.map((c) => (
+                      <li key={c.student.id}>
+                        {c.student.no}번 “{c.student.signals.explain1}”
+                      </li>
+                    ))}
+                  </ul>
+                </LockGate>
+              </div>
             </details>
           )}
           <VerifyNotice />
@@ -191,8 +200,8 @@ export default function TeacherPage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <TypeGrid className="md:col-span-2 xl:col-span-1" />
-        <ExceptionPanel events={d.events} showNames={showNames} />
-        <CheckInPanel events={d.events} showNames={showNames} />
+        <ExceptionPanel events={d.events} showNames={showNames && lock.open} />
+        <CheckInPanel events={d.events} showNames={showNames && lock.open} />
       </div>
 
       <p className="text-sm text-mute">
