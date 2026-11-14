@@ -1,44 +1,45 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# 징검다리 개발 규칙
 
-## This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
-
-# 징검다리 팀 규칙 (AI 코딩 도구용)
+팀원과 AI 코딩 도구가 이 저장소에서 작업할 때 지키는 규칙입니다. CLAUDE.md는 이 파일을 불러옵니다.
 
 ## 기준 문서
-- 기획은 `docs/SPEC.md`가 기준이다. 기능을 만들기 전에 해당 장을 읽는다.
-- 게임 규칙, 화면 문구, 근거는 `docs/GAMIFICATION.md`를 따른다. 두 문서가 다르면 `docs/SPEC.md`가 우선이다.
 
-## 기술
-- Next.js App Router + TypeScript + Tailwind.
-- 폴더: 화면은 `frontend/`(Next 앱, `@/…`), 서버 쪽(API 처리·AI·규칙·타입·데이터)은 `backend/`(`@backend/…`). `frontend/app/api/*/route.ts`는 `backend/api/*.ts`를 다시 내보내기만 한다. npm 명령은 `frontend/`에서 돌린다.
-- 타입은 `backend/lib/types.ts`에 있는 것만 쓴다. 새 타입이 필요하면 거기에 추가한다.
-- 시연 상태는 `frontend/lib/store.ts`의 `useDemo()`만 쓴다. localStorage는 `"use client"` 컴포넌트의 `useEffect` 안에서만 읽는다.
-- API 키는 서버(`backend/api`)에서만 `process.env`로 읽는다. `NEXT_PUBLIC_`에 넣지 않는다. `.env*` 파일은 커밋하지 않는다.
-- LLM 호출은 `backend/lib/llm.ts`의 `callLLM()`만 쓴다(server-only). 시간 제한·답 길이 상한·대체 결과를 항상 두고, 학생에게 보이는 문장은 AI가 쓰지 않는다(미리 쓴 문장만).
-- 시각은 `Date.now()`가 아니라 store의 가상 시계를 쓴다.
+- 기획의 기준은 docs/SPEC.md입니다.
+- 게임 규칙과 화면 문구는 docs/GAMIFICATION.md를 따르며, 두 문서가 다르면 SPEC이 우선합니다.
 
-## 보안 (백엔드)
-- AI 결과는 허용된 ID만 받고, 근거 인용은 학생 글에 실제로 있을 때만 인정한다(`quoted()`). 위기 낱말은 `isCrisis()`로 먼저 걸러 AI에 보내지 않는다.
-- 외부 AI에는 답 텍스트만 보낸다(학생 ID·이름 금지, `maskPII()` 거친 뒤). 서버 로그에는 토큰 수·이유만, 학생 글과 키는 남기지 않는다.
-- API에는 입력 검사(형식·길이·본문 크기), 다른 사이트 요청 차단(`crossSite()`), 남용 상한(학생별·서버 전체·하루 토큰)을 둔다. 관리자용 `/api/analyze`는 배포 주소에서 꺼 둔다.
-- 학생·교실 화면은 교사 전용 명단(`backend/lib/rules/roster.ts`, `backend/data/class-2-3.json`)을 import하지 않는다. 공개 필드는 `backend/lib/rules/bridge.ts`의 `PUBLIC_STUDENTS`.
-- push 전에 `npm run check:secrets`를 돌린다. 백엔드를 바꿨으면 `.claude/agents/security-reviewer.md` 기준으로 점검한다.
+## 구조
+
+- frontend: Next.js 앱입니다. 화면, 컴포넌트, 이미지, 설정, 시연 상태가 있으며 npm 명령은 이 폴더에서 실행합니다.
+- backend: API 처리, AI 호출, 규칙, 타입, 데이터, 점검 스크립트가 있습니다.
+- frontend/app/api의 각 경로는 backend/api의 같은 이름 파일을 그대로 내보냅니다.
+- 화면 코드는 @/로, 서버 쪽 코드는 @backend/로 불러옵니다.
+
+## 개발 규칙
+
+- 타입은 backend/lib/types.ts에만 정의합니다.
+- 시연 상태는 frontend/lib/store.ts의 useDemo만 사용하고, 시각도 그 안의 가상 시계를 씁니다.
+- LLM 호출은 backend/lib/llm.ts의 callLLM만 사용하며, 시간 제한과 답 길이 상한, 실패 시 대체 결과를 항상 둡니다.
+- 수정한 뒤에는 npm run build가 통과하는지 확인합니다.
+
+## 보안과 개인정보
+
+- API 키는 서버에서 환경 변수로만 읽고, 브라우저로 나가는 NEXT_PUBLIC 변수에 넣지 않습니다. env 파일은 커밋하지 않습니다.
+- 외부 AI에는 가명 처리한 답 텍스트만 보내며, 학생 이름과 ID는 보내지 않습니다.
+- AI 결과는 허용된 ID만 받고, 근거 인용은 학생 글에 실제로 있을 때만 인정합니다.
+- 위기 표현이 담긴 글은 AI에 보내지 않습니다.
+- API마다 입력 검사, 다른 사이트 요청 차단, 사용량 상한을 둡니다.
+- 학생과 교실 화면은 교사 전용 명단을 불러오지 않고 공개 필드만 씁니다.
+- push 전에 npm run check:secrets로 비밀값과 교사 전용 정보가 새지 않았는지 점검합니다.
 
 ## 제품 원칙
-- 학생 화면에 점수, 순위, 연속 기록을 만들지 않는다. 진행은 확인된 학습 증거로만 바뀐다.
-- 얼굴 이미지나 특징값을 다루는 코드를 만들지 않는다. 체크인은 결과(본인 맞음, 방법, 장소, 시각)만 다룬다.
-- 모든 AI 결과 화면에 "꼭 교사 본인이 직접 확인하시길 바랍니다"를 띄운다.
-- 화면 문구는 문서에 적힌 문구를 그대로 쓴다.
+
+- 학생 화면에는 점수, 순위, 연속 기록을 두지 않으며, 진행은 확인된 학습 증거로만 바뀝니다.
+- AI는 교사를 돕는 데만 쓰고, 학생에게 보이는 문장은 미리 써 둔 문장만 씁니다.
+- 모든 AI 결과 옆에 교사 본인이 직접 확인하라는 안내를 둡니다.
+- 얼굴 이미지나 얼굴 특징값을 다루는 코드는 만들지 않습니다.
 
 ## 협업
-- 폴더 담당은 `README.md`의 표를 참고한다. 요청받은 기능과 관계없는 다른 폴더의 파일은 고치지 않는다.
-- 같이 쓰는 파일(`backend/lib/types.ts`, `frontend/lib/store.ts`, `package.json`)에서는 기존 타입·함수·필드의 이름을 지우거나 바꾸지 말고 추가만 한다. 꼭 바꿔야 하면 바꾸기 전에 사람에게 묻는다.
-- 한 번에 한 기능만 고치고, 끝나면 `npm run build`가 통과하는지 확인한다.
-- 병합 충돌을 해결할 때 상대 변경을 지우지 않는다.
-- 커밋 메시지 앞에 `[환희]` 또는 `[재우]`를 붙인다.
+
+- 같이 쓰는 파일의 기존 이름은 지우거나 바꾸지 않고 추가만 합니다.
+- 병합 충돌을 해결할 때 상대의 변경을 지우지 않습니다.
+- 커밋 메시지 앞에 작성자 이름을 붙입니다.
