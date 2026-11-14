@@ -9,7 +9,7 @@ import { FitStage } from "@/components/FitStage";
 import { LabFrame } from "@/components/LabFrame";
 import { isLabKey, onLabDone, postLabDone } from "@/components/student/labSignal";
 import { myProgress } from "@/components/student/progress";
-import { DEMO_STUDENT } from "@/components/student/stones";
+import { DEMO_STUDENT, EXPLAIN } from "@/components/student/stones";
 import { StudentView } from "@/components/student/StudentView";
 import { useDemo } from "@/lib/store";
 
@@ -42,6 +42,15 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
   const [freeText, setFreeText] = useState("");
   const [busy, setBusy] = useState(false);
   const [gateMsg, setGateMsg] = useState("");
+  const [answer, setAnswer] = useState("");
+
+  // 단축키 N으로 시연을 강제로 넘겨도 학생 화면이 따라오게 (SPEC 9-2 실패 대비)
+  useEffect(() => {
+    // 외부(다른 탭의 단축키) 상태에 화면을 맞춘다
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (d.step >= 2) setScreen((s) => (s === "gate" ? "pass" : s));
+    else if (d.step >= 1) setScreen((s) => (s === "concept" || s === "lab" || s === "quiz" ? "splash" : s));
+  }, [d.step]);
 
   const tPlaced = d.events.some((e) => e.type === "stone_placed" && e.studentId === DEMO_STUDENT && e.stoneId === "st-t");
   const placedT = tPlaced || screen === "splash" || screen === "gate" || screen === "pass";
@@ -93,6 +102,7 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     setBusy(false);
     if (j.passed) {
       setGateMsg("");
+      setAnswer(text);
       d.reach(2); // 시연 단계 2: 말해보기 통과
       setScreen("pass");
     } else setGateMsg(j.feedback);
@@ -107,7 +117,7 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
 
   const v = {
     liteCls: "",
-    controls: true,
+    controls: false, // 시연용 '완성 처리' 버튼은 숨김(K 키는 그대로 동작)
     labSlot: screen === "lab" ? <LabFrame target="ㅌ" seed="ㄴ" onDone={labDone} onKey={onLabKey} /> : null,
     isHome: screen === "home",
     isConcept: screen === "concept",
@@ -166,6 +176,7 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
       setPicked(null);
     },
     goHome: () => setScreen("home"),
+    variantLabel: usedVariant ? "다음에 이어서" : "비슷한 문제로 다시",
     goConcept: () => {
       setTouched(true);
       setScreen(placedT ? (passed ? "home" : "gate") : "concept");
@@ -193,6 +204,14 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
     setFree: (e: React.ChangeEvent<HTMLTextAreaElement>) => setFreeText(e.target.value),
     gateMsg,
     busy,
+    answer: answer || EXPLAIN.prepared, // 실제 통과한 답, 없으면(단축키로 넘긴 경우) 준비된 바른 설명
+    crossing: true, // 시연 데이터에 아직 건너는 친구가 있음(숫자는 보이지 않음)
+    logout: () => setScreen("home"),
+    words: ["세게", "크게", "획을", "나란히", "작게"].map((w) => ({
+      w,
+      cls: "wchip" + (b1 === w || b2 === w ? " used" : ""),
+      fill: () => (!b1 ? setB1(w) : !b2 ? setB2(w) : undefined),
+    })),
   };
 
   return (

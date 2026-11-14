@@ -1,5 +1,6 @@
 "use client";
-// 교사 · 오늘의 수업 예보 (담당: 정환희, docs/SPEC.md 5-1 T1·T2·T4) — 슈퍼스쿨 교사 홈의 "오늘의 수업 예보" 카드를 연 화면
+// 교사 · 오늘의 수업 예보 (담당: 신재우·정환희, docs/SPEC.md 5-1 T1·T2·T4·T7)
+// 겉모습: 디자인 캔버스 Console(components/teacher/ConsoleView). 기능: 정환희가 만든 예보·AI 근거·잠금·예외·체크인 컴포넌트.
 // 숫자는 교사 화면에만 둔다(SPEC 5-0). AI 결과 바로 옆에 출처와 교사 확인 알림을 붙인다(6-4).
 // 교사 화면이 교실 프로젝터에 비칠 수 있어서 이름은 기본으로 가리고(번호만), 예외 사유는 결재 화면에서만 보인다.
 // [AI 분석 다시 실행]은 로컬(npm run dev)에서만 실제로 돌고, 배포 주소에서는 저장본(data/analysis.saved.json)을 쓴다.
@@ -8,24 +9,37 @@ import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import savedJson from "@/data/analysis.saved.json";
 import { AiEvidence } from "@/components/teacher/AiEvidence";
 import { BlockedTop3 } from "@/components/teacher/BlockedTop3";
-import { CheckInPanel, ExceptionPanel, TypeGrid } from "@/components/teacher/ClassPanels";
+import { CheckInPanel, ExceptionPanel } from "@/components/teacher/ClassPanels";
+import { ConsoleView } from "@/components/teacher/ConsoleView";
+import { TOGETHER } from "@/components/student/stones";
 import { LockGate, LockStatus, useInfoLock } from "@/components/teacher/InfoLock";
-import { SectionCards } from "@/components/teacher/SectionCards";
 import { VerifyNotice } from "@/components/teacher/VerifyNotice";
-import { STUDENTS, bridgeState } from "@/lib/rules/bridge";
+import { STUDENTS, bridgeState, type SectionState } from "@/lib/rules/bridge";
 import { type AnalysisRun, aiWins, blockedPoints, headline, needsTeacher } from "@/lib/rules/forecast";
 import { useDemo } from "@/lib/store";
 
 const SAVED = savedJson as unknown as AnalysisRun;
-const FRAME = {
-  storm: "border-l-8 border-storm bg-white",
-  locked: "border-l-8 border-seal bg-seal-soft",
-  cloud: "border-l-8 border-water bg-white",
-  clear: "border-l-8 border-water bg-white",
-} as const;
 const noop = () => () => {};
-
 type RunState = "idle" | "running" | "saved-only";
+
+const WX: Record<SectionState["weather"], { key: "clear" | "cloud" | "dark" | "shower"; col: string }> = {
+  맑음: { key: "clear", col: "#7A4E00" },
+  구름: { key: "cloud", col: "#4A4641" },
+  먹구름: { key: "dark", col: "#4B5C6B" },
+  소나기: { key: "shower", col: "#1E5A60" },
+};
+
+// 8유형 (SPEC 8-1-1): 환경 걸림돌이 있으면 참여는 "낮아 보임"으로 두고 판단을 미룬다
+const TYPES = [
+  { p: "있음", r: "준비", e: "양호", stones: "돌 1(심화)", color: "#7A2A3D" },
+  { p: "있음", r: "보충", e: "양호", stones: "돌 3", color: "#A8455C" },
+  { p: "있음", r: "준비", e: "걸림돌", stones: "돌 1", color: "#C76E7F" },
+  { p: "있음", r: "보충", e: "걸림돌", stones: "돌 2–3", color: "#E3A0A8" },
+  { p: "낮음", r: "준비", e: "양호", stones: "작은 돌 2", color: "#D9814F" },
+  { p: "낮음", r: "보충", e: "양호", stones: "작은 돌 2", color: "#EBAA80" },
+  { p: "낮음", r: "준비", e: "걸림돌", stones: "작은 돌 1", color: "#F3CBAE" },
+  { p: "낮음", r: "보충", e: "걸림돌", stones: "작은 돌 1", color: "#F8E3D4" },
+] as const;
 
 export default function TeacherPage() {
   const d = useDemo();
@@ -45,9 +59,11 @@ export default function TeacherPage() {
   const together = d.events.find((e) => e.type === "together_done");
   const h = headline(b, blocked[0], together?.type === "together_done" ? together.correctTeams : undefined);
   const startSections = b.sections.filter((s) => s.locked || (!b.lessonStarted && s.placed / Math.max(s.total, 1) < 0.8)).map((s) => s.name);
-  const lockedNow = b.lessonStarted && !b.together && b.sections.some((s) => s.locked);
+  const lockedNames = b.sections.filter((s) => s.locked).map((s) => s.name);
+  const lockedNow = b.lessonStarted && !b.together && lockedNames.length > 0;
   const model = run.model ?? "claude-haiku-5-5";
   const source = run.live ? `AI 분석 · 방금 다시 실행 (${model}, ${run.llmCount ?? run.results.length}명)` : `AI 분석 저장본 · 말해보기 제출 직후 (${model})`;
+  const agree = run.agreement ? ` · 오개념 탐지 일치 ${run.agreement.matched}/${run.agreement.total}` : "";
 
   function toggle(key: string) {
     setDismissed((prev) => {
@@ -88,125 +104,149 @@ export default function TeacherPage() {
     }
   }
 
-  return (
-    <main className="mx-auto flex min-h-dvh max-w-[1400px] flex-col gap-4 px-4 pt-5 pb-16 sm:px-8">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p className="text-sm text-mute">슈퍼스쿨 › 교사 홈 › 징검다리</p>
-          <h1 className="flex flex-wrap items-baseline gap-x-3 text-3xl font-bold tracking-tight sm:text-4xl">
-            오늘의 수업 예보
-            <span className="font-serif text-lg font-semibold tracking-normal text-water-deep">다리가 끊긴 곳에서 수업이 시작돼요</span>
-          </h1>
-          <p className="mt-1 text-base text-mute">2학년 3반 국어 · 3교시 10:50 · 문자 체계(가획과 병서)</p>
-        </div>
-        <div className="flex flex-col items-end gap-1 text-right">
-          <p className="tabular">
-            <span className="mr-2 text-base text-mute">지금 {d.now.slice(11, 16)}</span>
-            <span className="text-3xl font-bold">{d.minutesToLesson > 0 ? `수업까지 ${d.minutesToLesson}분` : "수업 중"}</span>
-          </p>
-          <p className="text-sm text-mute">
-            수업활동 › 성찰 「개념 말해보기」 {run.results.length}/{STUDENTS.length} 제출 · 누가 냈는지를 넘어 <b className="text-ink">무엇을 모르는지</b>
-          </p>
-          <LockStatus />
-          {lock.open && (
-            <button
-              type="button"
-              aria-pressed={showNames}
-              onClick={() => setShowNames((v) => !v)}
-              className="rounded-lg border border-line px-2.5 py-1 text-sm hover:border-ink"
-            >
-              {showNames ? "이름 가리기" : "이름도 보기"} <span className="text-mute">· 프로젝터에 띄울 땐 번호만</span>
-            </button>
-          )}
-        </div>
-      </header>
+  const secs = b.sections.map((s) => {
+    const pct = Math.round((s.placed / Math.max(s.total, 1)) * 100);
+    const w = WX[s.weather];
+    const left = s.total - s.placed;
+    const note =
+      s.rope > 0
+        ? `밧줄 돌 ${s.rope}개 · 오늘 안에 각자 굳힘`
+        : pct >= 100
+          ? "모두 놓임"
+          : pct >= 80
+            ? `남은 ${left}칸 · 개통 기준 넘음`
+            : s.locked
+              ? "80% 미만 · 물때에 잠김"
+              : "80% 미만 · 수업 시작 때 잠김";
+    return { name: s.name, placed: s.placed, total: s.total, pct, word: s.weather, col: w.col, note, clear: w.key === "clear", cloud: w.key === "cloud", dark: w.key === "dark", shower: w.key === "shower" };
+  });
 
-      <section className={`rounded-2xl px-5 py-4 transition-colors duration-500 ${FRAME[h.tone]}`}>
-        <div aria-live="polite" aria-atomic="true">
-          <p key={h.title} ref={titleRef} tabIndex={-1} className="animate-rise font-serif text-3xl leading-snug font-bold outline-none sm:text-4xl">
+  const counts = TYPES.map((t) => STUDENTS.filter((s) => s.type?.participation === t.p && s.type?.readiness === t.r && s.type?.environment === t.e).length);
+
+  const planNames = b.lessonStarted ? lockedNames : b.sections.filter((s) => s.placed / Math.max(s.total, 1) < 0.8).map((s) => s.name);
+  const planQ = planNames[0] ? TOGETHER[planNames[0] as keyof typeof TOGETHER] : null;
+  const v = {
+    planLine: b.lessonStarted
+      ? lockedNames.length
+        ? `잠긴 구간 ${lockedNames.length}개(${lockedNames.join("·")}) → 첫 8분 함께 놓기`
+        : "잠긴 구간이 없어요 · 바로 본시 수업"
+      : planNames.length
+        ? `수업 시작 때 80% 미만 구간이 잠겨요 · 지금 예상: ${planNames.join("·")}`
+        : "지금은 잠길 구간이 없어요",
+    planQ,
+    teams: together?.type === "together_done" ? `정답 모둠 ${together.correctTeams}/5 · 이 숫자는 교사 화면에만` : "",
+    secs,
+    tide: mounted && lockedNow,
+    headerLine: (
+      <>
+        2학년 3반 · 「국어의 문자 체계」 · 3교시 10:50 ·{" "}
+        <b style={{ color: "#9B3A51" }}>{d.minutesToLesson > 0 ? `수업까지 ${d.minutesToLesson}분` : "수업 중"}</b> · 수업활동 › 성찰 「개념 말해보기」 {run.results.length}/{STUDENTS.length} 제출
+      </>
+    ),
+    analyze,
+    analyzing: runState === "running",
+    analyzeLabel: runState === "running" ? `${STUDENTS.length}명 읽는 중…` : "AI 분석 다시 실행",
+    startSlot: !mounted ? null : !b.lessonStarted ? (
+      <button type="button" className="btn bp" onClick={startLesson}>
+        수업 시작 <kbd style={{ opacity: 0.7, fontSize: 12 }}>T</kbd>
+      </button>
+    ) : lockedNow ? (
+      <Link href="/class" className="btn bp">
+        함께 놓기 시작 · 8분 → 교실 화면
+      </Link>
+    ) : (
+      <span className="btn bs" aria-disabled="true">
+        {b.opened ? "개통 · 본시 수업" : "함께 놓기 끝"}
+      </span>
+    ),
+    toolbarSlot: (
+      <div className="bx" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+        <div aria-live="polite" aria-atomic="true" style={{ flex: "1 1 520px" }}>
+          <p key={h.title} ref={titleRef} tabIndex={-1} className="serif animate-rise" style={{ margin: 0, fontSize: 28, fontWeight: 700, lineHeight: 1.35, outline: "none" }}>
             {mounted ? h.title : " "}
           </p>
-          <p className="mt-1 text-lg text-ink/80">{mounted ? h.sub : " "}</p>
+          <p style={{ margin: "4px 0 0", fontSize: 15, color: "#4A4641" }}>{mounted ? h.sub : " "}</p>
+          <p style={{ margin: "6px 0 0", fontSize: 13, fontWeight: 700, color: "#0E6F61" }}>AI는 학생 답을 읽고 · 규칙은 돌을 고르고 · 선생님이 정해요</p>
         </div>
-        {mounted && !b.lessonStarted && (
-          <button type="button" onClick={startLesson} className="mt-3 rounded-lg bg-ink px-4 py-2 text-lg font-semibold text-paper hover:bg-ink/85">
-            수업 시작 <kbd className="ml-1 text-sm opacity-70">T</kbd>
-          </button>
-        )}
-        {mounted && lockedNow && (
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <Link href="/class" className="rounded-lg bg-seal px-4 py-2 text-lg font-bold text-white hover:bg-seal/90">
-              함께 놓기 시작 · 8분 → 교실 화면
-            </Link>
-            <span className="text-base text-ink/80">규칙 제안: 놓인 돌 80% 미만 구간은 잠그고 첫 8분 함께 놓기 · 결정은 선생님</span>
-          </div>
-        )}
-        <p className="mt-3 text-sm font-semibold text-water-deep">AI는 학생 답을 읽고 · 규칙은 돌을 고르고 · 선생님이 정해요</p>
-      </section>
-
-      <SectionCards b={b} animate={mounted} />
-
-      <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr]">
-        <section className="flex flex-col gap-2" aria-labelledby="top3-h">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 id="top3-h" className="text-xl font-bold">
-              막힌 지점 TOP 3
-            </h2>
-            <span className="text-sm text-mute">원문을 열어 근거 확인 · 틀린 판단은 선생님이 뺄 수 있어요</span>
-          </div>
-          <BlockedTop3 items={blocked} showNames={showNames && lock.open} startSections={startSections} onToggle={toggle} />
-          {check.length > 0 && (
-            <details className="rounded-lg border border-line bg-white px-3 py-2 text-base">
-              <summary className="cursor-pointer font-semibold">선생님이 직접 읽어야 할 답 {check.length}건 · 눌러서 보기</summary>
-              <div className="mt-1">
-                <LockGate what="AI가 판단을 미룬 답" ids={check.map((c) => c.student.id)}>
-                  <ul className="text-mute">
-                    {check.map((c) => (
-                      <li key={c.student.id}>
-                        {c.student.no}번 “{c.student.signals.explain1}”
-                      </li>
-                    ))}
-                  </ul>
-                </LockGate>
-              </div>
-            </details>
-          )}
-          <VerifyNotice />
-        </section>
-
-        <section className="flex flex-col gap-2" aria-labelledby="ai-h">
-          <div className="flex items-center justify-between gap-2">
-            <h2 id="ai-h" className="text-xl font-bold">
-              AI가 읽은 근거
-            </h2>
-            <button
-              type="button"
-              onClick={analyze}
-              disabled={runState === "running"}
-              className="rounded-lg border border-water px-3 py-1.5 text-base font-semibold text-water-deep hover:bg-water-soft disabled:opacity-60"
-            >
-              {runState === "running" ? "30명 읽는 중…" : "AI 분석 다시 실행"}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+          <LockStatus />
+          {lock.open && (
+            <button type="button" aria-pressed={showNames} onClick={() => setShowNames((x) => !x)} className="btn bg">
+              {showNames ? "이름 가리기" : "이름도 보기"} <span style={{ color: "#6B665F", fontWeight: 500 }}>· 프로젝터에 띄울 땐 번호만</span>
             </button>
+          )}
+        </div>
+      </div>
+    ),
+    noticeMeta: `${source}${agree}`,
+    tideTitle: `${lockedNames.join("·")} 소나기 · 첫 8분 함께 놓기`,
+    tideSub: `— 잠긴 구간 ${lockedNames.length}개 → ${lockedNames.length === 1 ? "O/X 1문항 + 해설" : lockedNames.length === 2 ? "구간마다 O/X 1문항" : "8분 + 본시 진도 조정 권장"}`,
+    totalPlaced: b.placed,
+    totalAll: b.total,
+    arrived: b.arrived,
+    students: b.students,
+    crossingText: "지금 건너는 친구 있음 · 학생 화면엔 숫자 없음",
+    top3Slot: (
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <BlockedTop3 items={blocked} showNames={showNames && lock.open} startSections={startSections} onToggle={toggle} />
+        {check.length > 0 && (
+          <details style={{ border: "1px solid #ECE9E1", borderRadius: 12, padding: "8px 12px", fontSize: 15 }}>
+            <summary style={{ cursor: "pointer", fontWeight: 700 }}>선생님이 직접 읽어야 할 답 {check.length}건 · 눌러서 보기</summary>
+            <div style={{ marginTop: 4 }}>
+              <LockGate what="AI가 판단을 미룬 답" ids={check.map((c) => c.student.id)}>
+                <ul style={{ color: "#6B665F", margin: 0 }}>
+                  {check.map((c) => (
+                    <li key={c.student.id}>
+                      {c.student.no}번 “{c.student.signals.explain1}”
+                    </li>
+                  ))}
+                </ul>
+              </LockGate>
+            </div>
+          </details>
+        )}
+        <VerifyNotice />
+      </div>
+    ),
+    exceptionSlot: <ExceptionPanel events={d.events} showNames={showNames && lock.open} />,
+    typeSlot: (
+      <>
+        <div style={{ display: "flex", height: 28, borderRadius: 8, overflow: "hidden", gap: 2 }} role="img" aria-label="유형 분포 8칸">
+          {TYPES.map((t, i) => counts[i] > 0 && <i key={i} style={{ flex: counts[i], background: t.color }} />)}
+        </div>
+        <div className="num" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "6px 16px", fontSize: 13, color: "#4A4641" }}>
+          {TYPES.map((t, i) => (
+            <span key={i}>
+              <i style={{ display: "inline-block", width: 10, height: 10, borderRadius: 3, background: t.color }} /> {t.p === "낮음" && t.e === "걸림돌" ? "낮아 보임" : t.p}·{t.r}·{t.e}{" "}
+              {/* 잠긴 동안 1~2명 칸은 묶어서 보인다(특정 학생 추정 방지, handoff-screens 원칙 4) */}
+              <b>{!lock.open && counts[i] > 0 && counts[i] <= 2 ? "1~2" : counts[i]}</b> · {t.stones}
+            </span>
+          ))}
+        </div>
+        <span style={{ fontSize: 12, color: "#6B665F" }}>환경 걸림돌이 있으면 참여는 “낮아 보임”으로 두고, 환경을 먼저 해소한 뒤 다시 판단해요(SPEC 8-1-1).</span>
+      </>
+    ),
+    extraSlot: (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "stretch" }}>
+        <div className="bx" style={{ flex: "7 1 520px", display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>AI가 읽은 근거</h2>
+            <span className="lb">키워드가 놓친 답을 AI가 찾은 예</span>
           </div>
           {runState === "saved-only" && (
-            <p role="status" className="text-sm text-mute">
+            <p role="status" style={{ margin: 0, fontSize: 13, color: "#6B665F" }}>
               {live ? "다시 부르지 못해서 직전 분석을 그대로 보여 줘요." : "지금은 AI를 부를 수 없어서 저장된 분석을 보여 줘요."}
             </p>
           )}
           <AiEvidence run={run} wins={wins.slice(0, 3)} total={wins.length} />
           <VerifyNotice source={source} />
-        </section>
+        </div>
+        <div className="bx" style={{ flex: "5 1 380px" }}>
+          <CheckInPanel events={d.events} showNames={showNames && lock.open} />
+        </div>
       </div>
+    ),
+  };
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <TypeGrid className="md:col-span-2 xl:col-span-1" />
-        <ExceptionPanel events={d.events} showNames={showNames && lock.open} />
-        <CheckInPanel events={d.events} showNames={showNames && lock.open} />
-      </div>
-
-      <p className="text-sm text-mute">
-        학생 답·AI 분석·8유형은 이 단원(약 4주)이 끝나면 지워요 · 학생부에 넣지 않아요 · 외부 AI에는 가명과 답만 보내요 · 시연은 가상 학생 데이터
-      </p>
-    </main>
-  );
+  return <ConsoleView {...v} />;
 }

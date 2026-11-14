@@ -1,5 +1,5 @@
 // components/student/progress.ts — 시연 학생 한 명의 내 경로 상태 (본인 것만 계산한다)
-import { STUDENTS } from "@/lib/rules/bridge";
+import { ME } from "@/lib/student/me";
 import type { DemoEvent, StoneProgress } from "@/lib/types";
 import { stoneCard } from "./stones";
 
@@ -13,7 +13,8 @@ export type MyStone = {
 };
 
 export function myProgress(studentId: string, events: readonly DemoEvent[]) {
-  const me = STUDENTS.find((s) => s.id === studentId);
+  // 학생 화면은 반 전체 명단을 불러오지 않는다(handoff-screens 원칙 8): 나(ME)만 본다
+  const me = studentId === ME.id ? ME : undefined;
   const placedNow = new Set(
     events.filter((e) => e.type === "stone_placed" && e.studentId === studentId).map((e) => (e.type === "stone_placed" ? e.stoneId : "")),
   );
@@ -26,7 +27,7 @@ export function myProgress(studentId: string, events: readonly DemoEvent[]) {
       title: card ? `${card.char} ${card.section}` : id,
       minutes: card?.minutes ?? 2,
       state: placedNow.has(id) ? "placed" : (saved ?? "todo"),
-      start: me?.start?.includes(id) ?? false,
+      start: (me?.start as readonly string[] | undefined)?.includes(id) ?? false,
     };
   });
   const placed = stones.filter((s) => s.state === "placed" || s.state === "paper").length;

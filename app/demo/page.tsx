@@ -13,7 +13,7 @@ export default function DemoPage() {
         </p>
         <p className="text-xs text-mute">N 다음 · T 수업 시작 · A 승인 · O 오프라인 · Shift+R 처음부터 · K 실험실 완성 · 1 학생 · 2 교실 · 3 교사</p>
       </div>
-      <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,44fr)_minmax(0,56fr)] gap-3">
+      <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,50fr)_minmax(0,50fr)] gap-3">
         <iframe src="/student" title="학생 화면 (아침 교실 태블릿)" className="h-full w-full rounded-2xl border border-line bg-paper" />
         <iframe src="/class" title="교실 화면" className="h-full w-full rounded-2xl border border-line bg-paper" />
       </div>

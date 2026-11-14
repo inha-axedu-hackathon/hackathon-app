@@ -1,0 +1,84 @@
+/* 디자인 캔버스(징검다리 · 디자인)에서 옮긴 스타일. 토큰은 app/globals.css */
+.num{font-variant-numeric:tabular-nums}
+.serif{font-family:"Noto Serif KR",serif}
+.on-light{--cs:rgba(28,26,24,.28)}
+
+/* ── 징검돌: 매트 클레이 + contact shadow ── */
+.stone{--s:76px;position:relative;flex:none;display:grid;place-items:center;width:var(--s);height:calc(var(--s)*.8);
+ border-radius:52% 48% 46% 50%/60% 58% 42% 40%;
+ background:radial-gradient(130% 100% at 32% 22%,#FFFDF7 0%,#ECE6DA 30%,#D2CABB 66%,#ADA393 100%);
+ box-shadow:inset -5px -7px 12px rgba(80,64,44,.24),inset 4px 5px 8px rgba(255,255,255,.75),0 calc(var(--s)*.17) calc(var(--s)*.15) calc(var(--s)*-.08) var(--cs);
+ font-family:"Noto Serif KR",serif;font-weight:700;font-size:calc(var(--s)*.42);line-height:1;color:#2A2622}
+.stone.start{box-shadow:inset -5px -7px 12px rgba(80,64,44,.24),inset 4px 5px 8px rgba(255,255,255,.75),0 calc(var(--s)*.17) calc(var(--s)*.15) calc(var(--s)*-.08) var(--cs),0 0 0 4px rgba(235,195,204,.75),0 0 28px rgba(201,121,138,.45)}
+.stone.wet{background:radial-gradient(130% 100% at 32% 22%,#F4F8F9 0%,#BCC9CE 30%,#8C9DA5 70%,#677983 100%);color:#1F2E36}
+.stone.wet::before,.stone.sunk::before{content:"";position:absolute;top:13%;left:22%;width:26%;height:14%;border-radius:50%;background:rgba(255,255,255,.85);filter:blur(1px);transform:rotate(-18deg)}
+.stone.next{background:rgba(255,255,255,.7);box-shadow:none;border:3px dashed var(--color-brand-rose);color:var(--color-brand)}
+.stone.sunk{background:radial-gradient(130% 100% at 32% 22%,#A7C2C5 0%,#62838A 50%,#3A5A61 100%);color:#123036;transform:translateY(26px)}
+.stone.rope{outline:3px solid rgba(214,184,140,.95);outline-offset:6px}
+.stone.gold{box-shadow:inset -5px -7px 12px rgba(80,64,44,.24),inset 4px 5px 8px rgba(255,255,255,.75),0 calc(var(--s)*.17) calc(var(--s)*.15) calc(var(--s)*-.08) var(--cs),0 0 0 3px rgba(201,162,39,.65)}
+
+/* ── 키프레임: 모두 'from'만 정의 → 최종 상태 = 자연 스타일 (reduced-motion 대체가 안전) ── */
+@keyframes jg-fade{from{opacity:0}}
+@keyframes kin-in{from{opacity:0;transform:translateY(.4em) rotate(5deg);filter:blur(8px)}}
+@keyframes pop-in{from{opacity:0;transform:scale(.6)}}
+@keyframes jg-rise-in{from{opacity:0;transform:translateY(24px)}}
+@keyframes drop-in{0%{opacity:0;transform:translateY(-280px) scale(.92)}55%{opacity:1;transform:translateY(10px) scale(1.06,.9)}78%{transform:translateY(-5px) scale(.98,1.03)}100%{transform:none}}
+@keyframes ripple{from{opacity:.95;transform:translate(-50%,-50%) scale(.25)}}
+@keyframes droplet{0%{opacity:1;transform:translate(0,0)}60%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+@keyframes sink{from{transform:none;filter:none}}
+@keyframes jg-rise{from{transform:translateY(34px);filter:brightness(.6) saturate(.4)}}
+@keyframes draw{from{stroke-dashoffset:1}}
+@keyframes toast-in{0%{opacity:0;transform:translate(-50%,-36px) scale(.9)}60%{opacity:1;transform:translate(-50%,6px) scale(1.02)}100%{transform:translate(-50%,0)}}
+@keyframes stamp{0%{opacity:0;transform:rotate(-8deg) scale(2.4)}62%{opacity:1;transform:rotate(-8deg) scale(.9)}100%{transform:rotate(-8deg) scale(1)}}
+@keyframes unfurl{from{clip-path:inset(0 50% 0 50%)}}
+@keyframes cam-up{from{opacity:1;transform:none}}
+@keyframes grid-in{from{opacity:0;transform:translateY(90px) scale(.55)}}
+@keyframes brush{from{-webkit-mask-position:100% 0;mask-position:100% 0;filter:blur(4px);opacity:.2}}
+@keyframes jg-wave{to{transform:translateX(-1440px)}}
+@keyframes rain{from{transform:translateY(-60px)}to{transform:translateY(560px)}}
+@keyframes glint{0%,100%{opacity:0;transform:scale(.3) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes jg-pulse{0%{box-shadow:0 0 0 0 rgba(201,121,138,.6)}100%{box-shadow:0 0 0 14px rgba(201,121,138,0)}}
+@keyframes ring-fill{from{stroke-dashoffset:1}}
+@keyframes jg-shimmer{0%,100%{opacity:.25}50%{opacity:.7}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes skel{50%{opacity:.5}}
+
+.loop-bob{animation:bob 2.4s ease-in-out infinite}
+.pulse{animation:jg-pulse 1.8s var(--ease-standard) infinite}
+
+/* reduced-motion: 모든 연출 → fade, 반복 모션 정지, 위치 transition 즉시 */
+@media (prefers-reduced-motion:reduce){
+ .a{animation:jg-fade 320ms var(--ease-standard) both !important}
+ .loop,.loop-bob,.pulse{animation:none !important}
+ .t{transition-property:opacity,color,background-color !important}
+}
+/* 저사양(크롬북) 폴백: 반복 모션·블러 끄기 */
+.lite .loop,.lite .loop-bob,.lite .pulse{animation:none !important}
+.lite .a{filter:none !important}
+
+/* 귀여운 나룻배 */
+@keyframes boat-bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+@keyframes boat-cross{from{transform:translateX(0)}to{transform:translateX(var(--bx,600px))}}
+.boat{position:absolute;pointer-events:none}
+.boat>svg{display:block;animation:boat-bob 3.2s ease-in-out infinite;transform-origin:50% 80%}
+.boat.cross{animation:boat-cross var(--bd,26s) linear infinite}
+@media (prefers-reduced-motion:reduce){.boat>svg,.boat.cross{animation:none !important}}
+.lite .boat>svg,.lite .boat.cross{animation:none !important}
+
+.bx{background:#fff;border:1px solid #EFE7E6;border-radius:20px;padding:24px;min-width:0;transition:box-shadow 200ms var(--ease-standard),border-color 200ms}
+.bx:hover{box-shadow:0 10px 30px rgba(122,42,61,.07);border-color:#E8D9DB}
+.lb{font-size:12px;font-weight:700;letter-spacing:.04em;color:#8A7F80}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:8px;border:none;font-size:14px;font-weight:700;transition:background-color 120ms,transform 120ms,box-shadow 120ms}
+.btn:active{transform:scale(.98)}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 2px #fff,0 0 0 4px #9B3A51}
+.bp{background:#9B3A51;color:#fff;box-shadow:0 8px 20px rgba(155,58,81,.18)}.bp:hover{background:#833044}
+.bs{background:#fff;color:#1C1A18;box-shadow:inset 0 0 0 1px #E6DADC}.bs:hover{background:#FBF5F6}
+.bg{background:transparent;color:#9B3A51}.bg:hover{background:#F8EAEE}
+.bseal{background:#B0371F;color:#fff}.bseal:hover{background:#992F1A}
+.bar{height:8px;border-radius:999px;background:#F5EEEE;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#B85A70,#E9A07C)}
+.row{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-top:1px solid #F3ECEC}
+.row:first-of-type{border-top:none}
+.q{font-family:"Noto Serif KR",serif;font-weight:700}
+.stamp{width:72px;height:72px;border-radius:12px;background:#B0371F;color:#FFF4EE;display:grid;place-items:center;transform:rotate(-8deg);animation:stamp 600ms var(--ease-bouncy) both;box-shadow:inset 0 0 0 3px rgba(255,244,238,.35)}

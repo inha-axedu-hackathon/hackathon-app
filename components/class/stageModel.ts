@@ -1,5 +1,6 @@
 // components/class/stageModel.ts — 시연 상태(lib/store) + 다리 계산(lib/rules/bridge) → 디자인 화면(StageView)의 값
 // 디자인 캔버스 Stage 아트보드의 renderVals를 옮겼다. 숫자(placed/total)는 쓰지 않고 날씨만 읽는다 (SPEC 5-0)
+import { TOGETHER } from "@/components/student/stones";
 import type { BridgeState, Weather } from "@/lib/rules/bridge";
 
 export type Scene = "forecast" | "splash" | "tide" | "together" | "rope" | "open" | "jejapyo";
@@ -108,6 +109,7 @@ export function stageVals(opts: {
 
   const locked = bridge.sections.filter((s) => s.locked).map((s) => s.name);
   const cloudy = bridge.sections.filter((s) => s.weather !== "맑음");
+  const tq = TOGETHER[(locked[0] ?? "병서") as keyof typeof TOGETHER]; // 잠긴 구간의 함께 놓기 문항 (data/stones.json)
   const forecastLine =
     cloudy.length === 0
       ? "모든 구간이 맑아요"
@@ -131,7 +133,7 @@ export function stageVals(opts: {
   };
   const LINE: Partial<Record<Scene, string>> = {
     forecast: forecastLine,
-    splash: "가획에 해가 났어요 · 병서엔 아직 먹구름",
+    splash: cloudy.length ? `해가 났어요 · ${cloudy.map((s) => `${s.name}엔 아직 ${s.weather}`).join(", ")}` : "모든 구간이 맑아요",
     rope: "구름이 걷히고, 잠긴 돌이 밧줄에 묶여 떠올라요",
   };
 
@@ -156,11 +158,15 @@ export function stageVals(opts: {
     waterFill: `${line} L1440 340 L0 340 Z`,
     ovKor: k === "jejapyo",
     ovMath: false,
-    ovCaption: "세종이 만든 자음 설계도",
+    ovCaption: "훈민정음 자음 설계도",
     ovName: "국어 · 자음 제자표",
     unitLabel: "2학년 3반 · 「국어의 문자 체계」",
-    oCls: "ox o" + (pick === "O" ? " picked" : "") + (revealed ? " wrong" : ""),
-    xCls: "ox x" + (pick === "X" ? " picked" : "") + (revealed ? " right" : ""),
+    oCls: "ox o" + (pick === "O" ? " picked" : "") + (revealed ? (tq.answer === "O" ? " right" : " wrong") : ""),
+    xCls: "ox x" + (pick === "X" ? " picked" : "") + (revealed ? (tq.answer === "X" ? " right" : " wrong") : ""),
+    tideBanner: `${locked.join("·")} 소나기 · 첫 8분 함께 놓기`,
+    qText: tq.prompt,
+    qAns: tq.answer,
+    qExplain: tq.explain,
     notRevealed: !revealed,
     revealed,
     controls: true, // '정답 공개' 버튼

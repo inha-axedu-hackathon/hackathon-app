@@ -8,4 +8,6 @@ export const ME = {
   alias: "옛이응 ㆁ",
   path: ["st-n", "st-d", "st-t"],
   progress: { "st-n": "placed", "st-d": "placed", "st-t": "wet" } as Record<string, StoneProgress>,
+  start: ["st-n"], // 출발 돌(처음부터 켜짐)
+  arrived: false, // 도착 관문 통과(깃발) — 시연 시작 시점
 } as const;
