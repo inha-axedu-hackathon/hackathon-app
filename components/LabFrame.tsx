@@ -22,6 +22,7 @@ export function LabFrame({ target, seed, onDone, onKey }: Props) {
   const box = useRef<HTMLDivElement | null>(null);
   const [fit, setFit] = useState<{ s: number; w: number; h: number; top: number } | null>(null);
   const [workH, setWorkH] = useState(LAB_MIN_H); // 실험실 작업 영역의 실제 높이(불러온 뒤 잼)
+  const [labBg, setLabBg] = useState<string | undefined>(undefined); // 남는 공간을 실험실 바탕색으로(흰 띠 없이 한 장처럼)
 
   useEffect(() => {
     doneRef.current = onDone;
@@ -97,6 +98,8 @@ export function LabFrame({ target, seed, onDone, onKey }: Props) {
     win.addEventListener("keydown", (e) => keyRef.current?.(e)); // 포커스가 실험실 안에 있어도 K·N 키가 먹게
     setTimeout(() => (loaded.current = true), 300);
     // 작업 영역 높이를 재서 배율에 쓰고, 실험실이 처음에 스스로 맨 위로 돌아가는 일이 있어 몇 번 더 맞춘다
+    const bg = [doc.body, doc.documentElement].map((el) => win.getComputedStyle(el).backgroundColor).find((c) => c && c !== "rgba(0, 0, 0, 0)" && c !== "transparent");
+    if (bg) setLabBg(bg);
     const work = doc.querySelector("#consonant .work");
     const readH = () => work && setWorkH(Math.ceil(work.getBoundingClientRect().height));
     readH();
@@ -110,7 +113,7 @@ export function LabFrame({ target, seed, onDone, onKey }: Props) {
   };
 
   return (
-    <div ref={box} className="relative min-h-[50vh] w-full flex-1 overflow-hidden">
+    <div ref={box} className="relative min-h-[50vh] w-full flex-1 overflow-hidden" style={{ background: labBg }}>
       <iframe
         ref={ref}
         onLoad={onLoad}
