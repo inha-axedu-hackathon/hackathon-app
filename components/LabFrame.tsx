@@ -18,22 +18,22 @@ const LAB_SKIN = `
 #consonant .mission{display:none!important}
 :root{--paper:#fafaf7;--panel:#ffffff;--line:#e3e0d6;--muted:#6b665f;
   --font-body:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
-:focus-visible{outline-color:#9b3a51}
+:focus-visible{outline-color:#C8662A}
 .btn{font-weight:600;border:1.5px solid #1c1a18;padding:6px 16px;transition:background-color .2s}
-.btn:hover{background:#f9ecef;color:#1c1a18}
-.btn.primary{background:#9b3a51;color:#fff;box-shadow:0 2px 0 #1c1a18}
-.btn.primary:hover{background:#833044;color:#fff}
+.btn:hover{background:#FFF1E5;color:#1c1a18}
+.btn.primary{background:#C8662A;color:#fff;box-shadow:0 2px 0 #1c1a18}
+.btn.primary:hover{background:#A9531F;color:#fff}
 .btn:disabled:hover{background:transparent;color:#1c1a18}
 .mission,.tool{border-radius:14px}
 .tool{transition:border-color .2s,box-shadow .2s}
-.tool:hover{border-color:#c9798a}
-.tool.active{border-color:#9b3a51;box-shadow:inset 0 0 0 1px #9b3a51;background:#fcf5f6}
+.tool:hover{border-color:#F2AD7E}
+.tool.active{border-color:#C8662A;box-shadow:inset 0 0 0 1px #C8662A;background:#FFF8F1}
 .board{border-radius:14px;box-shadow:0 3px 0 #1c1a18}
 .explain{border-radius:16px;box-shadow:0 1px 2px rgb(28 26 24/.06),0 2px 8px rgb(28 26 24/.06)}
 .ex-glyph{border-radius:12px}
-.jg-hint{position:relative;border-radius:16px;box-shadow:0 0 0 2px #9b3a51;animation:jgpulse 1.6s ease-in-out infinite}
-.jg-hint>.lab{color:#9b3a51;font-weight:700}
-@keyframes jgpulse{0%,100%{box-shadow:0 0 0 2px #9b3a51}50%{box-shadow:0 0 0 6px rgba(155,58,81,.18)}}
+.jg-hint{position:relative;border-radius:16px;box-shadow:0 0 0 2px #C8662A;animation:jgpulse 1.6s ease-in-out infinite}
+.jg-hint>.lab{color:#C8662A;font-weight:700}
+@keyframes jgpulse{0%,100%{box-shadow:0 0 0 2px #C8662A}50%{box-shadow:0 0 0 6px rgba(232,130,63,.22)}}
 `;
 
 type LabSnap = { tab: string; c: { cur: string | null; made: string[]; ach: number; tier: number } };

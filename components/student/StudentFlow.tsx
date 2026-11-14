@@ -274,7 +274,7 @@ export function StudentFlow({ initial = "home", initialStone = "st-t" }: { initi
     ringText: placedT ? "3/3" : "2/3",
     ringLabel: placedT ? "오늘 놓은 돌 3개 중 3개" : "오늘 놓은 돌 3개 중 2개",
     ringDash: placedT ? "3 0" : "2 3",
-    ringColor: placedT ? "#C9A227" : "#9B3A51",
+    ringColor: placedT ? "#C9A227" : "#F29A5C",
     heroLine: placedT ? (passed ? "완주! 🏁" : "돌 3개 다 놓음") : closed ? "오늘 놓기 마감" : "1칸 남음 · 4분이면 완주 🏁",
     heroSub: placedT ? (passed ? "오늘 수업에서 만나요" : "도착 관문만 남았어요") : closed ? "수업에서 함께 건너요" : "ㅌ 돌 하나만 더 놓으면 돼요",
     titleName: passed ? "집현전 견습생" : "첫걸음 학생",

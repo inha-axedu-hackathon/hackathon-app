@@ -117,3 +117,30 @@
 .lite .cf{display:none}
 .cf{position:absolute;width:8px;height:12px;border-radius:2px;opacity:0;animation:cf 1600ms var(--ease-exit) both}
 @keyframes cf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+
+/* ── 11/14 학생 화면 메인 색: 파스텔 주황(채움은 먹 글씨) · '지금 할 일'만 진한 붉은색 ── */
+.tab{--jg-main:#F7A36B;--jg-main-hover:#F29152;--jg-accent:#C8662A;--jg-accent-ink:#9A4A16;--jg-tint:#FFF1E5;--jg-blush:#FFF8F1;--jg-soft:#F9CDAE;--jg-rose:#F2AD7E;--jg-track:#FDE6D3;--jg-now:#B3261E;--jg-now-hover:#8F1D17}
+.tab .btnp{background:var(--jg-main);color:#231F1C}
+.tab .btnp:hover{background:var(--jg-main-hover)}
+.tab .btnp.now{background:var(--jg-now);color:#fff}
+.tab .btnp.now:hover{background:var(--jg-now-hover)}
+.tab .btnp:focus-visible,.tab .btns:focus-visible,.tab .opt:focus-visible,.tab .seg button:focus-visible,.tab .back:focus-visible,.tab .blank:focus{outline-color:var(--jg-accent)}
+.tab .stone.next{border-color:var(--jg-accent) !important;color:var(--jg-accent);box-shadow:0 0 0 6px rgba(242,154,92,.22) !important}
+.tab .blank{background:var(--jg-tint);box-shadow:inset 0 -2.5px 0 var(--jg-accent);color:var(--jg-accent-ink)}
+.tab .okchip{background:var(--jg-main);color:#231F1C}
+.tab .seg button.on{background:var(--jg-main) !important;color:#231F1C !important}
+.tab .wchip.used{background:var(--jg-tint);color:#C9A58C}
+
+/* ── 이번 단원 별: 은은하게 반짝(눈이 아프지 않게 느리고 작게) ── */
+.gstar{position:relative;display:inline-grid;place-items:center;flex:none}
+.gstar>svg{animation:gstar-glow 3.2s ease-in-out infinite}
+.gstar::before,.gstar::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;pointer-events:none;opacity:0;
+ background:radial-gradient(circle,#fff 0 28%,rgba(255,226,150,.95) 42%,rgba(255,226,150,0) 72%);animation:gstar-spark 3.2s ease-in-out infinite}
+.gstar::before{top:-3px;right:-3px}
+.gstar::after{bottom:1px;left:-4px;width:5px;height:5px;animation-delay:1.6s}
+.gstar.off>svg,.gstar.off::before,.gstar.off::after{animation:none;opacity:1}
+.gstar.off::before,.gstar.off::after{display:none}
+@keyframes gstar-glow{0%,100%{filter:drop-shadow(0 0 0 rgba(255,196,70,0))}50%{filter:drop-shadow(0 0 4px rgba(255,196,70,.7))}}
+@keyframes gstar-spark{0%,62%,100%{opacity:0;transform:scale(.3) rotate(0)}74%{opacity:1;transform:scale(1) rotate(45deg)}86%{opacity:0;transform:scale(.5) rotate(90deg)}}
+@media (prefers-reduced-motion:reduce){.gstar>svg,.gstar::before,.gstar::after{animation:none !important}.gstar::before,.gstar::after{display:none}}
+.lite .gstar>svg,.lite .gstar::before,.lite .gstar::after{animation:none !important}
