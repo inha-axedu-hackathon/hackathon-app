@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import "./student.css";
 
 export function StudentView(v: Record<string, any>) {
-  const { heroCta, heroGo, heroReplay, replay, tDoneText, variantLabel, crossing, logout, words, answer, labSlot, freeText, setFree, gateMsg, busy, afterOk, b1, b2, controls, d1, d2, d3, fbNo, fbOk, finish, frameTab, freeTab, goConcept, goGate, goHome, goLab, goPass, goQuiz, heroLine, heroSub, inStone, isConcept, isGate, isHome, isLab, isPass, isQuiz, isSplash, liteCls, okLabel, opts, qExplain, qFix, qTag, qText, ringColor, ringDash, ringLabel, ringText, segA, segB, setB1, setB2, star2, star2c, star2w, stepName, tDone, tLabel, tNext, tOpen, tWet, tabFrame, tabFree, titleName, toVariant } = v;
+  const { heroCta, heroGo, heroReplay, replay, tDoneText, variantLabel, crossing, logout, words, answer, labSlot, labCur, freeText, setFree, gateMsg, busy, afterOk, b1, b2, controls, d1, d2, d3, fbNo, fbOk, finish, frameTab, freeTab, goConcept, goGate, goHome, goLab, goPass, goQuiz, heroLine, heroSub, inStone, isConcept, isGate, isHome, isLab, isPass, isQuiz, isSplash, liteCls, okLabel, opts, qExplain, qFix, qTag, qText, ringColor, ringDash, ringLabel, ringText, segA, segB, setB1, setB2, star2, star2c, star2w, stepName, tDone, tLabel, tNext, tOpen, tWet, tabFrame, tabFree, titleName, toVariant } = v;
   return (
     <>
 <div className={`tab on-light ${liteCls}`} style={{fontFamily: "'Pretendard Variable', Pretendard, sans-serif"} as any}>
@@ -138,11 +138,33 @@ export function StudentView(v: Record<string, any>) {
       {(isLab) && (<>
         <div className="scr" style={{gap: '16px'} as any}>
           <div style={{flex: '1', display: 'flex', flexDirection: 'column', borderRadius: '24px', overflow: 'hidden', boxShadow: 'inset 0 0 0 1.5px #DCD7CC', background: '#fff'} as any}>
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 18px', background: '#F7F6F2', fontSize: '13px', color: '#6B665F'} as any}><span style={{fontWeight: '700', color: '#1C1A18'} as any}>실험실 · 목표 글자 ㅌ</span><span>한글 창제 원리 실험실 · 팀원 제작</span></div>
+            {/* 목표 띠: 딱 봐도 무엇을·어떻게 하는지(목표 + 지금 단계 ㄴ→ㄷ→ㅌ + 하는 법 3단계) */}
+            <div style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px 24px', padding: '14px 20px', background: '#F7F6F2', borderBottom: '1px solid #ECE9E1'} as any}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px'} as any}>
+                <span style={{fontSize: '13px', fontWeight: '800', color: '#fff', background: '#9B3A51', borderRadius: '999px', padding: '3px 10px'} as any}>목표</span>
+                <span style={{fontSize: '19px', fontWeight: '800', color: '#1C1A18', letterSpacing: '-0.02em'} as any}>ㄴ에 획을 더해 ㅌ 만들기</span>
+                <span aria-label={`지금 글자 ${labCur ?? ''}`} style={{display: 'flex', alignItems: 'center', gap: '6px'} as any}>
+                  {['ㄴ', 'ㄷ', 'ㅌ'].map((c, i, all) => {
+                    const at = all.indexOf(labCur ?? '');
+                    const on = i === at, past = at > i;
+                    return (<span key={c} style={{display: 'flex', alignItems: 'center', gap: '6px'} as any}>
+                      {i > 0 && <span aria-hidden="true" style={{color: '#B9B4AA', fontSize: '13px'} as any}>→</span>}
+                      <span className="serif" style={{width: '30px', height: '30px', display: 'grid', placeItems: 'center', borderRadius: '10px', fontSize: '17px', fontWeight: '700', background: on ? '#9B3A51' : past ? '#F9ECEF' : '#fff', color: on ? '#fff' : past ? '#9B3A51' : '#8C8A85', boxShadow: on ? 'none' : 'inset 0 0 0 1px #E3E0D6'} as any}>{c}</span>
+                    </span>);
+                  })}
+                </span>
+              </div>
+              <ol style={{display: 'flex', flexWrap: 'wrap', gap: '6px 16px', margin: '0 0 0 auto', padding: '0', listStyle: 'none', fontSize: '14px', color: '#4A4641'} as any}>
+                <li><b style={{color: '#9B3A51'} as any}>①</b> 깜빡이는 <b>더하기</b> 줄에서 획 카드를 끌어</li>
+                <li><b style={{color: '#9B3A51'} as any}>②</b> 글자 둘레 <b>점선 칸</b>에 놓아요</li>
+                <li><b style={{color: '#9B3A51'} as any}>③</b> ㅌ이 되면 저절로 다음</li>
+              </ol>
+            </div>
             <div style={{flex: '1', position: 'relative', display: 'flex'} as any}>{labSlot}</div>
           </div>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'} as any}>
             <span style={{display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px', color: '#4A4641'} as any}><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" className="loop" style={{animation: 'spin 1.2s linear infinite'} as any}><circle cx="12" cy="12" r="9" fill="none" stroke="#F6E9EC" strokeWidth="3" /><path d="M21 12a9 9 0 00-9-9" fill="none" stroke="#9B3A51" strokeWidth="3" strokeLinecap="round" /></svg>ㅌ이 만들어지면 자동으로 넘어가요</span>
+            <span style={{fontSize: '12px', color: '#8C8A85'} as any}>한글 창제 원리 실험실 · 팀원 제작</span>
             {(controls) && (<><button type="button" className="btns" onClick={goQuiz} style={{color: '#6B665F', fontSize: '14px'} as any}>시연: 완성 처리 (숨은 키 K)</button></>)}
           </div>
         </div>

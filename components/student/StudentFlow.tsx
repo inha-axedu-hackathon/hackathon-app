@@ -36,6 +36,7 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
   const router = useRouter();
   const p = useMemo(() => myProgress(DEMO_STUDENT, d.events), [d.events]);
   const [screen, setScreen] = useState<Screen>(initial);
+  const [labCur, setLabCur] = useState<string | null>("ㄴ"); // 실험실 작업판의 지금 글자(목표 띠 표시용)
   const [q, setQ] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [usedVariant, setUsedVariant] = useState(false);
@@ -132,7 +133,8 @@ export function StudentFlow({ initial = "home" }: { initial?: Screen }) {
   const v = {
     liteCls: "",
     controls: false, // 시연용 '완성 처리' 버튼은 숨김(K 키는 그대로 동작)
-    labSlot: screen === "lab" ? <LabFrame target="ㅌ" seed="ㄴ" onDone={labDone} onKey={onLabKey} /> : null,
+    labSlot: screen === "lab" ? <LabFrame target="ㅌ" seed="ㄴ" onDone={labDone} onKey={onLabKey} onChange={setLabCur} /> : null,
+    labCur,
     isHome: screen === "home",
     isConcept: screen === "concept",
     isLab: screen === "lab",

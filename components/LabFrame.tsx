@@ -30,18 +30,29 @@ const LAB_SKIN = `
 .board{border-radius:14px;box-shadow:0 3px 0 #1c1a18}
 .explain{border-radius:16px;box-shadow:0 1px 2px rgb(28 26 24/.06),0 2px 8px rgb(28 26 24/.06)}
 .ex-glyph{border-radius:12px}
+.jg-hint{position:relative;border-radius:16px;box-shadow:0 0 0 2px #9b3a51;animation:jgpulse 1.6s ease-in-out infinite}
+.jg-hint>.lab{color:#9b3a51;font-weight:700}
+@keyframes jgpulse{0%,100%{box-shadow:0 0 0 2px #9b3a51}50%{box-shadow:0 0 0 6px rgba(155,58,81,.18)}}
 `;
 
 type LabSnap = { tab: string; c: { cur: string | null; made: string[]; ach: number; tier: number } };
 type LabWin = Window & { __lab?: { snapshot(): LabSnap } };
-type Props = { target: string; seed?: string; onDone: () => void; onKey?: (e: KeyboardEvent) => void };
+type Props = {
+  target: string;
+  seed?: string;
+  onDone: () => void;
+  onKey?: (e: KeyboardEvent) => void;
+  onChange?: (cur: string | null) => void; // 지금 작업판의 글자(목표 띠의 ㄴ→ㄷ→ㅌ 표시용)
+};
 
-export function LabFrame({ target, seed, onDone, onKey }: Props) {
+export function LabFrame({ target, seed, onDone, onKey, onChange }: Props) {
   const ref = useRef<HTMLIFrameElement | null>(null);
   const done = useRef(false);
   const loaded = useRef(false); // 시작 글자를 올린 뒤부터만 완성 판정(지난 리허설 기록으로 바로 통과하지 않게)
   const doneRef = useRef(onDone);
   const keyRef = useRef(onKey);
+  const changeRef = useRef(onChange);
+  const lastCur = useRef<string | null | undefined>(undefined);
   const box = useRef<HTMLDivElement | null>(null);
   const [fit, setFit] = useState<{ s: number; w: number; h: number; top: number } | null>(null);
   const [workH, setWorkH] = useState(LAB_MIN_H); // 실험실 작업 영역의 실제 높이(불러온 뒤 잼)
@@ -50,6 +61,7 @@ export function LabFrame({ target, seed, onDone, onKey }: Props) {
   useEffect(() => {
     doneRef.current = onDone;
     keyRef.current = onKey;
+    changeRef.current = onChange;
   });
 
   // 작업 영역이 실험실 창 맨 위에 오게(같은 출처라 스크롤 위치를 정할 수 있음, 실험실 파일은 그대로)
@@ -95,6 +107,14 @@ export function LabFrame({ target, seed, onDone, onKey }: Props) {
       if (!loaded.current) return;
       try {
         const snap = (ref.current?.contentWindow as LabWin | null | undefined)?.__lab?.snapshot();
+        if (snap && snap.c.cur !== lastCur.current) {
+          lastCur.current = snap.c.cur;
+          changeRef.current?.(snap.c.cur);
+          // 첫 획을 놓기 전까지만 '더하기' 줄을 깜빡여 어디를 끌지 알려 준다(한 번 해 보면 사라짐)
+          const doc = ref.current?.contentDocument;
+          const row = [...(doc?.querySelectorAll("#consonant .toolrow") ?? [])].find((r) => r.querySelector(".lab")?.textContent?.includes("더하기"));
+          row?.classList.toggle("jg-hint", snap.c.cur === (seed ?? null));
+        }
         if (snap && !done.current && snap.c.cur === target) {
           done.current = true;
           doneRef.current();
@@ -104,7 +124,7 @@ export function LabFrame({ target, seed, onDone, onKey }: Props) {
       }
     }, 500);
     return () => clearInterval(timer);
-  }, [target]);
+  }, [target, seed]);
 
   const onLoad = () => {
     const doc = ref.current?.contentDocument;
