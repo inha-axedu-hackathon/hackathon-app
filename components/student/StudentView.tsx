@@ -108,6 +108,8 @@ export function StudentView(v: Record<string, any>) {
             <div className="card" style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px', boxShadow: '0 0 0 2px #9B3A51, 0 12px 28px rgba(155,58,81,.12)'} as any}>
               <span style={{fontSize: '12px', fontWeight: '700', color: '#9B3A51'} as any}>{tLabel}</span><b style={{fontSize: '18px'} as any}>ㄷ → ㅌ · 가획</b>
               {(tDone) && (<><span style={{fontSize: '14px', color: '#6B665F'} as any}>{tDoneText}</span></>)}
+              {(tDone && heroCta) && (<><button type="button" className="btnp" onClick={heroGo} style={{minHeight: '56px', fontSize: '19px'} as any}>{heroCta}</button></>)}
+              {(tDone && heroReplay) && (<><button type="button" className="btns" onClick={replay} style={{minHeight: '52px', fontSize: '16px'} as any}>오늘 완주! · 처음부터 다시 해 보기</button></>)}
               {(tOpen) && (<><button type="button" className="btnp" onClick={goConcept} style={{minHeight: '56px', fontSize: '19px'} as any}>밟기 · 4분 →</button></>)}
             </div>
           </div>
