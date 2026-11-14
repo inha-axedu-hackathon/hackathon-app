@@ -176,10 +176,18 @@ export default function TeacherPage() {
       <Link href="/class" className="btn bp">
         함께 놓기 시작 · 8분 → 교실 화면
       </Link>
+    ) : d.step < 5 ? (
+      <button type="button" className="btn bp" onClick={() => d.reach(5)}>
+        함께 놓기 끝 · 다리 개통 <kbd style={{ opacity: 0.7, fontSize: 12 }}>N</kbd>
+      </button>
+    ) : d.step < 6 ? (
+      <button type="button" className="btn bp" onClick={() => d.reach(6)}>
+        개통 · 위에서 보기 <kbd style={{ opacity: 0.7, fontSize: 12 }}>N</kbd>
+      </button>
     ) : (
-      <span className="btn bs" aria-disabled="true">
-        {b.opened ? "개통 · 본시 수업" : "함께 놓기 끝"}
-      </span>
+      <button type="button" className="btn bs" onClick={() => d.reset()}>
+        시연 처음부터 <kbd style={{ opacity: 0.7, fontSize: 12 }}>Shift+R</kbd>
+      </button>
     ),
     toolbarSlot: (
       <div className="bx" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
